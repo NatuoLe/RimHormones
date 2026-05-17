@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <AssemblyName>RimHormones</AssemblyName>
+    <RootNamespace>Hormones</RootNamespace>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Source\Coms\HormonesComponent.cs" />
+    <Compile Include="Source\HormonesUtility.cs" />
+    <Compile Include="Source\HarmonyPatches.cs" />
+    <Compile Include="Source\Logic\Define\Define.cs" />
+    <Compile Include="Source\Logic\HormonesLogic.cs" />
+    <Compile Include="Source\Needs\Need_Hormones.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony" HintPath="0Harmony.dll" />
+    <Reference Include="Assembly-CSharp" HintPath="Assembly-CSharp.dll" />
+    <Reference Include="Verse" HintPath="Assembly-CSharp.dll" />
+    <Reference Include="UnityEngine" HintPath="UnityEngine.dll" />
+  </ItemGroup>
+</Project>

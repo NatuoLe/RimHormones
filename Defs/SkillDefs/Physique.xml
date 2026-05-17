@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <SkillDef>
+    <defName>Physique</defName>
+    <label>physique</label>
+    <skillLabel>Physique</skillLabel>
+    <description>Represents a pawn's physical fitness, cardiorespiratory endurance, stress resilience, and hormone metabolism efficiency. Higher physique improves hormone recovery rate and reduces hormone loss from damage.</description>
+    <usuallyDefinedInBackstories>false</usuallyDefinedInBackstories>
+    <pawnCreatorSummaryVisible>true</pawnCreatorSummaryVisible>
+    <listOrder>0</listOrder>
+    <neverDisabledBasedOnWorkTypes>true</neverDisabledBasedOnWorkTypes>
+  </SkillDef>
+</Defs>

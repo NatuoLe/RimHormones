@@ -1,0 +1,261 @@
+using Verse;
+using RimWorld;
+
+namespace Hormones
+{
+
+public static class Helpers
+{
+    public static int Clamp(int value, int min, int max)
+    {
+        if (value < min) return min;
+        if (value > max) return max;
+        return value;
+    }
+
+    public static float Clamp(float value, float min, float max)
+    {
+        if (value < min) return min;
+        if (value > max) return max;
+        return value;
+    }
+}
+
+public class CompProperties_Hormones : CompProperties
+{
+    public float decayRate = 0.5f;
+    public float maxLevel = 100f;
+    public float baseDamageHormonesReduction = 15f;
+
+    public CompProperties_Hormones()
+    {
+        Log.Message("[Hormones] CompProperties_Hormones constructor called");
+        compClass = typeof(HormonesComponent);
+    }
+}
+
+public class HormonesComponent : ThingComp, IExposable
+{
+    private Pawn Pawn => parent as Pawn;
+
+    private float curLevelInt;
+    private float lastLevelInt;
+
+    static HormonesComponent()
+    {
+        Log.Message("[Hormones] HormonesComponent class loaded");
+    }
+
+    public float MaxLevel => Define.HormonesMaxLevel;
+
+    public CompProperties_Hormones Props => (CompProperties_Hormones)props;
+
+    public float CurLevel
+    {
+        get => curLevelInt;
+        set => curLevelInt = (value < 0f) ? 0f : ((value > MaxLevel) ? MaxLevel : value);
+    }
+
+    public float CurLevelPercentage => CurLevel / MaxLevel;
+
+    public float LastLevelPercentage => lastLevelInt / MaxLevel;
+
+    public HormonesStatus Status
+    {
+        get
+        {
+            if (CurLevelPercentage >= 0.8f) return HormonesStatus.Calm;
+            if (CurLevelPercentage >= 0.5f) return HormonesStatus.Normal;
+            if (CurLevelPercentage >= 0.2f) return HormonesStatus.Stressed;
+            return HormonesStatus.Panicked;
+        }
+    }
+
+    public bool IsStressed => Status <= HormonesStatus.Stressed;
+    public bool IsPanicked => Status == HormonesStatus.Panicked;
+    public bool IsCalm => Status == HormonesStatus.Calm;
+
+    private int GetPhysiqueLevel()
+    {
+        if (Pawn == null) return 1;
+        SkillDef physiqueSkillDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
+        if (physiqueSkillDef == null) return 1;
+        SkillRecord skill = Pawn.skills?.GetSkill(physiqueSkillDef);
+        int level = skill?.levelInt ?? 1;
+        return Helpers.Clamp(level, Define.PhysiqueMinLevel, Define.PhysiqueMaxLevel);
+    }
+
+    public float MetabolicRateMultiplier
+    {
+        get
+        {
+            int physiqueLevel = GetPhysiqueLevel();
+            float metabolicRate = Define.MetabolicRateBase + Define.MetabolicRatePerPhysique * physiqueLevel;
+            return metabolicRate;
+        }
+    }
+
+    public float AppetiteMultiplier
+    {
+        get
+        {
+            float metabolicRate = MetabolicRateMultiplier;
+            return Helpers.Clamp(metabolicRate, Define.AppetiteMinMultiplier, Define.AppetiteMaxMultiplier);
+        }
+    }
+
+    public float WorkEfficiencyMultiplier
+    {
+        get
+        {
+            int physiqueLevel = GetPhysiqueLevel();
+            float workEfficiency = Define.WorkEfficiencyBase + Define.WorkEfficiencyPerPhysique * physiqueLevel;
+            return Helpers.Clamp(workEfficiency, Define.WorkEfficiencyMin, Define.WorkEfficiencyMax);
+        }
+    }
+
+    public float HungerRateMultiplier
+    {
+        get
+        {
+            int physiqueLevel = GetPhysiqueLevel();
+            float hungerRate = Define.HungerRateBase + Define.HungerRatePerPhysique * physiqueLevel;
+            return Helpers.Clamp(hungerRate, Define.HungerRateMin, Define.HungerRateMax);
+        }
+    }
+
+    public float PhysiqueOverallBonus
+    {
+        get
+        {
+            int physiqueLevel = GetPhysiqueLevel();
+
+            if (physiqueLevel < Define.PhysiqueNegativeThresholdHigh)
+            {
+                return Define.PhysiqueLowPenalty;
+            }
+            else if (physiqueLevel <= Define.PhysiqueNegativeThresholdLow)
+            {
+                return Define.PhysiqueMediumPenalty;
+            }
+            else
+            {
+                float bonus = 1f + (physiqueLevel - Define.PhysiquePositiveThreshold + 1) * Define.PhysiqueBonusPerLevel;
+                return bonus;
+            }
+        }
+    }
+
+    private float GetPhysiqueRecoveryBonus()
+    {
+        int physiqueLevel = GetPhysiqueLevel();
+        return 1f + (physiqueLevel - 1f) / (Define.PhysiqueMaxLevel - 1) * Define.PhysiqueHormonesRecoveryBonusFactor;
+    }
+
+    private float GetPhysiqueDamageReductionFactor()
+    {
+        int physiqueLevel = GetPhysiqueLevel();
+        return 1f - (physiqueLevel - 1f) / (Define.PhysiqueMaxLevel - 1) * Define.PhysiqueHormonesDamageReductionFactor;
+    }
+
+    public override void Initialize(CompProperties props)
+    {
+        base.Initialize(props);
+        curLevelInt = MaxLevel;
+        lastLevelInt = MaxLevel;
+    }
+
+    public void AddHormonesReduction(float baseAmount)
+    {
+        lastLevelInt = curLevelInt;
+        float damageReductionFactor = GetPhysiqueDamageReductionFactor();
+        float actualReduction = baseAmount * damageReductionFactor;
+        CurLevel -= actualReduction;
+        Log.Message($"[Hormones] {Pawn?.Name?.ToStringFull ?? "Unknown"} TookDamage: -{actualReduction:F1} (Physique={GetPhysiqueLevel()}, Factor={damageReductionFactor:F2}), Current: {CurLevel:F1} ({Status})");
+    }
+
+    public void HormonesInterval()
+    {
+        if (Pawn == null || Pawn.Suspended) return;
+
+        lastLevelInt = curLevelInt;
+
+        float moodFactor = Pawn.needs?.mood?.CurLevel ?? 0.5f;
+        float recoveryBonus = GetPhysiqueRecoveryBonus();
+        float recoveryRate = Define.HormonesDecayRate * recoveryBonus;
+
+        bool hasSevereBleeding = HasSevereBleedingThought();
+
+        if (hasSevereBleeding)
+        {
+            float damageReductionFactor = GetPhysiqueDamageReductionFactor();
+            float baseBleedingReduction = Define.HormonesBaseDamageReduction * Define.HormonesBleedingReductionFactor;
+            float bleedingReduction = baseBleedingReduction * damageReductionFactor;
+            CurLevel -= bleedingReduction;
+            Log.Message($"[Hormones] {Pawn?.Name?.ToStringFull ?? "Unknown"} SevereBleeding: -{bleedingReduction:F3} (Physique={GetPhysiqueLevel()}), Current: {CurLevel:F1}");
+        }
+
+        if (CurLevel < MaxLevel && !hasSevereBleeding)
+        {
+            float recoveryAmount = recoveryRate * moodFactor;
+            CurLevel += recoveryAmount;
+            Log.Message($"[Hormones] {Pawn?.Name?.ToStringFull ?? "Unknown"} Recovery: +{recoveryAmount:F3} (Physique={GetPhysiqueLevel()}, Bonus={recoveryBonus:F2}), Current: {CurLevel:F1} ({Status})");
+        }
+    }
+
+    private bool HasSevereBleedingThought()
+    {
+        if (Pawn?.needs?.mood?.thoughts?.memories == null) return false;
+
+        var severeBleedingDef = DefDatabase<ThoughtDef>.GetNamed("SevereBleeding", false);
+        if (severeBleedingDef == null)
+        {
+            Log.Message("[Hormones] SevereBleeding ThoughtDef not found in database");
+            return false;
+        }
+
+        var memories = Pawn.needs.mood.thoughts.memories.Memories;
+        foreach (var memory in memories)
+        {
+            if (memory.def == severeBleedingDef)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public override void CompTick()
+    {
+        base.CompTick();
+        if (Pawn != null && Pawn.IsHashIntervalTick(200))
+        {
+            HormonesInterval();
+        }
+    }
+
+    public override string CompInspectStringExtra()
+    {
+        return "Hormones".Translate() + ": " + CurLevelPercentage.ToStringPercent() + " (" + Status.ToString().Translate() + ")\n" +
+               "Physique: " + GetPhysiqueLevel() + "\n" +
+               "Metabolic Rate: " + MetabolicRateMultiplier.ToStringPercent() + "\n" +
+               "Work Efficiency: " + WorkEfficiencyMultiplier.ToStringPercent() + "\n" +
+               "Hunger Rate: " + HungerRateMultiplier.ToStringPercent();
+    }
+
+    public void ExposeData()
+    {
+        Scribe_Values.Look(ref curLevelInt, "hormonesLevel", MaxLevel);
+        Scribe_Values.Look(ref lastLevelInt, "hormonesLastLevel", MaxLevel);
+    }
+}
+
+public enum HormonesStatus
+{
+    Panicked,
+    Stressed,
+    Normal,
+    Calm
+}
+
+}

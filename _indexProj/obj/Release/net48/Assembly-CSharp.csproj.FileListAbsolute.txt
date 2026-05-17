@@ -1,0 +1,13 @@
+D:\RimMods\Rim-Hormones\_indexProj\obj\Release\net48\Assembly-CSharp.csproj.AssemblyReference.cache
+D:\RimMods\Rim-Hormones\_indexProj\obj\Release\net48\Assembly-CSharp.GeneratedMSBuildEditorConfig.editorconfig
+D:\RimMods\Rim-Hormones\_indexProj\obj\Release\net48\Assembly-CSharp.AssemblyInfoInputs.cache
+D:\RimMods\Rim-Hormones\_indexProj\obj\Release\net48\Assembly-CSharp.AssemblyInfo.cs
+D:\RimMods\Rim-Hormones\_indexProj\obj\Release\net48\Assembly-CSharp.csproj.CoreCompileInputs.cache
+D:\RimMods\Rim-Hormones\_indexProj\bin\Release\net48\RimHormones.dll
+D:\RimMods\Rim-Hormones\_indexProj\bin\Release\net48\RimHormones.pdb
+D:\RimMods\Rim-Hormones\_indexProj\bin\Release\net48\0Harmony.dll
+D:\RimMods\Rim-Hormones\_indexProj\bin\Release\net48\Assembly-CSharp.dll
+D:\RimMods\Rim-Hormones\_indexProj\bin\Release\net48\UnityEngine.dll
+D:\RimMods\Rim-Hormones\_indexProj\obj\Release\net48\Assembly.44154EF1.Up2Date
+D:\RimMods\Rim-Hormones\_indexProj\obj\Release\net48\RimHormones.dll
+D:\RimMods\Rim-Hormones\_indexProj\obj\Release\net48\RimHormones.pdb

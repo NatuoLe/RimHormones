@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Rim Hormones</name>
+  <author>ThGold</author>
+  <packageId>thgold.hormones</packageId>
+  <description>Adds Hormones system with Fear and Courage stats to colonists. Fear is a dynamic value affecting immediate behavior. Courage is a persistent value that can be increased over time like skills.</description>
+  <modVersion>1.0.0</modVersion>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <modDependencies>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <displayName>Harmony</displayName>
+    </li>
+  </modDependencies>
+</ModMetaData>

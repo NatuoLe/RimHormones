@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <Need_Hormones>Hormones</Need_Hormones>
+  <Need_Hormones_Desc>The current hormones level of the pawn. High hormones means the pawn stays calm in battle, while low hormones causes stress and panic.</Need_Hormones_Desc>
+
+  <Calm>Calm</Calm>
+  <Normal>Normal</Normal>
+  <Stressed>Stressed</Stressed>
+  <Panicked>Panicked</Panicked>
+
+  <Hormones>Hormones</Hormones>
+
+  <SevereBleeding>severe bleeding</SevereBleeding>
+  <SevereBleeding_desc>I'm losing too much blood... I feel lightheaded and terrified.</SevereBleeding_desc>
+
+  <Physique>Physique</Physique>
+  <Physique_Description>Represents a pawn's physical fitness, cardiorespiratory endurance, stress resilience, and hormone metabolism efficiency.</Physique_Description>
+</LanguageData>

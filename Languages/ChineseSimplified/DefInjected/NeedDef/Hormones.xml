@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Hormones.label>Hormones</Hormones.label>
+  <Hormones.description>The current hormones level of the pawn. High hormones means the pawn stays calm in battle, while low hormones causes fear and panic.</Hormones.description>
+</LanguageData>
