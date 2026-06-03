@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\RimMods\\Rim-Hormones\\_indexProj\\Assembly-CSharp.csproj": {}
+    "D:\\RimMods\\Rim-Hormones\\RimHormones\\_indexProj\\Assembly-CSharp.csproj": {}
   },
   "projects": {
-    "D:\\RimMods\\Rim-Hormones\\_indexProj\\Assembly-CSharp.csproj": {
+    "D:\\RimMods\\Rim-Hormones\\RimHormones\\_indexProj\\Assembly-CSharp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RimMods\\Rim-Hormones\\_indexProj\\Assembly-CSharp.csproj",
+        "projectUniqueName": "D:\\RimMods\\Rim-Hormones\\RimHormones\\_indexProj\\Assembly-CSharp.csproj",
         "projectName": "RimHormones",
-        "projectPath": "D:\\RimMods\\Rim-Hormones\\_indexProj\\Assembly-CSharp.csproj",
+        "projectPath": "D:\\RimMods\\Rim-Hormones\\RimHormones\\_indexProj\\Assembly-CSharp.csproj",
         "packagesPath": "C:\\Users\\zhou\\.nuget\\packages\\",
-        "outputPath": "D:\\RimMods\\Rim-Hormones\\_indexProj\\obj\\",
+        "outputPath": "D:\\RimMods\\Rim-Hormones\\RimHormones\\_indexProj\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\zhou\\AppData\\Roaming\\NuGet\\NuGet.Config"

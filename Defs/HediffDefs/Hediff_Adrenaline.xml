@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>Adrenaline</defName>
+    <label>adrenaline</label>
+    <description>Epinephrine hormone that enhances physical performance under stress. Severity indicates hormone concentration level.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <makesAlert>true</makesAlert>
+    <stages>
+      <li>
+        <label>dormant</label>
+        <minSeverity>0</minSeverity>
+        <statFactors>
+          <MoveSpeed>1.0</MoveSpeed>
+        </statFactors>
+      </li>
+      <li>
+        <label>low concentration</label>
+        <minSeverity>0.15</minSeverity>
+        <statFactors>
+          <MoveSpeed>1.04</MoveSpeed>
+        </statFactors>
+      </li>
+      <li>
+        <label>medium-high concentration</label>
+        <minSeverity>0.5</minSeverity>
+        <statFactors>
+          <MoveSpeed>1.07</MoveSpeed>
+        </statFactors>
+      </li>
+      <li>
+        <label>high concentration</label>
+        <minSeverity>0.75</minSeverity>
+        <statFactors>
+          <MoveSpeed>1.10</MoveSpeed>
+        </statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MuscleStrain</defName>
+    <label>muscle strain</label>
+    <description>Temporary muscle strain from overexertion.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <statFactors>
+          <MoveSpeed>0.9</MoveSpeed>
+        </statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>JointSprain</defName>
+    <label>joint sprain</label>
+    <description>Temporary joint sprain from overexertion.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <statFactors>
+          <MoveSpeed>0.85</MoveSpeed>
+        </statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>TendonFatigue</defName>
+    <label>tendon fatigue</label>
+    <description>Temporary tendon fatigue from overexertion.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <statFactors>
+          <MoveSpeed>0.88</MoveSpeed>
+        </statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>HeartPalpitations</defName>
+    <label>heart palpitations</label>
+    <description>Temporary heart palpitations from adrenaline overload.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <statFactors>
+          <WorkSpeedGlobal>0.95</WorkSpeedGlobal>
+        </statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>ShortnessOfBreath</defName>
+    <label>shortness of breath</label>
+    <description>Temporary respiratory distress from overexertion.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <statFactors>
+          <WorkSpeedGlobal>0.93</WorkSpeedGlobal>
+        </statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>LimbWeakness</defName>
+    <label>limb weakness</label>
+    <description>Temporary limb weakness from exhaustion.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <statFactors>
+          <MoveSpeed>0.75</MoveSpeed>
+          <WorkSpeedGlobal>0.75</WorkSpeedGlobal>
+        </statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+
+</Defs>

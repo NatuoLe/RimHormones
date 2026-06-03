@@ -98,8 +98,8 @@ public static class Verb_MeleeAttack_GetNonMissChance_Patch
             float originalHitChance = __result;
             HormonesLogic.ApplyPhysiqueCombatBonus(__instance.CasterPawn, ref __result);
             HormonesLogic.ApplyHormonesCombatPenalty(__instance.CasterPawn, ref __result);
-            Log.Message($"[Hormones] {__instance.CasterPawn?.Name?.ToStringFull ?? "Unknown"} MeleeHitChance: {originalHitChance:F3} -> {__result:F3}");
-        }
+            // Log.Message($"[Hormones] {__instance.CasterPawn?.Name?.ToStringFull ?? "Unknown"} MeleeHitChance: {originalHitChance:F3} -> {__result:F3}");
+        }   
     }
 }
 
@@ -114,7 +114,7 @@ public static class Thing_TakeDamage_Patch
         Pawn pawn = __instance as Pawn;
         if (pawn == null) return;
 
-        Log.Message($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} Took damage: {dinfo.Amount} from {dinfo.Def?.label ?? "unknown"}");
+        // Log.Message($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} Took damage: {dinfo.Amount} from {dinfo.Def?.label ?? "unknown"}");
 
         HormonesComponent hormonesComp = pawn.GetComp<HormonesComponent>();
         if (hormonesComp != null)
@@ -124,12 +124,14 @@ public static class Thing_TakeDamage_Patch
             float actualReduction = baseDamage * damageFactor;
 
             hormonesComp.AddHormonesReduction(actualReduction);
-            Log.Message($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} Hormones reduced by {actualReduction:F1} (base={baseDamage}, factor={damageFactor:F2})");
+            // Log.Message($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} Hormones reduced by {actualReduction:F1} (base={baseDamage}, factor={damageFactor:F2})");
         }
         else
         {
-            Log.Warning($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} HormonesComponent not found!");
+            // Log.Warning($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} HormonesComponent not found!");
         }
+
+        AdrenalineProducer.OnHit(pawn);
     }
 }
 
@@ -139,17 +141,17 @@ public static class Need_Food_MaxLevel_Patch
     [HarmonyPostfix]
     public static void Postfix(ref float __result, Need_Food __instance)
     {
-        Pawn pawn = __instance.GetType().BaseType.GetField("pawn", 
+        Pawn pawn = __instance.GetType().BaseType.GetField("pawn",
             System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
             ?.GetValue(__instance) as Pawn;
-        
+
         if (pawn == null) return;
 
         float appetite = HormonesLogic.GetAppetiteMultiplier(pawn);
         float original = __result;
         __result *= appetite;
 
-        Log.Message($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} FoodMaxLevel: {original:F2} -> {__result:F2} (Appetite={appetite:F2})");
+        // Log.Message($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} FoodMaxLevel: {original:F2} -> {__result:F2} (Appetite={appetite:F2})");
     }
 }
 
@@ -159,17 +161,17 @@ public static class Need_Food_FoodFallPerTickAssumingCategory_Patch
     [HarmonyPostfix]
     public static void Postfix(ref float __result, Need_Food __instance)
     {
-        Pawn pawn = __instance.GetType().BaseType.GetField("pawn", 
+        Pawn pawn = __instance.GetType().BaseType.GetField("pawn",
             System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
             ?.GetValue(__instance) as Pawn;
-        
+
         if (pawn == null) return;
 
         float hungerRate = HormonesLogic.GetHungerRate(pawn);
         float original = __result;
         __result *= hungerRate;
 
-        Log.Message($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} FoodFallPerTick: {original:F6} -> {__result:F6} (HungerRate={hungerRate:F2})");
+        // Log.Message($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} FoodFallPerTick: {original:F6} -> {__result:F6} (HungerRate={hungerRate:F2})");
     }
 }
 
@@ -181,18 +183,91 @@ public static class StatWorker_GetValue_Patch
     {
         if (thing is Pawn pawn)
         {
-            StatDef stat = __instance.GetType().GetField("stat", 
+            StatDef stat = __instance.GetType().GetField("stat",
                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
                 ?.GetValue(__instance) as StatDef;
-            
+
             if (stat == StatDefOf.WorkSpeedGlobal)
             {
                 float workEfficiency = HormonesLogic.GetWorkEfficiency(pawn);
-                float original = __result;
                 __result *= workEfficiency;
-
-                Log.Message($"[Hormones] {pawn?.Name?.ToStringFull ?? "Unknown"} WorkSpeedGlobal: {original:F3} -> {__result:F3} (Efficiency={workEfficiency:F2})");
             }
+
+            AdrenalineEffects effects = AdrenalineLogic.CalculateAdrenalineEffects(pawn);
+            if (effects.HasActiveEffects)
+            {
+                if (stat == StatDefOf.MoveSpeed)
+                {
+                    __result *= (1 + effects.MoveSpeed);
+                }
+            }
+        }
+    }
+}
+
+[HarmonyPatch(typeof(Need_Food), "FoodFallPerTickAssumingCategory")]
+public static class Need_Food_FallRate_Adrenaline_Patch
+{
+    [HarmonyPostfix]
+    public static void Postfix(ref float __result, Need_Food __instance)
+    {
+        Pawn pawn = __instance.GetType().BaseType.GetField("pawn",
+            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+            ?.GetValue(__instance) as Pawn;
+
+        if (pawn == null) return;
+
+        AdrenalineEffects effects = AdrenalineLogic.CalculateAdrenalineEffects(pawn);
+        if (effects.HasActiveEffects)
+        {
+            __result *= (1 + effects.Metabolism);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(Pawn), "Tick")]
+public static class Pawn_Tick_Patch
+{
+    [HarmonyPostfix]
+    public static void Postfix(Pawn __instance)
+    {
+        if (__instance.IsHashIntervalTick(60))
+        {
+            AdrenalineProducer.ProcessAdrenalineDynamic(__instance);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(Verb_MeleeAttack), "TryCastShot")]
+public static class Verb_MeleeAttack_TryCastShot_Patch
+{
+    [HarmonyPostfix]
+    public static void Postfix(Verb_MeleeAttack __instance)
+    {
+        Pawn attacker = __instance.CasterPawn;
+        if (attacker != null)
+        {
+            AdrenalineProducer.OnAttack(attacker, true);
+
+            AdrenalineEffects effects = AdrenalineLogic.CalculateAdrenalineEffects(attacker);
+            if (effects.HasActiveEffects && effects.Level >= AdrenalineLevel.High)
+            {
+                AdrenalineLogic.TryApplyOverexertDamage(attacker);
+            }
+        }
+    }
+}
+
+[HarmonyPatch(typeof(Verb_LaunchProjectile), "TryCastShot")]
+public static class Verb_LaunchProjectile_TryCastShot_Patch
+{
+    [HarmonyPostfix]
+    public static void Postfix(Verb_LaunchProjectile __instance)
+    {
+        Pawn attacker = __instance.CasterPawn;
+        if (attacker != null)
+        {
+            AdrenalineProducer.OnAttack(attacker, false);
         }
     }
 }
