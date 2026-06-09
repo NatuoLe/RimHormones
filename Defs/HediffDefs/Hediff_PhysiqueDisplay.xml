@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <HediffDef>
+    <defName>PhysiqueBodyCondition</defName>
+    <label>body condition</label>
+    <description>Physical condition reflecting the colonist's physique level and its effects on the body. Higher physique means better physical performance but increased metabolic demands.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <defaultLabelColor>(0.6, 0.8, 1.0)</defaultLabelColor>
+
+    <!-- 使用 stages 根据体魄等级显示不同效果 -->
+    <stages>
+      <!-- 等级 0-4: 虚弱 (Severity 0.00-0.24) -->
+      <li>
+        <label>frail</label>
+        <minSeverity>0</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.10</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.10</offset>
+          </li>
+        </capMods>
+        <statFactors>
+          <WorkSpeedGlobal>0.70</WorkSpeedGlobal>
+        </statFactors>
+        <hungerRateFactorOffset>-0.15</hungerRateFactorOffset>
+      </li>
+
+      <!-- 等级 5-7: 一般 (Severity 0.25-0.39) -->
+      <li>
+        <label>average</label>
+        <minSeverity>0.25</minSeverity>
+        <statFactors>
+          <WorkSpeedGlobal>0.90</WorkSpeedGlobal>
+        </statFactors>
+        <hungerRateFactorOffset>-0.05</hungerRateFactorOffset>
+      </li>
+
+      <!-- 等级 8-12: 健康 (Severity 0.40-0.64) -->
+      <li>
+        <label>fit</label>
+        <minSeverity>0.40</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>0.05</offset>
+          </li>
+        </capMods>
+        <statFactors>
+          <WorkSpeedGlobal>1.05</WorkSpeedGlobal>
+        </statFactors>
+      </li>
+
+      <!-- 等级 13-16: 强壮 (Severity 0.65-0.84) -->
+      <li>
+        <label>strong</label>
+        <minSeverity>0.65</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>0.10</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>0.05</offset>
+          </li>
+        </capMods>
+        <statFactors>
+          <WorkSpeedGlobal>1.10</WorkSpeedGlobal>
+        </statFactors>
+        <hungerRateFactorOffset>0.10</hungerRateFactorOffset>
+      </li>
+
+      <!-- 等级 17-20: 卓越 (Severity 0.85-1.0) -->
+      <li>
+        <label>peak</label>
+        <minSeverity>0.85</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>0.15</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>0.10</offset>
+          </li>
+          <li>
+            <capacity>Breathing</capacity>
+            <offset>0.05</offset>
+          </li>
+        </capMods>
+        <statFactors>
+          <WorkSpeedGlobal>1.195</WorkSpeedGlobal>
+        </statFactors>
+        <hungerRateFactorOffset>0.20</hungerRateFactorOffset>
+      </li>
+    </stages>
+
+    <comps>
+      <li Class="Hormones.HediffCompProperties_PhysiqueDisplay" />
+    </comps>
+  </HediffDef>
+</Defs>

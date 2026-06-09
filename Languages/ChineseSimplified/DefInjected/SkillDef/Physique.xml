@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <!-- Physique 技能 -->
+  <Physique.label>体魄</Physique.label>
+  <Physique.skillLabel>体魄</Physique.skillLabel>
+  <Physique.description>代表殖民者的体能素质、心肺耐力、压力抵抗力和激素代谢效率。体魄越高，激素恢复速度越快，受伤害时激素流失越少。</Physique.description>
+</LanguageData>

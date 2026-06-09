@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-  <Need_Hormones>Hormones</Need_Hormones>
-  <Need_Hormones_Desc>The current hormones level of the pawn. High hormones means the pawn stays calm in battle, while low hormones causes stress and panic.</Need_Hormones_Desc>
+  <Need_Hormones>激素</Need_Hormones>
+  <Need_Hormones_Desc>殖民者当前的激素水平。高激素意味着殖民者在战斗中保持冷静，而低激素会导致压力和恐慌。</Need_Hormones_Desc>
 
-  <Calm>Calm</Calm>
-  <Normal>Normal</Normal>
-  <Stressed>Stressed</Stressed>
-  <Panicked>Panicked</Panicked>
+  <Calm>冷静</Calm>
+  <Normal>正常</Normal>
+  <Stressed>紧张</Stressed>
+  <Panicked>恐慌</Panicked>
 
-  <Hormones>Hormones</Hormones>
+  <Hormones>激素</Hormones>
 
-  <SevereBleeding>Severe Bleeding</SevereBleeding>
-  <SevereBleeding_desc>I'm bleeding a lot! I don't want to die!!!</SevereBleeding_desc>
+  <SevereBleeding>严重出血</SevereBleeding>
+  <SevereBleeding_desc>我流了好多血！我不想死！！！</SevereBleeding_desc>
 
-  <Physique>Physique</Physique>
-  <Physique_Description>Represents a pawn's physical fitness, cardiorespiratory endurance, stress resilience, and hormone metabolism efficiency.</Physique_Description>
+  <Physique>体魄</Physique>
+  <Physique_Description>代表殖民者的体能素质、心肺耐力、压力抵抗力和激素代谢效率。</Physique_Description>
+
+  <!-- 体魄可视化 -->
+  <PhysiqueLevel>体魄等级</PhysiqueLevel>
+  <OverallBonus>整体加成</OverallBonus>
+  <WorkEfficiency>工作效率</WorkEfficiency>
+  <HungerRate>饥饿速率</HungerRate>
+  <MetabolicRate>代谢速率</MetabolicRate>
+  <Appetite>食欲需求</Appetite>
+  <HormoneRecovery>激素恢复</HormoneRecovery>
+  <HormoneDamageReduction>激素减伤</HormoneDamageReduction>
+  <AdrenalinePenalty>肾上腺素惩罚</AdrenalinePenalty>
+  <AdrenalineExempt>肾上腺素豁免</AdrenalineExempt>
+  <CortisolGrowth>皮质醇增长</CortisolGrowth>
+  <Yes>是</Yes>
+  <No>否</No>
 </LanguageData>

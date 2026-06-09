@@ -170,6 +170,7 @@ public class HormonesComponent : ThingComp, IExposable
     /// 延迟到第一次 Tick 时添加，确保 HediffDef 已加载
     /// </summary>
     private bool cortisolAdded = false;
+    private bool physiqueDisplayAdded = false;
     
     public override void CompTick()
     {
@@ -179,6 +180,12 @@ public class HormonesComponent : ThingComp, IExposable
         if (!cortisolAdded && Pawn != null && Pawn.IsHashIntervalTick(60))
         {
             AddCortisolHediff();
+        }
+        
+        // 延迟添加体魄可视化 Hediff
+        if (!physiqueDisplayAdded && Pawn != null && Pawn.IsHashIntervalTick(60))
+        {
+            AddPhysiqueDisplayHediff();
         }
         
         // 原有的激素间隔逻辑
@@ -220,6 +227,42 @@ public class HormonesComponent : ThingComp, IExposable
         
         cortisolAdded = true;
         Log.Message($"[皮质醇-初始化] {Pawn?.Name?.ToStringFull ?? "Unknown"} 添加了皮质醇 Hediff，初始浓度: 0.15");
+    }
+
+    /// <summary>
+    /// 添加体魄可视化 Hediff 到殖民者
+    /// </summary>
+    private void AddPhysiqueDisplayHediff()
+    {
+        if (physiqueDisplayAdded) return;
+        if (Pawn == null) return;
+
+        // 检查是否已经有体魄可视化 Hediff
+        if (Pawn.health?.hediffSet == null) return;
+
+        HediffDef physiqueDef = DefDatabase<HediffDef>.GetNamed("PhysiqueBodyCondition", false);
+        if (physiqueDef == null)
+        {
+            Log.Warning("[Hormones] PhysiqueBodyCondition HediffDef not found! Will retry next tick...");
+            return;
+        }
+
+        // 检查是否已经有该 Hediff
+        if (Pawn.health.hediffSet.HasHediff(physiqueDef))
+        {
+            physiqueDisplayAdded = true;
+            return; // 已经有了，不再添加
+        }
+
+        // 添加体魄可视化 Hediff
+        Hediff physiqueHediff = HediffMaker.MakeHediff(physiqueDef, Pawn);
+        int physiqueLevel = GetPhysiqueLevel();
+        // Severity 必须 > 0，否则 Hediff 会被自动移除
+        physiqueHediff.Severity = System.Math.Max(0.01f, physiqueLevel / 20f);
+        Pawn.health.AddHediff(physiqueHediff);
+
+        physiqueDisplayAdded = true;
+        Log.Message($"[体魄-初始化] {Pawn?.Name?.ToStringFull ?? "Unknown"} 添加了体魄可视化 Hediff，初始等级: {physiqueLevel}");
     }
 
     public void AddHormonesReduction(float baseAmount)

@@ -55,9 +55,9 @@ namespace Hormones
         /// 每tick执行的更新逻辑
         /// 处理皮质醇变化、神经衰弱判定、战后疲惫检测
         /// </summary>
-        public override void CompTick()
+        public override void CompPostTick(ref float severityAdjustment)
         {
-            base.CompTick();
+            base.CompPostTick(ref severityAdjustment);
             ticksSinceLastUpdate++;
             ticksSinceLastDailyCheck++;
             ticksSinceLastCombatCheck++;
@@ -116,7 +116,7 @@ namespace Hormones
                 if (adrenalinePeakLast5Minutes > Define.AdrenalineCortisolLinkThreshold)
                 {
                     float oldSeverity = parent.Severity;
-                    parent.Severity = Mathf.Clamp01(parent.Severity + 0.02f);
+                    parent.Severity = Utils.Clamp01(parent.Severity + 0.02f);
                     adrenalinePeakLast5Minutes = 0f;
                     
                     // ========================================
@@ -192,7 +192,7 @@ namespace Hormones
         /// <param name="amount">调整量（正数增加，负数减少）</param>
         public void AdjustSeverity(float amount)
         {
-            parent.Severity = Mathf.Clamp01(parent.Severity + amount);
+            parent.Severity = Utils.Clamp01(parent.Severity + amount);
         }
 
         /// <summary>
@@ -417,7 +417,7 @@ namespace Hormones
             }
 
             // 低温环境检测
-            if (pawn.Position != null && pawn.Map != null)
+            if (pawn.Position.IsValid && pawn.Map != null)
             {
                 Room room = pawn.GetRoom();
                 if (room != null && room.Temperature < 5f)
@@ -563,7 +563,7 @@ namespace Hormones
             float physiqueFactor = 13 - physiqueLevel;
 
             float probability = baseProb + severityFactor * physiqueFactor;
-            return Mathf.Clamp(probability, 0f, Define.CortisolNeurastheniaMaxProb);
+            return Utils.Clamp(probability, 0f, Define.CortisolNeurastheniaMaxProb);
         }
 
         /// <summary>

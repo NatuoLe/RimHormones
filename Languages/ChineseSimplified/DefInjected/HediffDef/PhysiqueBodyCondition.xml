@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <PhysiqueBodyCondition.label>体魄</PhysiqueBodyCondition.label>
+  <PhysiqueBodyCondition.description>反映殖民者体魄等级及其对身体各项机能的影响。体魄越高，身体表现越好，但新陈代谢需求也越高。</PhysiqueBodyCondition.description>
+  
+  <!-- 体魄阶段 (按索引) -->
+  <PhysiqueBodyCondition.stages.0.label>虚弱</PhysiqueBodyCondition.stages.0.label>
+  <PhysiqueBodyCondition.stages.1.label>一般</PhysiqueBodyCondition.stages.1.label>
+  <PhysiqueBodyCondition.stages.2.label>健康</PhysiqueBodyCondition.stages.2.label>
+  <PhysiqueBodyCondition.stages.3.label>强壮</PhysiqueBodyCondition.stages.3.label>
+  <PhysiqueBodyCondition.stages.4.label>卓越</PhysiqueBodyCondition.stages.4.label>
+
+  <!-- 皮质醇 -->
+  <Cortisol.label>皮质醇</Cortisol.label>
+  <Cortisol.description>应激激素，长期压力下缓慢积累。浓度越高，身体和心理的慢性压力越大。</Cortisol.description>
+  
+  <CortisolNeurasthenia.label>神经衰弱</CortisolNeurasthenia.label>
+  <CortisolNeurasthenia.description>长期高皮质醇导致的神经耗竭。会引起失眠和情绪紊乱。</CortisolNeurasthenia.description>
+  
+  <CortisolOverloadExhaustion.label>过载耗竭</CortisolOverloadExhaustion.label>
+  <CortisolOverloadExhaustion.description>皮质醇过载导致的极度身心疲惫。需要长时间休息恢复。</CortisolOverloadExhaustion.description>
+
+  <!-- 肾上腺素 -->
+  <Adrenaline.label>肾上腺素</Adrenaline.label>
+  <Adrenaline.description>应激激素，压力下增强身体表现。严重程度表示激素浓度水平。</Adrenaline.description>
+  
+  <Adrenaline.stages.0.label>休眠</Adrenaline.stages.0.label>
+  <Adrenaline.stages.1.label>低浓度</Adrenaline.stages.1.label>
+  <Adrenaline.stages.2.label>中高浓度</Adrenaline.stages.2.label>
+  <Adrenaline.stages.3.label>高浓度</Adrenaline.stages.3.label>
+</LanguageData>
