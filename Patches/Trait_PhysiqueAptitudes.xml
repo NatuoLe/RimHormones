@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "Tough"]/degreeDatas/li</xpath>
+    <value>
+      <skillGains>
+        <Physique>2</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "Delicate"]/degreeDatas/li</xpath>
+    <value>
+      <skillGains>
+        <Physique>-2</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "Brawler"]/degreeDatas/li</xpath>
+    <value>
+      <skillGains>
+        <Physique>1</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "Bodybuilder"]/degreeDatas/li</xpath>
+    <value>
+      <skillGains>
+        <Physique>3</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+</Patch>

@@ -36,7 +36,17 @@ echo Build success!
 echo.
 
 echo ========================================
-echo   Step 2: Copy to RimWorld Mods
+echo   Step 2: Clean up old files in Dest
+echo ========================================
+echo.
+
+if exist "%DEST_DIR%\Defs\TraitDefs\Trait_PhysiqueAptitudes.xml" (
+    echo Removing old Trait_PhysiqueAptitudes.xml from Defs...
+    del "%DEST_DIR%\Defs\TraitDefs\Trait_PhysiqueAptitudes.xml"
+)
+
+echo ========================================
+echo   Step 3: Copy to RimWorld Mods
 echo ========================================
 echo.
 
@@ -50,6 +60,9 @@ xcopy /E /I /Y "%PROJECT_DIR%..\About" "%DEST_DIR%\About"
 
 echo Copy Defs folder...
 xcopy /E /I /Y "%PROJECT_DIR%..\Defs" "%DEST_DIR%\Defs"
+
+echo Copy Patches folder...
+xcopy /E /I /Y "%PROJECT_DIR%..\Patches" "%DEST_DIR%\Patches"
 
 echo Copy Languages folder...
 xcopy /E /I /Y "%PROJECT_DIR%..\Languages" "%DEST_DIR%\Languages"

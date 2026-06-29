@@ -82,7 +82,15 @@ public class HormonesComponent : ThingComp, IExposable
         if (physiqueSkillDef == null) return 1;
         SkillRecord skill = Pawn.skills?.GetSkill(physiqueSkillDef);
         int level = skill?.levelInt ?? 1;
-        return Helpers.Clamp(level, Define.PhysiqueMinLevel, Define.PhysiqueMaxLevel);
+        
+        // 应用 Trait 的初始等级偏移
+        int traitOffset = PhysiqueTraitUtility.GetTotalPhysiqueOffset(Pawn);
+        level += traitOffset;
+        
+        // 计算修正后的最大等级
+        int maxLevel = Define.PhysiqueMaxLevel + PhysiqueTraitUtility.GetTotalCapOffset(Pawn);
+        
+        return Helpers.Clamp(level, Define.PhysiqueMinLevel, maxLevel);
     }
 
     public float MetabolicRateMultiplier

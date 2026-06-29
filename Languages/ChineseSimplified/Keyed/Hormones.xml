@@ -28,6 +28,15 @@
   <AdrenalinePenalty>肾上腺素惩罚</AdrenalinePenalty>
   <AdrenalineExempt>肾上腺素豁免</AdrenalineExempt>
   <CortisolGrowth>皮质醇增长</CortisolGrowth>
+  
+  <!-- Trait 影响 -->
+  <TraitEffects>特质影响</TraitEffects>
+  <InitialLevelOffset>初始等级偏移</InitialLevelOffset>
+  <GrowthRate>成长速度</GrowthRate>
+  <DecayRate>衰减速度</DecayRate>
+  <MaxLevelBonus>最大等级加成</MaxLevelBonus>
+  <PhysiqueEffects>体魄效果</PhysiqueEffects>
+  
   <Yes>是</Yes>
   <No>否</No>
 </LanguageData>
