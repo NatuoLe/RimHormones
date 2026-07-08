@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 namespace Hormones
 {
-    /// <summary>
-    /// 挂载在 Trait 上存储体魄相关参数
-    /// </summary>
     public class PhysiqueTraitExt : DefModExtension
     {
         public int physiqueOffset = 0;
@@ -15,9 +12,6 @@ namespace Hormones
         public int physiqueCapOffset = 0;
     }
 
-    /// <summary>
-    /// 简易数据载体
-    /// </summary>
     public struct PhysiqueTraitData
     {
         public int offset;
@@ -30,9 +24,6 @@ namespace Hormones
     {
         private static Dictionary<string, PhysiqueTraitExt> traitCache = new Dictionary<string, PhysiqueTraitExt>();
 
-        /// <summary>
-        /// 清除缓存（在扩展添加后调用）
-        /// </summary>
         public static void ClearCache()
         {
             traitCache.Clear();
@@ -42,8 +33,6 @@ namespace Hormones
         public static PhysiqueTraitExt GetPhysiqueExtension(this TraitDef traitDef)
         {
             if (traitDef == null) return null;
-            
-            // 不使用缓存，确保每次都获取最新的扩展
             return traitDef.GetModExtension<PhysiqueTraitExt>();
         }
 
@@ -65,34 +54,12 @@ namespace Hormones
 
         public static float GetTotalExpFactor(Pawn pawn)
         {
-            if (pawn == null || pawn.story?.traits == null) return 1f;
-            
-            float factor = 1f;
-            foreach (var trait in pawn.story.traits.allTraits)
-            {
-                var extension = trait.def.GetPhysiqueExtension();
-                if (extension != null)
-                {
-                    factor *= extension.physiqueExpFactor;
-                }
-            }
-            return factor;
+            return 1f;
         }
 
         public static float GetTotalDecayFactor(Pawn pawn)
         {
-            if (pawn == null || pawn.story?.traits == null) return 1f;
-            
-            float factor = 1f;
-            foreach (var trait in pawn.story.traits.allTraits)
-            {
-                var extension = trait.def.GetPhysiqueExtension();
-                if (extension != null)
-                {
-                    factor *= extension.physiqueDecayFactor;
-                }
-            }
-            return factor;
+            return 1f;
         }
 
         public static int GetTotalCapOffset(Pawn pawn)

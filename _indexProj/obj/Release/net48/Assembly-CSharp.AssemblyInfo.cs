@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RimHormones")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+96084e24e1ec291357b5dd6e77361f6ecfaa0c03")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5301414d97451c9970dbfe41b209203d30618e50")]
 [assembly: System.Reflection.AssemblyProductAttribute("RimHormones")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RimHormones")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

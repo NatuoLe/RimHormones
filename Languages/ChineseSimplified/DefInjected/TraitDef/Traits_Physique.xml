@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Anorexic.degreeDatas.0.label>厌食症</Anorexic.degreeDatas.0.label>
+  <Anorexic.degreeDatas.0.description>{PAWN_nameDef} 患有厌食症。{PAWN_pronoun} 的食欲降低，需要的食物更少，但体格较差。</Anorexic.degreeDatas.0.description>
+  
+  <Brawny.degreeDatas.0.label>身强力壮</Brawny.degreeDatas.0.label>
+  <Brawny.degreeDatas.0.description>{PAWN_nameDef} 异常强壮且肌肉发达。{PAWN_pronoun} 拥有出色的体能，在需要力量的任务中表现出色。</Brawny.degreeDatas.0.description>
+  
+  <Obese.degreeDatas.0.label>肥胖</Obese.degreeDatas.0.label>
+  <Obese.degreeDatas.0.description>{PAWN_nameDef} 体重超标。{PAWN_pronoun} 移动较慢，魅力较低，但并不缺乏耐力。</Obese.degreeDatas.0.description>
+  
+  <Slender.degreeDatas.0.label>纤细</Slender.degreeDatas.0.label>
+  <Slender.degreeDatas.0.description>{PAWN_nameDef} 身材苗条优雅。{PAWN_pronoun} 很有魅力，但缺乏体力。</Slender.degreeDatas.0.description>
+  
+  <Agile.degreeDatas.0.label>身手矫健</Agile.degreeDatas.0.label>
+  <Agile.degreeDatas.0.description>{PAWN_nameDef} 异常敏捷快速。{PAWN_pronoun} 能轻松闪避攻击，动作优雅。</Agile.degreeDatas.0.description>
+</LanguageData>

@@ -22,13 +22,85 @@
     <xpath>*/TraitDef[defName = "Brawler"]/degreeDatas/li</xpath>
     <value>
       <skillGains>
-        <Physique>1</Physique>
+        <Physique>3</Physique>
       </skillGains>
     </value>
   </Operation>
 
   <Operation Class="PatchOperationAdd">
     <xpath>*/TraitDef[defName = "Bodybuilder"]/degreeDatas/li</xpath>
+    <value>
+      <skillGains>
+        <Physique>3</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "Nimble"]/degreeDatas/li</xpath>
+    <value>
+      <skillGains>
+        <Physique>2</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "Immunity"]/degreeDatas/li[degree=1]</xpath>
+    <value>
+      <skillGains>
+        <Physique>3</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "Immunity"]/degreeDatas/li[degree=-1]</xpath>
+    <value>
+      <skillGains>
+        <Physique>-3</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "SpeedOffset"]/degreeDatas/li[degree=1]</xpath>
+    <value>
+      <skillGains>
+        <Physique>3</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "QuickSleeper"]/degreeDatas/li</xpath>
+    <value>
+      <skillGains>
+        <Physique>1</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "Wimp"]/degreeDatas/li</xpath>
+    <value>
+      <skillGains>
+        <Physique>-1</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "NaturalMood"]/degreeDatas/li[degree=-2]</xpath>
+    <value>
+      <skillGains>
+        <Physique>-2</Physique>
+      </skillGains>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/TraitDef[defName = "Bloodlust"]/degreeDatas/li</xpath>
     <value>
       <skillGains>
         <Physique>3</Physique>

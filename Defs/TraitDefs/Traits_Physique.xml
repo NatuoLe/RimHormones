@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <TraitDef>
+    <defName>Anorexic</defName>
+    <commonality>0.5</commonality>
+    <degreeDatas>
+      <li>
+        <label>anorexic</label>
+        <description>{PAWN_nameDef} struggles with anorexia. {PAWN_pronoun} has a reduced appetite and needs less food to survive, but suffers from poor physique.</description>
+        <skillGains>
+          <Physique>-2</Physique>
+        </skillGains>
+        <statFactors>
+          <MaxNutrition>0.65</MaxNutrition>
+        </statFactors>
+      </li>
+    </degreeDatas>
+  </TraitDef>
+
+  <TraitDef>
+    <defName>Brawny</defName>
+    <commonality>0.8</commonality>
+    <degreeDatas>
+      <li>
+        <label>brawny</label>
+        <description>{PAWN_nameDef} is exceptionally strong and muscular. {PAWN_pronoun} has impressive physical capabilities and excels in tasks requiring raw strength.</description>
+        <skillGains>
+          <Physique>4</Physique>
+        </skillGains>
+      </li>
+    </degreeDatas>
+    <conflictingTraits>
+      <li>Anorexic</li>
+      <li>Slender</li>
+    </conflictingTraits>
+  </TraitDef>
+
+  <TraitDef>
+    <defName>Obese</defName>
+    <commonality>0.6</commonality>
+    <degreeDatas>
+      <li>
+        <label>obese</label>
+        <description>{PAWN_nameDef} carries excess weight. {PAWN_pronoun} moves slower and is less attractive, but doesn't lack endurance.</description>
+        <skillGains>
+          <Physique>-2</Physique>
+        </skillGains>
+        <statOffsets>
+          <MoveSpeed>-0.2</MoveSpeed>
+          <PawnBeauty>-1</PawnBeauty>
+        </statOffsets>
+      </li>
+    </degreeDatas>
+    <conflictingTraits>
+      <li>Slender</li>
+      <li>Agile</li>
+    </conflictingTraits>
+  </TraitDef>
+
+  <TraitDef>
+    <defName>Slender</defName>
+    <commonality>1.0</commonality>
+    <degreeDatas>
+      <li>
+        <label>slender</label>
+        <description>{PAWN_nameDef} has a thin, graceful build. {PAWN_pronoun} is attractive but lacks physical strength.</description>
+        <skillGains>
+          <Physique>-1</Physique>
+        </skillGains>
+        <statOffsets>
+          <PawnBeauty>1</PawnBeauty>
+        </statOffsets>
+      </li>
+    </degreeDatas>
+    <conflictingTraits>
+      <li>Brawny</li>
+      <li>Obese</li>
+    </conflictingTraits>
+  </TraitDef>
+
+  <TraitDef>
+    <defName>Agile</defName>
+    <commonality>0.8</commonality>
+    <degreeDatas>
+      <li>
+        <label>agile</label>
+        <description>{PAWN_nameDef} is exceptionally nimble and quick. {PAWN_pronoun} dodges attacks easily and moves with grace.</description>
+        <skillGains>
+          <Physique>2</Physique>
+        </skillGains>
+        <statOffsets>
+          <MeleeDodgeChance>0.1</MeleeDodgeChance>
+          <MoveSpeed>0.1</MoveSpeed>
+        </statOffsets>
+      </li>
+    </degreeDatas>
+    <conflictingTraits>
+      <li>Obese</li>
+    </conflictingTraits>
+  </TraitDef>
+</Defs>
