@@ -55,10 +55,10 @@ namespace Hormones
             if (level == AdrenalineLevel.Dormant)
                 return new AdrenalineEffects();
 
-            int physiqueLevel = GetPhysiqueLevel(pawn);
-            float physiqueMod = GetPhysiqueModifier(physiqueLevel);
-            bool visionHearingExempt = IsVisionHearingExempt(physiqueLevel);
-            bool meleeHitExempt = IsMeleeHitExempt(physiqueLevel);
+            int physiqueLevel = PhysiqueLgc.GetPhysiqueLevel(pawn);
+            float physiqueMod = PhysiqueLgc.GetAdrenalinePhysiqueModifier(pawn);
+            bool visionHearingExempt = PhysiqueLgc.IsAdrenalineExempt(pawn);
+            bool meleeHitExempt = PhysiqueLgc.IsAdrenalineExempt(pawn);
 
             AdrenalineEffects effects = new AdrenalineEffects();
             effects.Level = level;
@@ -130,8 +130,8 @@ namespace Hormones
             if (adrenaline == null || adrenaline.Severity < Define.AdrenalineThresholdMedium)
                 return;
 
-            int physiqueLevel = GetPhysiqueLevel(pawn);
-            if (physiqueLevel >= Define.PhysiqueAdrenalineExemptionThreshold)
+            int physiqueLevel = PhysiqueLgc.GetPhysiqueLevel(pawn);
+            if (PhysiqueLgc.IsAdrenalineExempt(pawn))
                 return;
 
             float chance = Define.AdrenalineOverexertBaseChance + 
@@ -145,7 +145,7 @@ namespace Hormones
 
         private static void ApplyRandomOverexertHediff(Pawn pawn, int physiqueLevel)
         {
-            List<string> mildHediffs = new List<string> { "MuscleStrain", "JointSprain" };
+            List<string> mildHediffs = new List<string> { "MuscleStrainHediff", "JointSprain" };
             List<string> moderateHediffs = new List<string> { "TendonFatigue", "HeartPalpitations", "ShortnessOfBreath" };
             List<string> severeHediffs = new List<string> { "LimbWeakness" };
 
@@ -219,15 +219,6 @@ namespace Hormones
             }
         }
 
-        private static int GetPhysiqueLevel(Pawn pawn)
-        {
-            if (pawn == null) return 1;
-            SkillDef physiqueSkillDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
-            if (physiqueSkillDef == null) return 1;
-            SkillRecord skill = pawn.skills?.GetSkill(physiqueSkillDef);
-            int level = skill?.levelInt ?? 1;
-            return Helpers.Clamp(level, Define.PhysiqueMinLevel, Define.PhysiqueMaxLevel);
-        }
     }
 
     public class AdrenalineEffects

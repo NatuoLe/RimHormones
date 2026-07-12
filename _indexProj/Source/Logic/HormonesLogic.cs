@@ -8,67 +8,30 @@ namespace Hormones
 
 public static class HormonesLogic
 {
-    private static int GetPhysiqueLevel(Pawn pawn)
-    {
-        if (pawn == null) return 1;
-        SkillDef physiqueSkillDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
-        if (physiqueSkillDef == null) return 1;
-        SkillRecord skill = pawn.skills?.GetSkill(physiqueSkillDef);
-        int level = skill?.levelInt ?? 1;
-        return Helpers.Clamp(level, Define.PhysiqueMinLevel, Define.PhysiqueMaxLevel);
-    }
-
-    private static float GetPhysiqueBonus(Pawn pawn)
-    {
-        int physiqueLevel = GetPhysiqueLevel(pawn);
-
-        if (physiqueLevel < Define.PhysiqueNegativeThresholdHigh)
-        {
-            return Define.PhysiqueLowPenalty;
-        }
-        else if (physiqueLevel <= Define.PhysiqueNegativeThresholdLow)
-        {
-            return Define.PhysiqueMediumPenalty;
-        }
-        else
-        {
-            float bonus = 1f + (physiqueLevel - Define.PhysiquePositiveThreshold + 1) * Define.PhysiqueBonusPerLevel;
-            return bonus;
-        }
-    }
-
     public static float GetWorkEfficiency(Pawn pawn)
     {
-        int physiqueLevel = GetPhysiqueLevel(pawn);
-        float workEfficiency = Define.WorkEfficiencyBase + Define.WorkEfficiencyPerPhysique * physiqueLevel;
-        return Helpers.Clamp(workEfficiency, Define.WorkEfficiencyMin, Define.WorkEfficiencyMax);
+        return PhysiqueLgc.GetWorkEfficiency(pawn);
     }
 
     public static float GetHungerRate(Pawn pawn)
     {
-        int physiqueLevel = GetPhysiqueLevel(pawn);
-        float hungerRate = Define.HungerRateBase + Define.HungerRatePerPhysique * physiqueLevel;
-        return Helpers.Clamp(hungerRate, Define.HungerRateMin, Define.HungerRateMax);
+        return PhysiqueLgc.GetHungerRate(pawn);
     }
 
     public static void ApplyPhysiqueCombatBonus(Pawn pawn, ref float hitChance)
     {
-        float physiqueBonus = GetPhysiqueBonus(pawn);
-        hitChance *= physiqueBonus;
+        PhysiqueLgc.ApplyPhysiqueCombatBonus(pawn, ref hitChance);
     }
 
     public static float GetMetabolicRate(Pawn pawn)
     {
-        int physiqueLevel = GetPhysiqueLevel(pawn);
-        return Define.MetabolicRateBase + Define.MetabolicRatePerPhysique * physiqueLevel;
+        return PhysiqueLgc.GetMetabolicRate(pawn);
     }
 
     public static float GetAppetiteMultiplier(Pawn pawn)
-{
-    int physiqueLevel = GetPhysiqueLevel(pawn);
-    float appetite = Define.AppetiteBase + Define.AppetitePerPhysique * physiqueLevel;
-    return Helpers.Clamp(appetite, Define.AppetiteMinMultiplier, Define.AppetiteMaxMultiplier);
-}
+    {
+        return PhysiqueLgc.GetAppetiteMultiplier(pawn);
+    }
 
     public static void ApplyHormonesCombatPenalty(Pawn pawn, ref float hitChance)
     {

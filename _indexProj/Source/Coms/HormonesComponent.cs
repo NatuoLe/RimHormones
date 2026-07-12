@@ -77,29 +77,14 @@ public class HormonesComponent : ThingComp, IExposable
 
     private int GetPhysiqueLevel()
     {
-        if (Pawn == null) return 1;
-        SkillDef physiqueSkillDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
-        if (physiqueSkillDef == null) return 1;
-        SkillRecord skill = Pawn.skills?.GetSkill(physiqueSkillDef);
-        int level = skill?.levelInt ?? 1;
-        
-        // 应用 Trait 的初始等级偏移
-        int traitOffset = PhysiqueTraitUtility.GetTotalPhysiqueOffset(Pawn);
-        level += traitOffset;
-        
-        // 计算修正后的最大等级
-        int maxLevel = Define.PhysiqueMaxLevel + PhysiqueTraitUtility.GetTotalCapOffset(Pawn);
-        
-        return Helpers.Clamp(level, Define.PhysiqueMinLevel, maxLevel);
+        return PhysiqueLgc.GetPhysiqueLevel(Pawn);
     }
 
     public float MetabolicRateMultiplier
     {
         get
         {
-            int physiqueLevel = GetPhysiqueLevel();
-            float metabolicRate = Define.MetabolicRateBase + Define.MetabolicRatePerPhysique * physiqueLevel;
-            return metabolicRate;
+            return PhysiqueLgc.GetMetabolicRate(Pawn);
         }
     }
 
@@ -107,8 +92,7 @@ public class HormonesComponent : ThingComp, IExposable
     {
         get
         {
-            float metabolicRate = MetabolicRateMultiplier;
-            return Helpers.Clamp(metabolicRate, Define.AppetiteMinMultiplier, Define.AppetiteMaxMultiplier);
+            return PhysiqueLgc.GetAppetiteMultiplier(Pawn);
         }
     }
 
@@ -116,9 +100,7 @@ public class HormonesComponent : ThingComp, IExposable
     {
         get
         {
-            int physiqueLevel = GetPhysiqueLevel();
-            float workEfficiency = Define.WorkEfficiencyBase + Define.WorkEfficiencyPerPhysique * physiqueLevel;
-            return Helpers.Clamp(workEfficiency, Define.WorkEfficiencyMin, Define.WorkEfficiencyMax);
+            return PhysiqueLgc.GetWorkEfficiency(Pawn);
         }
     }
 
@@ -126,9 +108,7 @@ public class HormonesComponent : ThingComp, IExposable
     {
         get
         {
-            int physiqueLevel = GetPhysiqueLevel();
-            float hungerRate = Define.HungerRateBase + Define.HungerRatePerPhysique * physiqueLevel;
-            return Helpers.Clamp(hungerRate, Define.HungerRateMin, Define.HungerRateMax);
+            return PhysiqueLgc.GetHungerRate(Pawn);
         }
     }
 
@@ -136,34 +116,18 @@ public class HormonesComponent : ThingComp, IExposable
     {
         get
         {
-            int physiqueLevel = GetPhysiqueLevel();
-
-            if (physiqueLevel < Define.PhysiqueNegativeThresholdHigh)
-            {
-                return Define.PhysiqueLowPenalty;
-            }
-            else if (physiqueLevel <= Define.PhysiqueNegativeThresholdLow)
-            {
-                return Define.PhysiqueMediumPenalty;
-            }
-            else
-            {
-                float bonus = 1f + (physiqueLevel - Define.PhysiquePositiveThreshold + 1) * Define.PhysiqueBonusPerLevel;
-                return bonus;
-            }
+            return PhysiqueLgc.GetPhysiqueBonus(Pawn);
         }
     }
 
     private float GetPhysiqueRecoveryBonus()
     {
-        int physiqueLevel = GetPhysiqueLevel();
-        return 1f + (physiqueLevel - 1f) / (Define.PhysiqueMaxLevel - 1) * Define.PhysiqueHormonesRecoveryBonusFactor;
+        return PhysiqueLgc.GetRecoveryBonus(Pawn);
     }
 
     private float GetPhysiqueDamageReductionFactor()
     {
-        int physiqueLevel = GetPhysiqueLevel();
-        return 1f - (physiqueLevel - 1f) / (Define.PhysiqueMaxLevel - 1) * Define.PhysiqueHormonesDamageReductionFactor;
+        return PhysiqueLgc.GetDamageReductionFactor(Pawn);
     }
 
     public override void Initialize(CompProperties props)

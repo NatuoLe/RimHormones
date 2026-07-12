@@ -40,24 +40,6 @@
   </HediffDef>
 
   <HediffDef>
-    <defName>MuscleStrain</defName>
-    <label>muscle strain</label>
-    <description>Temporary muscle strain from overexertion.</description>
-    <hediffClass>HediffWithComps</hediffClass>
-    <isBad>true</isBad>
-    <makesAlert>false</makesAlert>
-    <tendable>true</tendable>
-    <stages>
-      <li>
-        <minSeverity>0</minSeverity>
-        <statFactors>
-          <MoveSpeed>0.9</MoveSpeed>
-        </statFactors>
-      </li>
-    </stages>
-  </HediffDef>
-
-  <HediffDef>
     <defName>JointSprain</defName>
     <label>joint sprain</label>
     <description>Temporary joint sprain from overexertion.</description>

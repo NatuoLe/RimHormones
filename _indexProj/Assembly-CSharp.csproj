@@ -16,10 +16,15 @@
     <Compile Include="Source\Logic\AdrenalineLogic.cs" />
     <Compile Include="Source\Logic\AdrenalineProducer.cs" />
     <Compile Include="Source\Logic\PhysiqueTraitUtility.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\PhysiqueLgc.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\PhysiqueDefine.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\PhysiquePatches.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\PhysiqueDatas.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\MuscleStrainUtility.cs" />
     <Compile Include="Source\Needs\Need_Hormones.cs" />
+    <Compile Include="Source\Needs\Need_MuscleStrain.cs" />
     <Compile Include="Source\Comps\HediffComp_PhysiqueDisplay.cs" />
     <Compile Include="Source\Comps\HediffComp_Cortisol.cs" />
-    <Compile Include="Source\Patches\PhysiqueTraitPatches.cs" />
     <Compile Include="Source\Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>

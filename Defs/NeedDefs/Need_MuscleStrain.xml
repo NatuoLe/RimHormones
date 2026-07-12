@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <NeedDef>
+    <defName>MuscleStrain</defName>
+    <label>muscle strain</label>
+    <description>Muscle fatigue and strain level. Higher strain means more prone to muscle injuries. Recovers only during sleep.</description>
+    <needClass>Hormones.Need_MuscleStrain</needClass>
+    <minIntelligence>ToolUser</minIntelligence>
+    <showOnNeedList>true</showOnNeedList>
+    <colonistsOnly>false</colonistsOnly>
+    <baseLevel>0</baseLevel>
+    <fallPerDay>0</fallPerDay>
+    <major>false</major>
+  </NeedDef>
+</Defs>

@@ -20,6 +20,9 @@ namespace Hormones
             var compProps = new CompProperties_Hormones();
             Log.Message("[Hormones] CompProperties: Hormones(decay=" + compProps.decayRate + ", maxLevel=" + compProps.maxLevel + ")");
 
+            Logic.PhysiqueLogic.PhysiqueDatas.Initialize();
+            Log.Message("[Hormones] PhysiqueDatas initialized with Vector3 object pool");
+
             var harmony = new Harmony("thgold.hormones");
             harmony.PatchAll();
 

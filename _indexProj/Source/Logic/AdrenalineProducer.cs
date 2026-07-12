@@ -40,7 +40,7 @@ namespace Hormones
 
         public static float CalculateNetChangePerSecond(Pawn pawn)
         {
-            int physique = GetPhysiqueLevel(pawn);
+            int physique = PhysiqueLgc.GetPhysiqueLevel(pawn);
             
             float decay = GetDecayPerSecond(physique);
             
@@ -119,7 +119,7 @@ namespace Hormones
                 attacker.health.AddHediff(adrenaline);
             }
 
-            int physique = GetPhysiqueLevel(attacker);
+            int physique = PhysiqueLgc.GetPhysiqueLevel(attacker);
             float gain = GetAttackAdrenalineGain(isMelee, physique);
             
             adrenaline.Severity = Math.Min(adrenaline.Severity + gain, 1f);
@@ -134,20 +134,11 @@ namespace Hormones
                 victim.health.AddHediff(adrenaline);
             }
 
-            int physique = GetPhysiqueLevel(victim);
+            int physique = PhysiqueLgc.GetPhysiqueLevel(victim);
             float gain = GetHitAdrenalineGain(physique);
             
             adrenaline.Severity = Math.Min(adrenaline.Severity + gain, 1f);
         }
 
-        private static int GetPhysiqueLevel(Pawn pawn)
-        {
-            if (pawn == null) return 1;
-            SkillDef physiqueSkillDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
-            if (physiqueSkillDef == null) return 1;
-            SkillRecord skill = pawn.skills?.GetSkill(physiqueSkillDef);
-            int level = skill?.levelInt ?? 1;
-            return Helpers.Clamp(level, Define.PhysiqueMinLevel, Define.PhysiqueMaxLevel);
-        }
     }
 }

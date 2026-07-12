@@ -259,12 +259,7 @@ namespace Hormones
         /// <returns>修正系数（体魄<8:0.5，8≤体魄<13:1.0，体魄≥13:1.2）</returns>
         public static float GetCortisolPhysiqueModifier(Pawn pawn)
         {
-            int physiqueLevel = GetPhysiqueLevel(pawn);
-            if (physiqueLevel < Define.PhysiqueCortisolPenaltyThreshold)
-                return Define.PhysiqueCortisolPenaltyFactor;
-            if (physiqueLevel >= Define.PhysiqueCortisolBonusThreshold)
-                return Define.PhysiqueCortisolBonusFactor;
-            return 1.0f;
+            return PhysiqueLgc.GetCortisolPhysiqueModifier(pawn);
         }
 
         /// <summary>
@@ -329,7 +324,7 @@ namespace Hormones
         {
             string pawnName = pawn.Name?.ToStringFull ?? "Unknown";
             CortisolLevel level = GetCortisolLevel(newSev);
-            int physiqueLevel = GetPhysiqueLevel(pawn);
+            int physiqueLevel = PhysiqueLgc.GetPhysiqueLevel(pawn);
             
             // 构建变化源字符串
             string sources = "";
@@ -537,7 +532,7 @@ namespace Hormones
             // ========================================
             // 【神经衰弱判定日志】
             // ========================================
-            int physiqueLevel = GetPhysiqueLevel(pawn);
+            int physiqueLevel = PhysiqueLgc.GetPhysiqueLevel(pawn);
             Log.Message($"[皮质醇-神经衰弱判定] {pawn.Name?.ToStringFull ?? "Unknown"} | " +
                        $"皮质醇: {severity:F3} | 体魄: {physiqueLevel} | " +
                        $"触发概率: {probability:P1}");
@@ -557,7 +552,7 @@ namespace Hormones
         /// <returns>触发概率（0~0.6）</returns>
         public static float CalculateNeurastheniaProbability(Pawn pawn, float severity)
         {
-            int physiqueLevel = GetPhysiqueLevel(pawn);
+            int physiqueLevel = PhysiqueLgc.GetPhysiqueLevel(pawn);
             float baseProb = Define.CortisolNeurastheniaBaseProb;
             float severityFactor = Define.CortisolNeurastheniaSeverityFactor * severity;
             float physiqueFactor = 13 - physiqueLevel;
@@ -716,20 +711,6 @@ namespace Hormones
         {
             Hediff adrenaline = pawn.health.hediffSet.GetFirstHediffOfDef(DefDatabase<HediffDef>.GetNamed("Adrenaline", false));
             return adrenaline?.Severity ?? 0f;
-        }
-
-        /// <summary>
-        /// 获取指定pawn的体魄等级
-        /// </summary>
-        /// <param name="pawn">目标pawn</param>
-        /// <returns>体魄等级（0~20），默认返回8</returns>
-        public static int GetPhysiqueLevel(Pawn pawn)
-        {
-            if (pawn == null) return 8;
-            SkillDef physiqueSkillDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
-            if (physiqueSkillDef == null) return 8;
-            SkillRecord skill = pawn.skills?.GetSkill(physiqueSkillDef);
-            return skill?.levelInt ?? 8;
         }
 
         /// <summary>

@@ -6,11 +6,11 @@
     <description>Physical condition reflecting the colonist's physique level and its effects on the body. Higher physique means better physical performance but increased metabolic demands.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>false</isBad>
-    <defaultLabelColor>(0.6, 0.8, 1.0)</defaultLabelColor>
+    <defaultLabelColor>(0.8, 0.8, 0.8)</defaultLabelColor>
 
     <!-- 使用 stages 根据体魄等级显示不同效果 -->
     <stages>
-      <!-- 等级 0-4: 虚弱 (Severity 0.00-0.24) -->
+      <!-- 等级 0-4: frail 虚弱 (Severity 0.00-0.24) -->
       <li>
         <label>frail</label>
         <minSeverity>0</minSeverity>
@@ -21,82 +21,138 @@
           </li>
           <li>
             <capacity>Manipulation</capacity>
-            <offset>-0.10</offset>
+            <offset>-0.08</offset>
+          </li>
+          <li>
+            <capacity>Breathing</capacity>
+            <offset>-0.05</offset>
           </li>
         </capMods>
+        <statOffsets>
+          <MeleeHitChance>-0.10</MeleeHitChance>
+          <MeleeDodgeChance>-0.20</MeleeDodgeChance>
+          <ShootingAccuracyPawn>-0.10</ShootingAccuracyPawn>
+        </statOffsets>
         <statFactors>
-          <WorkSpeedGlobal>0.70</WorkSpeedGlobal>
+          <MeleeDamageFactor>0.90</MeleeDamageFactor>
+          <MoveSpeed>0.90</MoveSpeed>
+          <WorkSpeedGlobal>0.90</WorkSpeedGlobal>
+          <CarryingCapacity>0.90</CarryingCapacity>
+          <Mass>0.80</Mass>
         </statFactors>
-        <hungerRateFactorOffset>-0.15</hungerRateFactorOffset>
+        <hungerRateFactorOffset>-0.20</hungerRateFactorOffset>
       </li>
 
-      <!-- 等级 5-7: 一般 (Severity 0.25-0.39) -->
+      <!-- 等级 5-7: average 一般 (Severity 0.25-0.39) -->
       <li>
         <label>average</label>
         <minSeverity>0.25</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.03</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.03</offset>
+          </li>
+        </capMods>
+        <statOffsets>
+          <MeleeDodgeChance>-0.10</MeleeDodgeChance>
+        </statOffsets>
         <statFactors>
-          <WorkSpeedGlobal>0.90</WorkSpeedGlobal>
+          <WorkSpeedGlobal>0.95</WorkSpeedGlobal>
+          <CarryingCapacity>0.97</CarryingCapacity>
         </statFactors>
-        <hungerRateFactorOffset>-0.05</hungerRateFactorOffset>
       </li>
 
-      <!-- 等级 8-12: 健康 (Severity 0.40-0.64) -->
+      <!-- 等级 8-12: fit 健康 (Severity 0.40-0.64) -->
       <li>
         <label>fit</label>
         <minSeverity>0.40</minSeverity>
         <capMods>
           <li>
-            <capacity>Moving</capacity>
-            <offset>0.05</offset>
+            <capacity>Breathing</capacity>
+            <offset>0.03</offset>
           </li>
         </capMods>
+        <statOffsets>
+          <MeleeHitChance>0.10</MeleeHitChance>
+          <MeleeDodgeChance>0.10</MeleeDodgeChance>
+          <ShootingAccuracyPawn>0.10</ShootingAccuracyPawn>
+        </statOffsets>
         <statFactors>
-          <WorkSpeedGlobal>1.05</WorkSpeedGlobal>
+          <MeleeDamageFactor>1.05</MeleeDamageFactor>
+          <CarryingCapacity>1.10</CarryingCapacity>
+          <Mass>1.10</Mass>
         </statFactors>
+        <hungerRateFactorOffset>0.20</hungerRateFactorOffset>
       </li>
 
-      <!-- 等级 13-16: 强壮 (Severity 0.65-0.84) -->
+      <!-- 等级 13-16: strong 强壮 (Severity 0.65-0.84) -->
       <li>
         <label>strong</label>
         <minSeverity>0.65</minSeverity>
         <capMods>
           <li>
             <capacity>Moving</capacity>
-            <offset>0.10</offset>
+            <offset>0.03</offset>
           </li>
           <li>
             <capacity>Manipulation</capacity>
-            <offset>0.05</offset>
-          </li>
-        </capMods>
-        <statFactors>
-          <WorkSpeedGlobal>1.10</WorkSpeedGlobal>
-        </statFactors>
-        <hungerRateFactorOffset>0.10</hungerRateFactorOffset>
-      </li>
-
-      <!-- 等级 17-20: 卓越 (Severity 0.85-1.0) -->
-      <li>
-        <label>peak</label>
-        <minSeverity>0.85</minSeverity>
-        <capMods>
-          <li>
-            <capacity>Moving</capacity>
-            <offset>0.15</offset>
-          </li>
-          <li>
-            <capacity>Manipulation</capacity>
-            <offset>0.10</offset>
+            <offset>0.03</offset>
           </li>
           <li>
             <capacity>Breathing</capacity>
             <offset>0.05</offset>
           </li>
         </capMods>
+        <statOffsets>
+          <MeleeHitChance>0.10</MeleeHitChance>
+          <MeleeDodgeChance>0.20</MeleeDodgeChance>
+          <ShootingAccuracyPawn>0.10</ShootingAccuracyPawn>
+        </statOffsets>
         <statFactors>
-          <WorkSpeedGlobal>1.195</WorkSpeedGlobal>
+          <MeleeDamageFactor>1.10</MeleeDamageFactor>
+          <MoveSpeed>1.03</MoveSpeed>
+          <WorkSpeedGlobal>1.03</WorkSpeedGlobal>
+          <CarryingCapacity>1.20</CarryingCapacity>
+          <Mass>1.20</Mass>
         </statFactors>
-        <hungerRateFactorOffset>0.20</hungerRateFactorOffset>
+        <hungerRateFactorOffset>0.60</hungerRateFactorOffset>
+      </li>
+
+      <!-- 等级 17-20: peak 卓越 (Severity 0.85-1.0) -->
+      <li>
+        <label>peak</label>
+        <minSeverity>0.85</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>0.08</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>0.08</offset>
+          </li>
+          <li>
+            <capacity>Breathing</capacity>
+            <offset>0.15</offset>
+          </li>
+        </capMods>
+        <statOffsets>
+          <MeleeHitChance>0.20</MeleeHitChance>
+          <MeleeDodgeChance>0.30</MeleeDodgeChance>
+          <ShootingAccuracyPawn>0.20</ShootingAccuracyPawn>
+        </statOffsets>
+        <statFactors>
+          <MeleeDamageFactor>1.15</MeleeDamageFactor>
+          <MoveSpeed>1.08</MoveSpeed>
+          <WorkSpeedGlobal>1.08</WorkSpeedGlobal>
+          <CarryingCapacity>1.30</CarryingCapacity>
+          <Mass>1.25</Mass>
+        </statFactors>
+        <hungerRateFactorOffset>1.00</hungerRateFactorOffset>
       </li>
     </stages>
 

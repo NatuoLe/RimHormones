@@ -1,6 +1,6 @@
 namespace Hormones
 {
-    public static class Define
+    public static partial class Define
     {
         public const string ModName = "RimHormones";
 
@@ -11,48 +11,12 @@ namespace Hormones
 
         public const float SevereBleedingThreshold = 2.5f;
 
-        public const int PhysiqueMinLevel = 0;
-        public const int PhysiqueMaxLevel = 20;
-
-        public const float PhysiqueHormonesRecoveryBonusFactor = 0.5f;
-        public const float PhysiqueHormonesDamageReductionFactor = 0.5f;
-
-        public const float MetabolicRateBase = 0.85f;
-        public const float MetabolicRatePerPhysique = 0.02f;
-
-        public const float AppetiteBase = 0.66f;
-        public const float AppetitePerPhysique = 0.067f;
-        public const float AppetiteMinMultiplier = 0.66f;
-        public const float AppetiteMaxMultiplier = 2.0f;
-
-        public const int PhysiqueNegativeThresholdHigh = 5;
-        public const int PhysiqueNegativeThresholdLow = 7;
-        public const int PhysiquePositiveThreshold = 8;
-
-        public const float PhysiqueLowPenalty = 0.7f;
-        public const float PhysiqueMediumPenalty = 0.9f;
-        public const float PhysiqueBonusPerLevel = 0.015f;
-
-        public const float WorkEfficiencyBase = 0.8f;
-        public const float WorkEfficiencyPerPhysique = 0.03f;
-        public const float WorkEfficiencyMin = 0.8f;
-        public const float WorkEfficiencyMax = 1.2f;
-
-        public const float HungerRateBase = 0.66f;
-        public const float HungerRatePerPhysique = 0.05f;
-        public const float HungerRateMin = 0.66f;
-        public const float HungerRateMax = 1.66f;
-
         #region Adrenaline Constants
 
         public const float AdrenalineThresholdDormant = 0.15f;
         public const float AdrenalineThresholdLow = 0.5f;
         public const float AdrenalineThresholdMedium = 0.75f;
         public const float AdrenalineThresholdHigh = 1.0f;
-
-        public const int PhysiqueAdrenalinePenaltyThreshold = 8;
-        public const int PhysiqueAdrenalineExemptionThreshold = 13;
-        public const float PhysiqueAdrenalinePenaltyFactor = 0.5f;
 
         public const float AdrenalineRestMultiplierLow = 1.0f;
         public const float AdrenalineRestMultiplierMedium = 1.25f;
@@ -131,17 +95,6 @@ namespace Hormones
         public const float CortisolThresholdNormal = 0.15f;
         public const float CortisolThresholdStress = 0.5f;
         public const float CortisolThresholdOverload = 0.75f;
-
-        // ========================================
-        // 体魄修正系数
-        // ========================================
-        // 体魄 < 8: 惩罚系数 0.5（皮质醇上升更快、下降更慢）
-        // 8 ≤ 体魄 < 13: 正常系数 1.0
-        // 体魄 ≥ 13: 增益系数 1.2（皮质醇积聚较慢、消退较快）
-        public const int PhysiqueCortisolPenaltyThreshold = 8;
-        public const int PhysiqueCortisolBonusThreshold = 13;
-        public const float PhysiqueCortisolPenaltyFactor = 0.5f;
-        public const float PhysiqueCortisolBonusFactor = 1.2f;
 
         // ========================================
         // 皮质醇增长速率（增量/秒）

@@ -30,7 +30,7 @@ namespace Hormones
 
         private void UpdateDisplay()
         {
-            int physiqueLevel = GetPhysiqueLevel();
+            int physiqueLevel = PhysiqueLgc.GetPhysiqueLevel(Pawn);
             // Severity 必须 > 0，否则 Hediff 会被自动移除
             float targetSeverity = System.Math.Max(0.01f, physiqueLevel / 20f);
 
@@ -44,25 +44,6 @@ namespace Hormones
                 // 通知健康系统更新显示
                 Pawn.health.Notify_HediffChanged(parent);
             }
-        }
-
-        private int GetPhysiqueLevel()
-        {
-            if (Pawn == null) return 1;
-            SkillDef physiqueSkillDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
-            if (physiqueSkillDef == null) return 1;
-            SkillRecord skill = Pawn.skills?.GetSkill(physiqueSkillDef);
-            int level = skill?.levelInt ?? 1;
-            return Helpers.Clamp(level, Define.PhysiqueMinLevel, Define.PhysiqueMaxLevel);
-        }
-
-        private float GetPhysiqueBonus(int level)
-        {
-            if (level < Define.PhysiqueNegativeThresholdHigh)
-                return Define.PhysiqueLowPenalty;
-            if (level <= Define.PhysiqueNegativeThresholdLow)
-                return Define.PhysiqueMediumPenalty;
-            return 1f + (level - Define.PhysiquePositiveThreshold + 1) * Define.PhysiqueBonusPerLevel;
         }
 
         // 在 Hediff 标签括号中显示体魄等级
@@ -80,35 +61,18 @@ namespace Hormones
         {
             get
             {
-                int physiqueLevel = GetPhysiqueLevel();
-                float bonus = GetPhysiqueBonus(physiqueLevel);
+                int physiqueLevel = PhysiqueLgc.GetPhysiqueLevel(Pawn);
 
                 string tip ="";
-                //   tip += $"\n\n{"PhysiqueLevel".Translate()}: {physiqueLevel}/20\n";
-                //   tip +="测试文本\n";
-                // tip += $"{"OverallBonus".Translate()}: {bonus:P1}\n";
-                tip += $"{"WorkEfficiency".Translate()}: {HormonesLogic.GetWorkEfficiency(Pawn):P0}\n";
-                tip += $"{"HungerRate".Translate()}: {HormonesLogic.GetHungerRate(Pawn):P0}\n";
-                tip += $"{"MetabolicRate".Translate()}: {HormonesLogic.GetMetabolicRate(Pawn):P0}\n";
-                tip += $"{"Appetite".Translate()}: {HormonesLogic.GetAppetiteMultiplier(Pawn):P0}\n";
+                tip += $"{"WorkEfficiency".Translate()}: {PhysiqueLgc.GetWorkEfficiency(Pawn):P0}\n";
+                tip += $"{"HungerRate".Translate()}: {PhysiqueLgc.GetHungerRate(Pawn):P0}\n";
+                tip += $"{"MetabolicRate".Translate()}: {PhysiqueLgc.GetMetabolicRate(Pawn):P0}\n";
+                tip += $"{"Appetite".Translate()}: {PhysiqueLgc.GetAppetiteMultiplier(Pawn):P0}\n";
 
-                // 激素系统影响
-                float recoveryBonus = 1f + (physiqueLevel - 1f) / (Define.PhysiqueMaxLevel - 1) * Define.PhysiqueHormonesRecoveryBonusFactor;
-                float damageReduction = 1f - (physiqueLevel - 1f) / (Define.PhysiqueMaxLevel - 1) * Define.PhysiqueHormonesDamageReductionFactor;
+                float recoveryBonus = PhysiqueLgc.GetRecoveryBonus(Pawn);
+                float damageReduction = PhysiqueLgc.GetDamageReductionFactor(Pawn);
                 tip += $"\n{"HormoneRecovery".Translate()}: +{(recoveryBonus - 1f):P0}\n";
                 tip += $"{"HormoneDamageReduction".Translate()}: {(1f - damageReduction):P0}\n";
-
-                // // 肾上腺素联动
-                // if (physiqueLevel < Define.PhysiqueAdrenalinePenaltyThreshold)
-                //     tip += $"{"AdrenalinePenalty".Translate()}: -50%\n";
-                // else if (physiqueLevel >= Define.PhysiqueAdrenalineExemptionThreshold)
-                //     tip += $"{"AdrenalineExempt".Translate()}: {"Yes".Translate()}\n";
-
-                // // 皮质醇联动
-                // if (physiqueLevel < Define.PhysiqueCortisolPenaltyThreshold)
-                //     tip += $"{"CortisolGrowth".Translate()}: +50%\n";
-                // else if (physiqueLevel >= Define.PhysiqueCortisolBonusThreshold)
-                //     tip += $"{"CortisolGrowth".Translate()}: -20%\n";
 
                 return tip;
             }
