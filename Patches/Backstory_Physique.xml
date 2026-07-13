@@ -7,7 +7,7 @@
   </Operation>
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='PiousSoldier67']/skillGains</xpath>
-    <value><Physique>4</Physique></value>
+    <value><Physique>3</Physique></value>
   </Operation>
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='BanishedSoldier85']/skillGains</xpath>
@@ -65,6 +65,55 @@
     <xpath>*/BackstoryDef[defName='BrokenSoldier29']/skillGains</xpath>
     <value><Physique>4</Physique></value>
   </Operation>
+  <!-- 新增 +4 战斗背景 -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Warrior73']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Warrior94']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='SpaceMarine51']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='MilitaryCadet46']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='OfficerCadet25']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Deserter65']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Warmaster54']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Warmonger35']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Firebomber51']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='ImperialInquisitor53']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='RoyalBastard64']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='WarBastard60']/skillGains</xpath>
+    <value><Physique>4</Physique></value>
+  </Operation>
 
   <!-- ===== 战斗/格斗 +3 ===== -->
   <Operation Class="PatchOperationAdd">
@@ -95,6 +144,107 @@
     <xpath>*/BackstoryDef[defName='SpaceHunter79']/skillGains</xpath>
     <value><Physique>3</Physique></value>
   </Operation>
+  <!-- 新增 +3 战斗背景 -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Scavenger97']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='VengefulExplorer54']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='LineInfanteer20']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='LoyalJanissary59']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Shipcracker37']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='IntelligenceAgent21']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='InfantryOfficer49']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='DisgracedOfficer19']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='MilitaryCommissar71']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Artilleryman28']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Demolitionist39']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='MilitaryCook18']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='InfantryMedic6']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='VatgrownMedic53']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='IndworldUrchin73']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Mailman2']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Machinist56']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Landworker98']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='WarRefugee96']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Delinquent13']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='NavyScientist47']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='ChildScientist30']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='MadScientist22']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='SpaceResearcher25']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='FerventResearcher72']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
 
   <!-- ===== 体力劳动 +3 ===== -->
   <Operation Class="PatchOperationAdd">
@@ -113,8 +263,17 @@
     <xpath>*/BackstoryDef[defName='PlanetaryMiner64']/skillGains</xpath>
     <value><Physique>3</Physique></value>
   </Operation>
+  <!-- 新增 +3 体力劳动 -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='DeepSpaceMiner82']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='Builder96']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='ConstructionBuilder27']/skillGains</xpath>
     <value><Physique>3</Physique></value>
   </Operation>
   <Operation Class="PatchOperationAdd">
@@ -145,11 +304,67 @@
     <xpath>*/BackstoryDef[defName='Scavenger62']/skillGains</xpath>
     <value><Physique>3</Physique></value>
   </Operation>
+  <!-- 新增工程师 +3 -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='CivilEngineer2']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='CombatEngineer30']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='InfantryEngineer46']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='MilitaryEngineer45']/skillGains</xpath>
+    <value><Physique>3</Physique></value>
+  </Operation>
+
+  <!-- ===== 体力劳动 +2 ===== -->
+  <!-- 新增 +2 体力劳动 -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='StalwartFarmer21']/skillGains</xpath>
+    <value><Physique>2</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='DisciplinedFarmer28']/skillGains</xpath>
+    <value><Physique>2</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='FarmerBoy88']/skillGains</xpath>
+    <value><Physique>2</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='FarmBoy64']/skillGains</xpath>
+    <value><Physique>2</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='MidworldSailor91']/skillGains</xpath>
+    <value><Physique>2</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='WorkCampSlave37']/skillGains</xpath>
+    <value><Physique>2</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='TynanCustomAdulthood']/skillGains</xpath>
+    <value><Physique>2</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='JoeCustomAdulthood']/skillGains</xpath>
+    <value><Physique>2</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='HouseServant86']/skillGains</xpath>
+    <value><Physique>1</Physique></value>
+  </Operation>
 
   <!-- ===== 苦难/脑力 -2 ===== -->
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='Malingerer28']/skillGains</xpath>
-    <value><Physique>-2</Physique></value>
+    <value><Physique>-3</Physique></value>
   </Operation>
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='Nerd92']/skillGains</xpath>
@@ -196,5 +411,96 @@
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='Vatgrown']/skillGains</xpath>
     <value><Physique>-3</Physique></value>
+  </Operation>
+  <!-- 新增 -3 苦难背景 -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='MentalPatient69']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='HeadButler50']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='RoyalMasseuse43']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Herbalist54']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Teacher20']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='ImperialPriest24']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='ChurchPsychic98']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='CorporateDrone10']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='CorporateFixer36']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='MidworldEntrepreneur87']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='AbandonedChild30']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Assassin7']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='HiredAssassin37']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='MilitaryInventor35']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Architect28']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='StoryWriter67']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Veterinarian99']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='NathanCustomAdulthood']/skillGains</xpath>
+    <value><Physique>-3</Physique></value>
+  </Operation>
+
+  <!-- ===== 苦难 -4 ===== -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='PoliticalCaptive7']/skillGains</xpath>
+    <value><Physique>-4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='Torturer37']/skillGains</xpath>
+    <value><Physique>-4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='EscapedConvict90']/skillGains</xpath>
+    <value><Physique>-4</Physique></value>
+  </Operation>
+  <Operation Class="PatchOperationAdd">
+    <xpath>*/BackstoryDef[defName='UnwantedSurvivor67']/skillGains</xpath>
+    <value><Physique>-4</Physique></value>
   </Operation>
 </Patch>
