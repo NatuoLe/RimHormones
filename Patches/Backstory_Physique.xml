@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Patch>
   <!-- ===== 战斗/格斗 +4 ===== -->
-  <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='Soldier18']/skillGains</xpath>
-    <value><Physique>4</Physique></value>
-  </Operation>
+  <!-- Soldier18 不存在，已移除 -->
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='PiousSoldier67']/skillGains</xpath>
     <value><Physique>3</Physique></value>
@@ -145,10 +142,7 @@
     <value><Physique>3</Physique></value>
   </Operation>
   <!-- 新增 +3 战斗背景 -->
-  <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='Scavenger97']/skillGains</xpath>
-    <value><Physique>3</Physique></value>
-  </Operation>
+  <!-- Scavenger97 不存在 -->
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='VengefulExplorer54']/skillGains</xpath>
     <value><Physique>3</Physique></value>
@@ -226,7 +220,7 @@
     <value><Physique>3</Physique></value>
   </Operation>
   <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='NavyScientist47']/skillGains</xpath>
+    <xpath>*/BackstoryDef[defName='NavyScientist52']/skillGains</xpath>
     <value><Physique>3</Physique></value>
   </Operation>
   <Operation Class="PatchOperationAdd">
@@ -264,18 +258,12 @@
     <value><Physique>3</Physique></value>
   </Operation>
   <!-- 新增 +3 体力劳动 -->
-  <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='DeepSpaceMiner82']/skillGains</xpath>
-    <value><Physique>3</Physique></value>
-  </Operation>
+  <!-- DeepSpaceMiner82 不存在 -->
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='Builder96']/skillGains</xpath>
     <value><Physique>3</Physique></value>
   </Operation>
-  <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='ConstructionBuilder27']/skillGains</xpath>
-    <value><Physique>3</Physique></value>
-  </Operation>
+  <!-- ConstructionBuilder27 不存在，已移除 -->
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='CorporateBuilder58']/skillGains</xpath>
     <value><Physique>3</Physique></value>
@@ -390,26 +378,26 @@
     <xpath>*/BackstoryDef[defName='SpaceNerd97']/skillGains</xpath>
     <value><Physique>-2</Physique></value>
   </Operation>
+  <!-- Bookworm86 不存在，改为 Bookworm19 -->
   <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='Bookworm86']/skillGains</xpath>
+    <xpath>*/BackstoryDef[defName='Bookworm19']/skillGains</xpath>
     <value><Physique>-2</Physique></value>
   </Operation>
+  <!-- Prodigy17/Prodigy88 不存在 -->
   <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='Prodigy17']/skillGains</xpath>
-    <value><Physique>-2</Physique></value>
-  </Operation>
-  <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='Prodigy88']/skillGains</xpath>
+    <xpath>*/BackstoryDef[defName='ChildProdigy76']/skillGains</xpath>
     <value><Physique>-2</Physique></value>
   </Operation>
 
   <!-- ===== 苦难/脑力 -3 ===== -->
+  <!-- OrphanThief 不存在，改为 Orphan15 -->
   <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='OrphanThief']/skillGains</xpath>
+    <xpath>*/BackstoryDef[defName='Orphan15']/skillGains</xpath>
     <value><Physique>-3</Physique></value>
   </Operation>
+  <!-- Vatgrown 不存在，改为 VatgrownChild11 -->
   <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='Vatgrown']/skillGains</xpath>
+    <xpath>*/BackstoryDef[defName='VatgrownChild11']/skillGains</xpath>
     <value><Physique>-3</Physique></value>
   </Operation>
   <!-- 新增 -3 苦难背景 -->
@@ -449,10 +437,7 @@
     <xpath>*/BackstoryDef[defName='CorporateFixer36']/skillGains</xpath>
     <value><Physique>-3</Physique></value>
   </Operation>
-  <Operation Class="PatchOperationAdd">
-    <xpath>*/BackstoryDef[defName='MidworldEntrepreneur87']/skillGains</xpath>
-    <value><Physique>-3</Physique></value>
-  </Operation>
+  <!-- MidworldEntrepreneur87 不存在 -->
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='AbandonedChild30']/skillGains</xpath>
     <value><Physique>-3</Physique></value>

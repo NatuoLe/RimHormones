@@ -2,14 +2,14 @@
 <Defs>
   <HediffDef>
     <defName>Cortisol</defName>
-    <label>cortisol</label>
-    <description>Cortisol hormone representing chronic stress accumulation. Severity indicates hormone concentration level. High cortisol causes fatigue, immune suppression, and metabolic changes.</description>
+    <label>皮质醇</label>
+    <description>皮质醇激素，代表慢性压力积累。严重程度表示激素浓度水平。高皮质醇会导致疲劳、免疫抑制和新陈代谢变化。</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>false</isBad>
     <makesAlert>false</makesAlert>
     <stages>
       <li>
-        <label>sleep deprivation</label>
+        <label>睡眠剥夺</label>
         <minSeverity>0</minSeverity>
         <capMods>
           <li>
@@ -22,12 +22,12 @@
         </statFactors>
       </li>
       <li>
-        <label>normal</label>
-        <minSeverity>0.15</minSeverity>
+        <label>正常</label>
+        <minSeverity>0.33</minSeverity>
       </li>
       <li>
-        <label>chronic stress</label>
-        <minSeverity>0.5</minSeverity>
+        <label>慢性压力</label>
+        <minSeverity>0.66</minSeverity>
         <capMods>
           <li>
             <capacity>Consciousness</capacity>
@@ -48,67 +48,42 @@
         </statFactors>
         <hungerRateFactorOffset>0.15</hungerRateFactorOffset>
       </li>
-      <li>
-        <label>overload</label>
-        <minSeverity>0.75</minSeverity>
-        <capMods>
-          <li>
-            <capacity>Consciousness</capacity>
-            <offset>0.05</offset>
-          </li>
-          <li>
-            <capacity>Metabolism</capacity>
-            <offset>0.15</offset>
-          </li>
-          <li>
-            <capacity>BloodPumping</capacity>
-            <offset>-0.10</offset>
-          </li>
-        </capMods>
-        <statFactors>
-          <InjuryHealingFactor>0.97</InjuryHealingFactor>
-          <ImmunityGainSpeedFactor>0.90</ImmunityGainSpeedFactor>
-        </statFactors>
-        <hungerRateFactorOffset>0.30</hungerRateFactorOffset>
-      </li>
     </stages>
   </HediffDef>
 
   <HediffDef>
     <defName>CortisolNeurasthenia</defName>
-    <label>neurasthenia</label>
-    <description>Nervous exhaustion from prolonged high cortisol levels. Causes insomnia and mood disturbances.</description>
+    <label>神经衰弱</label>
+    <description>长期高皮质醇导致的神经耗竭。睡眠效率下降、情绪低落，且可叠加。</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>true</isBad>
     <makesAlert>true</makesAlert>
+    <defaultLabelColor>(1.0, 0.4, 0.2)</defaultLabelColor>
     <stages>
       <li>
         <minSeverity>0</minSeverity>
         <statFactors>
-          <RestFallRateFactor>1.6</RestFallRateFactor>
+          <!-- 睡眠效率 -33%：近似为休息下降速率提高 33%（pawn 级无直接“睡眠效率”stat，用 RestFallRateFactor 近似） -->
+          <RestFallRateFactor>1.33</RestFallRateFactor>
         </statFactors>
-        <statOffsets>
-          <MentalBreakThreshold>0.40</MentalBreakThreshold>
-        </statOffsets>
-        <capMods>
-          <li>
-            <capacity>Consciousness</capacity>
-            <offset>-0.10</offset>
-          </li>
-        </capMods>
       </li>
     </stages>
     <comps>
+      <!-- 沿用疼痛影响心情的机制：hediff 存在期间给 pawn 挂一条永久心情记忆，移除 hediff 时自动清除 -->
+      <li Class="HediffCompProperties_ThoughtSetter">
+        <thought>NeurastheniaMood</thought>
+        <moodOffset>-5</moodOffset>
+      </li>
       <li Class="HediffCompProperties_Disappears">
-        <disappearsAfterTicks>60000</disappearsAfterTicks>
+        <disappearsAfterTicks>180000</disappearsAfterTicks>
       </li>
     </comps>
   </HediffDef>
 
   <HediffDef>
     <defName>CortisolOverloadExhaustion</defName>
-    <label>overload exhaustion</label>
-    <description>Severe exhaustion from sustained cortisol overload. All bodily functions are significantly impaired.</description>
+    <label>过载衰竭</label>
+    <description>持续皮质醇过载导致的严重衰竭。所有身体功能都显著受损。</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>true</isBad>
     <makesAlert>true</makesAlert>

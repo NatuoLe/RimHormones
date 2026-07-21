@@ -27,14 +27,7 @@
     </value>
   </Operation>
 
-  <Operation Class="PatchOperationAdd">
-    <xpath>*/TraitDef[defName = "Bodybuilder"]/degreeDatas/li</xpath>
-    <value>
-      <skillGains>
-        <Physique>3</Physique>
-      </skillGains>
-    </value>
-  </Operation>
+  <!-- Bodybuilder 特质不存在，已移除 -->
 
   <Operation Class="PatchOperationAdd">
     <xpath>*/TraitDef[defName = "Nimble"]/degreeDatas/li</xpath>

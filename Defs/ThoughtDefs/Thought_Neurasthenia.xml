@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 神经衰弱带来的持续心情惩罚（由 HediffComp_ThoughtSetter 在 hediff 存在期间挂到 pawn 上） -->
+  <ThoughtDef>
+    <defName>NeurastheniaMood</defName>
+    <label>神经衰弱</label>
+    <description>神经衰弱带来的持续低落情绪。</description>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>神经衰弱</label>
+        <description>神经衰弱让我情绪持续低落。</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>

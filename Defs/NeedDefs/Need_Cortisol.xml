@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <NeedDef>
+    <defName>Cortisol</defName>
+    <label>cortisol</label>
+    <description>Cortisol level representing chronic stress. Higher levels indicate more stress. Affects social interactions, neurasthenia probability, and overall health.</description>
+    <needClass>Hormones.Need_Cortisol</needClass>
+    <minIntelligence>ToolUser</minIntelligence>
+    <showOnNeedList>true</showOnNeedList>
+    <colonistsOnly>false</colonistsOnly>
+    <baseLevel>0</baseLevel>
+    <fallPerDay>0</fallPerDay>
+    <major>false</major>
+  </NeedDef>
+</Defs>

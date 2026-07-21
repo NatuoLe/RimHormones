@@ -96,12 +96,6 @@ namespace Hormones
             int traitOffset = PhysiqueTraitUtility.GetTotalPhysiqueOffset(pawn);
             level += traitOffset;
 
-            // 调试日志：输出背景故事 defName
-            if (pawn.story != null && pawn.story.Childhood != null)
-            {
-                Log.Message($"[Hormones] Physique: {pawn.Name}, Childhood: {pawn.story.Childhood.defName}");
-            }
-
             int maxLevel = Define.PhysiqueMaxLevel + PhysiqueTraitUtility.GetTotalCapOffset(pawn);
             return Helpers.Clamp(level, Define.PhysiqueMinLevel, maxLevel);
         }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>GoodSleep</defName>
+    <label>优质睡眠</label>
+    <description>在美观的房间中获得了充足的优质睡眠。身心得到充分恢复。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <makesAlert>false</makesAlert>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <statOffsets>
+          <RestFallRateFactor>-0.1</RestFallRateFactor>
+        </statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_ThoughtSetter">
+        <thought>GoodSleepMood</thought>
+        <moodOffset>3</moodOffset>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>60000</disappearsAfterTicks>
+      </li>
+    </comps>
+  </HediffDef>
+</Defs>

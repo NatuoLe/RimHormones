@@ -85,62 +85,79 @@ namespace Hormones
 
         #region Cortisol Constants
         // ========================================
-        // 皮质醇档位阈值（Severity 范围 0~1）
+        // 皮质醇档位阈值（Need CurLevel 范围 0~100）
+        // 严重度 = CurLevel / 100
         // ========================================
-        // 休眠不足: 0 ≤ S < 0.15 - 基础唤醒缺失，精神萎靡
-        // 正常区间: 0.15 ≤ S < 0.5 - 健康舒适区间
-        // 持续承压: 0.5 ≤ S < 0.75 - 疲劳累积，效率下滑
-        // 过载透支: 0.75 ≤ S ≤ 1.0 - 长期过载，身心双重损耗
-        public const float CortisolThresholdSleepDeprivation = 0.15f;
-        public const float CortisolThresholdNormal = 0.15f;
-        public const float CortisolThresholdStress = 0.5f;
-        public const float CortisolThresholdOverload = 0.75f;
+        // 正常波动: 0 ≤ S < 33 - 衰减9%/日，冒犯权重-50%，神经衰弱0%
+        // 承压: 33 ≤ S < 66 - 衰减5%/日，冒犯权重+200%，神经衰弱3%
+        // 高压: 66 ≤ S ≤ 100 - 衰减3%/日，冒犯权重+400%，神经衰弱8%
+        public const float CortisolThresholdNormal = 33f;
+        public const float CortisolThresholdStress = 66f;
+        public const float CortisolThresholdOverload = 100f;
 
         // ========================================
-        // 皮质醇增长速率（增量/秒）
+        // 基础衰减（每日，占最大值百分比；MaxLevel=10000，常量已 ×100）
         // ========================================
-        public const float CortisolBaseGrowthMin = 0.001f;      // 基础每日增长（随机范围最小值）
-        public const float CortisolBaseGrowthMax = 0.003f;      // 基础每日增长（随机范围最大值）
-        public const float CortisolNeurastheniaGrowth = 0.005f; // 神经衰弱时增长（睡不好→皮质醇更高）
-        public const float CortisolChronicStressGrowth = 0.002f;// 慢性压力环境增长（饥饿、恶劣环境）
-        public const float CortisolAdrenalineLinkGrowth = 0.001f;// 肾上腺素联动增长
-        public const float CortisolLowMoodGrowth = 0.0015f;     // 低心情增长（心情 < -10）
+        public const float CortisolDecayNormal = 900f;     // 正常波动：9%/日
+        public const float CortisolDecayStress = 500f;     // 承压：5%/日
+        public const float CortisolDecayHighStress = 300f; // 高压：3%/日
 
         // ========================================
-        // 皮质醇衰减速率（减量/秒）
+        // 额外衰减（可叠加）
         // ========================================
-        // 设计意图：皮质醇一旦堆积，极难消退——模拟真实皮质醇的「压力残留」特性
-        public const float CortisolBaseDecay = 0.008f;      // 基础衰减速率
-        public const float CortisolRestDecay = 0.015f;      // 充足安稳睡眠时衰减
-        public const float CortisolHighMoodDecay = 0.005f;  // 心情极好时衰减（心情 > 20）
+        public const float CortisolDecayHighMood = 800f;      // 心情>0.8：额外-8%/日
+        public const float CortisolDecayDeliciousFood = 800f; // 美食Hediff：额外-8%/日
+        public const float CortisolDecayGoodSleep = 800f;    // 优质睡眠Hediff：额外-8%/日
+        public const float CortisolMoodHighThreshold = 0.8f; // 高心情触发额外衰减阈值（mood need 0~1，不缩放）
+
+        // ========================================
+        // 增长（每日，占最大值百分比，可叠加）
+        // ========================================
+        public const float CortisolGrowthLowMood = 1000f;    // 心情<0.3：+10%/日
+        public const float CortisolGrowthUglyEnv = 500f;     // 环境差：+5%/日
+        public const float CortisolGrowthHunger = 1200f;     // 饥饿Hediff：+12%/日
+        public const float CortisolGrowthPain = 500f;        // 疼痛Hediff：+5%/日
+        public const float CortisolGrowthIllness = 800f;     // 得病：+8%/日
+        public const float CortisolGrowthInsulted = 300f;    // 被侮辱Hediff：+3%/日
 
         // ========================================
         // 状态判定阈值
         // ========================================
-        public const float CortisolMoodLowThreshold = -10f;   // 低心情触发增长阈值
-        public const float CortisolMoodHighThreshold = 20f;   // 高心情触发加速衰减阈值
-        public const float CortisolGoodRestThreshold = 0.8f;  // 良好休息判定阈值
+        public const float CortisolHungerThreshold = 0.2f;    // 饥饿触发阈值（食物 CurLevel < 0.2）
+        public const float CortisolMoodLowThreshold = 0.3f;   // 低心情触发增长阈值（心情 CurLevel < 0.3）
 
         // ========================================
-        // 神经衰弱触发参数
+        // 旧版常量（保留给 HediffComp_Cortisol 使用）
         // ========================================
-        // 触发概率公式: P = min(0.15 + 0.03 × S × (13 - P), 0.6)
+        public const float CortisolBaseDecay = 0.008f;      // 基础衰减速率（用于日志对比）
+        public const float CortisolBaseGrowthMin = 0.001f;   // 基础增长最小值
+        public const float CortisolBaseGrowthMax = 0.003f;   // 基础增长最大值
+        public const float CortisolNeurastheniaGrowth = 0.005f; // 神经衰弱增长
+        public const float CortisolAdrenalineLinkGrowth = 0.001f; // 肾上腺素联动增长
+        public const float CortisolHungerGrowth = 0.002f;    // 饥饿增长（旧版）
+        public const float CortisolUglyEnvGrowth = 0.0015f;  // 环境增长（旧版）
+        public const float CortisolPainGrowth = 0.002f;     // 疼痛增长（旧版）
+        public const float CortisolLowMoodGrowth = 0.0015f; // 心情增长（旧版）
+
+        // ========================================
+        // 神经衰弱触发参数（保留）
+        // ========================================
         public const float CortisolNeurastheniaBaseProb = 0.15f;      // 基础触发概率
         public const float CortisolNeurastheniaMaxProb = 0.6f;        // 最大触发概率（封顶60%）
         public const float CortisolNeurastheniaSeverityFactor = 0.03f;// 浓度影响因子
 
         // ========================================
-        // 肾上腺素联动参数
+        // 肾上腺素联动参数（保留）
         // ========================================
         public const float AdrenalineCortisolLinkThreshold = 0.5f; // 肾上腺素联动阈值
 
         // ========================================
-        // 过载耗竭参数
+        // 过载耗竭参数（保留）
         // ========================================
         public const float CortisolOverloadDurationHours = 48f; // 过载持续2天后触发耗竭
 
         // ========================================
-        // 定时检查间隔
+        // 定时检查间隔（保留）
         // ========================================
         public const int CortisolDailyCheckInterval = 60000; // 每日检查间隔（约1游戏天）
 

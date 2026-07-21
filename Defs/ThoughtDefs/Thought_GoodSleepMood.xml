@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThoughtDef>
+    <defName>GoodSleepMood</defName>
+    <label>优质睡眠</label>
+    <description>在美观的房间中获得优质睡眠，身心得到充分恢复。</description>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>优质睡眠</label>
+        <description>昨晚睡得很好，身心都得到了充分恢复。</description>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>

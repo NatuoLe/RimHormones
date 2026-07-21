@@ -217,17 +217,6 @@ namespace Hormones
     }
 
     /// <summary>
-    /// 皮质醇档位枚举
-    /// </summary>
-    public enum CortisolLevel
-    {
-        SleepDeprivation,  // 休眠不足（0 ≤ S < 0.15）
-        Normal,            // 正常区间（0.15 ≤ S < 0.5）
-        ChronicStress,     // 持续承压（0.5 ≤ S < 0.75）
-        Overload           // 过载透支（0.75 ≤ S ≤ 1.0）
-    }
-
-    /// <summary>
     /// 皮质醇核心逻辑类
     /// 包含浓度计算、体魄修正、神经衰弱判定、过载耗竭处理等核心逻辑
     /// </summary>
@@ -241,15 +230,16 @@ namespace Hormones
         /// </summary>
         /// <param name="severity">皮质醇浓度（0~1）</param>
         /// <returns>对应的档位枚举</returns>
+        /// <remarks>已废弃，使用 Need_Cortisol 代替 Hediff</remarks>
+        [System.Obsolete("使用 Need_Cortisol.GetCortisolLevel()")]
         public static CortisolLevel GetCortisolLevel(float severity)
         {
-            if (severity < Define.CortisolThresholdNormal)
-                return CortisolLevel.SleepDeprivation;
-            if (severity < Define.CortisolThresholdStress)
+            // 使用 Need_Cortisol 的枚举值
+            if (severity < 0.33f)
                 return CortisolLevel.Normal;
-            if (severity < Define.CortisolThresholdOverload)
-                return CortisolLevel.ChronicStress;
-            return CortisolLevel.Overload;
+            if (severity < 0.66f)
+                return CortisolLevel.Normal;
+            return CortisolLevel.Normal;
         }
 
         /// <summary>
@@ -279,14 +269,20 @@ namespace Hormones
             // 累加所有增长源
             float baseGrowth = GetBaseDailyGrowth();           // 基础每日增长
             float neurastheniaGrowth = GetNeurastheniaGrowth(pawn);    // 神经衰弱加速增长
-            float chronicStressGrowth = GetChronicStressGrowth(pawn);   // 慢性压力环境增长
             float adrenalineGrowth = GetAdrenalineLinkGrowth(pawn);  // 肾上腺素联动增长
-            float lowMoodGrowth = GetLowMoodGrowth(pawn);         // 低心情增长
+
+            // 四大应激源（可叠加：同时命中多项则相加）
+            float hungerGrowth = GetHungerGrowth(pawn);          // 饥饿（饮食 < 0.2）
+            float uglyEnvGrowth = GetUglyEnvGrowth(pawn);        // 环境丑陋
+            float painGrowth = GetPainGrowth(pawn);              // 疼痛
+            float lowMoodGrowth = GetLowMoodGrowth(pawn);        // 心情差（< 0.3）
 
             change += baseGrowth;
             change += neurastheniaGrowth;
-            change += chronicStressGrowth;
             change += adrenalineGrowth;
+            change += hungerGrowth;
+            change += uglyEnvGrowth;
+            change += painGrowth;
             change += lowMoodGrowth;
 
             // 减去衰减
@@ -311,16 +307,18 @@ namespace Hormones
             // 【皮质醇更新日志】每60tick输出一次详细变化
             // ========================================
             LogCortisolUpdate(pawn, currentSeverity, newSeverity, change,
-                            baseGrowth, neurastheniaGrowth, chronicStressGrowth, 
-                            adrenalineGrowth, lowMoodGrowth, decay, physiqueMod);
+                            baseGrowth, neurastheniaGrowth, adrenalineGrowth,
+                            hungerGrowth, uglyEnvGrowth, painGrowth, lowMoodGrowth,
+                            decay, physiqueMod);
         }
 
         /// <summary>
         /// 皮质醇更新日志输出
         /// </summary>
         private static void LogCortisolUpdate(Pawn pawn, float oldSev, float newSev, float netChange,
-                                           float baseG, float neurasG, float stressG, 
-                                           float adrG, float moodG, float decay, float physiqueMod)
+                                           float baseG, float neurasG, float adrG,
+                                           float hungerG, float uglyG, float painG, float moodG,
+                                           float decay, float physiqueMod)
         {
             string pawnName = pawn.Name?.ToStringFull ?? "Unknown";
             CortisolLevel level = GetCortisolLevel(newSev);
@@ -330,13 +328,16 @@ namespace Hormones
             string sources = "";
             if (baseG > 0) sources += $"基础+{baseG:F4} ";
             if (neurasG > 0) sources += $"神经衰弱+{neurasG:F4} ";
-            if (stressG > 0) sources += $"慢性压力+{stressG:F4} ";
             if (adrG > 0) sources += $"肾上腺素联动+{adrG:F4} ";
-            if (moodG > 0) sources += $"低心情+{moodG:F4} ";
+            if (hungerG > 0) sources += $"饥饿+{hungerG:F4} ";
+            if (uglyG > 0) sources += $"环境丑陋+{uglyG:F4} ";
+            if (painG > 0) sources += $"疼痛+{painG:F4} ";
+            if (moodG > 0) sources += $"心情差+{moodG:F4} ";
             if (decay > 0) sources += $"衰减-{decay:F4}";
 
             // 根据场景判断
-            string scene = DetermineScene(baseG, neurasG, stressG, adrG, moodG, decay);
+            float stressorG = hungerG + uglyG + painG + moodG;
+            string scene = DetermineScene(baseG, neurasG, stressorG, adrG, decay);
 
             Log.Message($"[皮质醇-更新] {pawnName} | " +
                        $"皮质醇: {oldSev:F3} → {newSev:F3} ({netChange:+0.0000;-0.0000;0}) | " +
@@ -347,15 +348,15 @@ namespace Hormones
         /// <summary>
         /// 判断当前场景类型
         /// </summary>
-        private static string DetermineScene(float baseG, float neurasG, float stressG, float adrG, float moodG, float decay)
+        private static string DetermineScene(float baseG, float neurasG, float stressorG, float adrG, float decay)
         {
             // 场景4：神经衰弱恶性循环
             if (neurasG > 0 && decay <= Define.CortisolBaseDecay * 60)
                 return "🔴 场景4-神经衰弱恶性循环";
 
-            // 场景3：持续高压
-            if (stressG > 0 || moodG > 0)
-                return "⚠️ 场景3-持续高压";
+            // 场景3：应激源施压（饥饿/环境丑陋/疼痛/心情差）
+            if (stressorG > 0)
+                return "⚠️ 场景3-应激源施压";
 
             // 场景2：肾上腺素联动
             if (adrG > 0)
@@ -398,29 +399,47 @@ namespace Hormones
         }
 
         /// <summary>
-        /// 获取慢性压力环境下的增长
-        /// 包括：饥饿、恶劣环境（低温）等
+        /// 应激源①：饥饿增长
+        /// 饮食需求 CurLevel < 0.2 时触发（对应原版 NeedFood 的"饥饿"心情）
         /// </summary>
         /// <param name="pawn">目标pawn</param>
         /// <returns>增长值（已乘以60tick）</returns>
-        private static float GetChronicStressGrowth(Pawn pawn)
+        private static float GetHungerGrowth(Pawn pawn)
         {
-            // 饥饿检测
-            if (pawn.needs?.food != null && pawn.needs.food.CurLevel < 0.3f)
+            if (pawn.needs?.food != null && pawn.needs.food.CurLevel < Define.CortisolHungerThreshold)
             {
-                return Define.CortisolChronicStressGrowth * 60f;
+                return Define.CortisolHungerGrowth * 60f;
             }
+            return 0f;
+        }
 
-            // 低温环境检测
-            if (pawn.Position.IsValid && pawn.Map != null)
+        /// <summary>
+        /// 应激源②：环境丑陋增长
+        /// 美观需求档位 ≤ Ugly（Hideous/VeryUgly/Ugly）时触发（对应原版 NeedBeauty 的"丑陋环境"心情）
+        /// </summary>
+        /// <param name="pawn">目标pawn</param>
+        /// <returns>增长值（已乘以60tick）</returns>
+        private static float GetUglyEnvGrowth(Pawn pawn)
+        {
+            if (pawn.needs?.beauty != null && (int)pawn.needs.beauty.CurCategory <= (int)BeautyCategory.Ugly)
             {
-                Room room = pawn.GetRoom();
-                if (room != null && room.Temperature < 5f)
-                {
-                    return Define.CortisolChronicStressGrowth * 60f;
-                }
+                return Define.CortisolUglyEnvGrowth * 60f;
             }
+            return 0f;
+        }
 
+        /// <summary>
+        /// 应激源③：疼痛增长
+        /// PainTotal > 0 时触发（与原版 ThoughtWorker_Pain 监听同一 PainTotal）
+        /// </summary>
+        /// <param name="pawn">目标pawn</param>
+        /// <returns>增长值（已乘以60tick）</returns>
+        private static float GetPainGrowth(Pawn pawn)
+        {
+            if (pawn.health?.hediffSet != null && pawn.health.hediffSet.PainTotal > 0f)
+            {
+                return Define.CortisolPainGrowth * 60f;
+            }
             return 0f;
         }
 
@@ -441,8 +460,9 @@ namespace Hormones
         }
 
         /// <summary>
-        /// 获取低心情状态下的增长
-        /// 心情 < -10 时触发
+        /// 应激源④：低心情增长
+        /// 心情 CurLevel < 0.3 时触发
+        /// （修正：旧实现用 CurLevel*100 与 -10 比较，因 CurLevel 恒 ≥ 0 而永不触发）
         /// </summary>
         /// <param name="pawn">目标pawn</param>
         /// <returns>增长值（已乘以60tick）</returns>
@@ -451,8 +471,7 @@ namespace Hormones
             if (pawn.needs?.mood == null)
                 return 0f;
 
-            float moodValue = pawn.needs.mood.CurLevel * 100f;
-            if (moodValue < Define.CortisolMoodLowThreshold)
+            if (pawn.needs.mood.CurLevel < Define.CortisolMoodLowThreshold)
             {
                 return Define.CortisolLowMoodGrowth * 60f;
             }
@@ -464,54 +483,34 @@ namespace Hormones
         /// 根据休息状态和心情动态调整衰减速率
         /// </summary>
         /// <param name="pawn">目标pawn</param>
-        /// <returns>衰减值（已乘以60tick）</returns>
+        /// <returns>衰减值（每tick）</returns>
         private static float GetDecay(Pawn pawn)
         {
-            float decay = Define.CortisolBaseDecay;
-
-            // 充足睡眠时加速衰减
-            if (IsRestingWell(pawn))
+            // 获取当前皮质醇浓度
+            float severity = GetCortisolSeverity(pawn);
+            
+            // 根据严重度区间计算衰减速率（每日百分比转换为每tick）
+            // 游戏内一天 = 60000 ticks
+            // 每日13% = 0.13 / 60000 ≈ 0.00000217 per tick
+            float decay;
+            
+            if (severity < 0.33f)
             {
-                decay = Define.CortisolRestDecay;
+                // 0 ≤ S < 0.33：正常波动，13%每日
+                decay = 0.13f / 60000f;
             }
-            // 心情极好时也加速衰减
+            else if (severity < 0.66f)
+            {
+                // 0.33 ≤ S < 0.66：承压，8%每日
+                decay = 0.08f / 60000f;
+            }
             else
             {
-                float moodValue = pawn.needs?.mood?.CurLevel * 100f ?? 0f;
-                if (moodValue > Define.CortisolMoodHighThreshold)
-                {
-                    decay = Define.CortisolHighMoodDecay;
-                }
+                // 0.66 ≤ S ≤ 1.0：高压，3%每日
+                decay = 0.03f / 60000f;
             }
 
-            return decay * 60f;
-        }
-
-        /// <summary>
-        /// 判断是否处于良好休息状态
-        /// 影响皮质醇衰减速率
-        /// </summary>
-        /// <param name="pawn">目标pawn</param>
-        /// <returns>true表示休息良好</returns>
-        private static bool IsRestingWell(Pawn pawn)
-        {
-            if (pawn.needs?.rest == null)
-                return false;
-
-            // 呕吐状态
-            if (pawn.CurJobDef == DefDatabase<JobDef>.GetNamed("Vomit", false))
-                return false;
-
-            // 失眠状态
-            if (pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("Insomnia", false)))
-                return false;
-
-            // 神经衰弱状态
-            if (pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("CortisolNeurasthenia", false)))
-                return false;
-
-            // 休息值足够高
-            return pawn.needs.rest.CurLevel > Define.CortisolGoodRestThreshold;
+            return decay;
         }
 
         /// <summary>
@@ -522,9 +521,7 @@ namespace Hormones
         /// <param name="severity">当前皮质醇浓度</param>
         public static void TryTriggerNeurasthenia(Pawn pawn, float severity)
         {
-            // 已有神经衰弱则不再触发
-            if (pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("CortisolNeurasthenia", false)))
-                return;
+            // 神经衰弱允许叠加（按设计：可以叠加），不做去重拦截，可同时持有多个实例
 
             // 计算触发概率
             float probability = CalculateNeurastheniaProbability(pawn, severity);
@@ -574,13 +571,13 @@ namespace Hormones
             Hediff neurasthenia = HediffMaker.MakeHediff(neurastheniaDef, pawn);
             neurasthenia.Severity = 1.0f;
             
-            // 设置持续时间：1天
+            // 设置持续时间：3天（180000 tick）
             if (neurasthenia is HediffWithComps hediffWithComps)
             {
                 HediffComp_Disappears disappearsComp = hediffWithComps.TryGetComp<HediffComp_Disappears>();
                 if (disappearsComp != null)
                 {
-                    disappearsComp.ticksToDisappear = (int)(GenDate.TicksPerDay * 1);
+                    disappearsComp.ticksToDisappear = (int)(GenDate.TicksPerDay * 3);
                 }
             }
             
