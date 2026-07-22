@@ -275,25 +275,11 @@ public class HormonesComponent : ThingComp, IExposable
         }
     }
 
+    /// <summary>
+    /// 废弃功能：SevereBleeding ThoughtDef 已从游戏中移除
+    /// </summary>
     private bool HasSevereBleedingThought()
     {
-        if (Pawn?.needs?.mood?.thoughts?.memories == null) return false;
-
-        var severeBleedingDef = DefDatabase<ThoughtDef>.GetNamed("SevereBleeding", false);
-        if (severeBleedingDef == null)
-        {
-            Log.Message("[Hormones] SevereBleeding ThoughtDef not found in database");
-            return false;
-        }
-
-        var memories = Pawn.needs.mood.thoughts.memories.Memories;
-        foreach (var memory in memories)
-        {
-            if (memory.def == severeBleedingDef)
-            {
-                return true;
-            }
-        }
         return false;
     }
 

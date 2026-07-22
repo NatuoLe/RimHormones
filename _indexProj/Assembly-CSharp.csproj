@@ -24,6 +24,8 @@
     <Compile Include="Source\Needs\Need_Hormones.cs" />
     <Compile Include="Source\Needs\Need_MuscleStrain.cs" />
     <Compile Include="Source\Needs\Need_Cortisol.cs" />
+    <Compile Include="Source\Logic\CortisolLogic\ThoughtWorker_CortisolMood.cs" />
+    <Compile Include="Source\Logic\CortisolLogic\ThoughtWorker_NeurastheniaMood.cs" />
     <Compile Include="Source\Harmony_CortisolNeedInit.cs" />
     <Compile Include="Source\Comps\HediffComp_PhysiqueDisplay.cs" />
     <Compile Include="Source\Comps\HediffComp_Cortisol.cs" />

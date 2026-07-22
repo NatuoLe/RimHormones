@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <!-- 神经衰弱带来的持续心情惩罚（由 HediffComp_ThoughtSetter 在 hediff 存在期间挂到 pawn 上） -->
+  <!-- 神经衰弱心情（含体魄修正）。由 ThoughtWorker_NeurastheniaMood 在 pawn 带 CortisolNeurasthenia 时评估，
+       stage 索引 = physiqueIdx（Frail=0 Average=1 Fit=2 Strong=3 Peak=4），心情 = 基础-5 + 体魄偏移。 -->
   <ThoughtDef>
     <defName>NeurastheniaMood</defName>
     <label>神经衰弱</label>
-    <description>神经衰弱带来的持续低落情绪。</description>
-    <thoughtClass>Thought_Memory</thoughtClass>
+    <description>神经衰弱带来的持续低落情绪，体魄越强壮越能缓冲。</description>
+    <workerClass>Hormones.ThoughtWorker_NeurastheniaMood</workerClass>
     <stages>
-      <li>
-        <label>神经衰弱</label>
-        <description>神经衰弱让我情绪持续低落。</description>
-      </li>
+      <li><label>神经衰弱·虚弱</label><baseMoodEffect>-7</baseMoodEffect></li>
+      <li><label>神经衰弱·一般</label><baseMoodEffect>-5</baseMoodEffect></li>
+      <li><label>神经衰弱·健壮</label><baseMoodEffect>-4</baseMoodEffect></li>
+      <li><label>神经衰弱·强壮</label><baseMoodEffect>-2</baseMoodEffect></li>
+      <li><label>神经衰弱·巅峰</label><baseMoodEffect>-1</baseMoodEffect></li>
     </stages>
   </ThoughtDef>
 </Defs>

@@ -63,17 +63,13 @@
       <li>
         <minSeverity>0</minSeverity>
         <statFactors>
-          <!-- 睡眠效率 -33%：近似为休息下降速率提高 33%（pawn 级无直接“睡眠效率”stat，用 RestFallRateFactor 近似） -->
-          <RestFallRateFactor>1.33</RestFallRateFactor>
+          <!-- 休息效率直接 -50%：乘 RestRateMultiplier（睡眠时休息值回复速度），UI「休息效率乘数」会显示 ×50% -->
+          <RestRateMultiplier>0.5</RestRateMultiplier>
         </statFactors>
       </li>
     </stages>
     <comps>
-      <!-- 沿用疼痛影响心情的机制：hediff 存在期间给 pawn 挂一条永久心情记忆，移除 hediff 时自动清除 -->
-      <li Class="HediffCompProperties_ThoughtSetter">
-        <thought>NeurastheniaMood</thought>
-        <moodOffset>-5</moodOffset>
-      </li>
+      <!-- 心情惩罚改由 ThoughtWorker_NeurastheniaMood 按体魄分档评估（见 Thought_Neurasthenia.xml），不再用 ThoughtSetter -->
       <li Class="HediffCompProperties_Disappears">
         <disappearsAfterTicks>180000</disappearsAfterTicks>
       </li>

@@ -15,8 +15,8 @@ namespace Hormones
     /// 衰减（每日，占最大值百分比）：
     /// | 档位     | 基础衰减 | 心情>0.8 | 美食  | 优质睡眠 |
     /// |---------|---------|---------|------|---------|
-    /// | 正常波动 | -9%    | -8%    | -8%  | -8%     |
-    /// | 承压     | -5%    | -8%    | -8%  | -8%     |
+    /// | 正常波动 | -13%   | -8%    | -8%  | -8%     |
+    /// | 承压     | -8%    | -8%    | -8%  | -8%     |
     /// | 高压     | -3%    | -8%    | -8%  | -8%     |
     ///
     /// 增长（每日，占最大值百分比）：
@@ -28,6 +28,16 @@ namespace Hormones
     /// | 疼痛Hediff  | +5%  |
     /// | 得病        | +8%  |
     /// | 被侮辱Hediff| +3%  |
+    ///
+    /// 档位效果（随严重度 S = CurLevel/MaxLevel）：
+    /// | 区间          | 状态   | 心情加成 | 冒犯权重 | 神经衰弱 |
+    /// |--------------|-------|---------|---------|---------|
+    /// | 0 ≤ S < 0.33  | 正常波动 | +2     | -50%    | 0%      |
+    /// | 0.33 ≤ S<0.66 | 承压   | -1     | +200%   | 3%      |
+    /// | 0.66 ≤ S≤1.0  | 高压   | -5     | +400%   | 8%      |
+    /// 注：心情加成由 ThoughtWorker_CortisolMood + ThoughtDef CortisolMoodEffect 实现；
+    ///     冒犯权重见 GetSocialFightChanceFactor，神经衰弱概率见 GetNeurastheniaProbability。
+    ///     神经衰弱检测每 6000 tick 一次。
     ///
     /// 注：MaxLevel=10000，Define 中对应常量已 ×100 放大为绝对点数。
     /// </summary>
@@ -49,8 +59,8 @@ namespace Hormones
         private bool hasLoggedInit = false;
         private bool hasLoggedFirstTick = false;
 
-        // 上一次Rest值（用于检测苏醒）
-        private float lastRestLevel = -1f;
+        // 上一帧是否在睡眠（用于 asleep→awake 跳变检测苏醒）
+        private bool wasAsleep = false;
 
         public override float MaxLevel => 10000f;
 
@@ -95,27 +105,27 @@ namespace Hormones
 
             try
             {
-                // 记录 Rest 值用于苏醒检测
-                lastRestLevel = pawn.needs?.rest?.CurLevel ?? -1f;
-
                 // 检测苏醒（从睡眠状态醒来）
                 CheckForWakeUp();
 
                 // 计算当前严重度 (0-1)
                 float severity = CurLevel / MaxLevel;
 
-                // 计算本区间(NeedInterval=150 tick)的衰减与增长（单位：CurLevel 0~100）
+                // 计算本区间(NeedInterval=150 tick)的衰减与增长（单位：CurLevel 0~10000）
                 float decay = GetDecayPerInterval(severity);
                 float growth = GetGrowthPerInterval();
+                // 体魄对皮质醇每日涨幅的修正（表C：体魄越强壮涨得越慢甚至下降）
+                float physiqueGrowth = GetPhysiqueGrowthPerDay(severity) * 150f / 60000f;
 
                 CurLevel -= decay;
                 CurLevel += growth;
+                CurLevel += physiqueGrowth;
 
                 // 限制范围
                 CurLevel = CurLevel < 0f ? 0f : (CurLevel > MaxLevel ? MaxLevel : CurLevel);
 
                 // 流程日志：每 5 次调用（约 750 tick）打印一次，确认引擎工作
-                LogCortisolFlow(severity, decay, growth);
+                LogCortisolFlow(severity, decay, growth, physiqueGrowth);
 
                 // 神经衰弱检测（内部按 6000 tick 节流）
                 TryTriggerNeurastheniaCheck();
@@ -137,16 +147,13 @@ namespace Hormones
         /// </summary>
         private void CheckForWakeUp()
         {
-            if (pawn.needs?.rest == null)
-                return;
-
-            float currentRest = pawn.needs.rest.CurLevel;
-
-            // 检测苏醒：上次 Rest < 0.5（睡眠中），本次 >= 0.5（醒来）
-            if (lastRestLevel >= 0 && lastRestLevel < 0.5f && currentRest >= 0.5f)
+            // 用 asleep 状态跳变检测苏醒：上一帧在睡、这一帧醒了 = 刚苏醒
+            bool isAsleep = pawn.jobs?.curDriver?.asleep == true;
+            if (wasAsleep && !isAsleep)
             {
                 TryApplyGoodSleep();
             }
+            wasAsleep = isAsleep;
         }
 
         /// <summary>
@@ -190,6 +197,29 @@ namespace Hormones
             string text = $"皮质醇 {arrow}{changeAbs:F1}";
 
             // 使用与 MuscleStrainUtility 相同的飘字方式
+            MoteText moteText = (MoteText)ThingMaker.MakeThing(ThingDefOf.Mote_Text);
+            object vector3 = PhysiqueDatas.GetVector3(
+                pawn.Position.x + 0.5f, 0.5f, pawn.Position.z + 0.5f);
+            FieldInfo field = typeof(MoteText).GetField("exactPosition");
+            if (field != null)
+            {
+                field.SetValue(moteText, vector3);
+                moteText.SetVelocity(Rand.Range(5, 35), Rand.Range(0.42f, 0.45f));
+                moteText.text = text;
+                GenSpawn.Spawn(moteText, pawn.Position, pawn.Map);
+                PhysiqueDatas.ReturnVector3(vector3);
+            }
+        }
+
+        /// <summary>
+        /// 通用飘字：在 pawn 头顶显示一段文本（复用 MuscleStrainUtility 的 MoteText 方式）。
+        /// 用于神经衰弱检测概率、神经衰弱触发、优质睡眠获取等事件反馈。
+        /// </summary>
+        private void ShowMote(string text)
+        {
+            if (pawn == null || pawn.Map == null)
+                return;
+
             MoteText moteText = (MoteText)ThingMaker.MakeThing(ThingDefOf.Mote_Text);
             object vector3 = PhysiqueDatas.GetVector3(
                 pawn.Position.x + 0.5f, 0.5f, pawn.Position.z + 0.5f);
@@ -302,10 +332,6 @@ namespace Hormones
             if (HasGoodSleepHediff())
                 return;
 
-            // 检查 Rest < 0.03（刚苏醒）
-            if (pawn.needs?.rest == null || pawn.needs.rest.CurLevel >= 0.03f)
-                return;
-
             // 检查睡眠房间美观度
             if (!IsSleepRoomBeautiful())
                 return;
@@ -364,6 +390,8 @@ namespace Hormones
             Hediff goodSleep = HediffMaker.MakeHediff(goodSleepDef, pawn);
             goodSleep.Severity = 1.0f;
             pawn.health.AddHediff(goodSleep);
+
+            ShowMote("优质睡眠 ✓");
         }
 
         /// <summary>
@@ -424,6 +452,56 @@ namespace Hormones
 
             // 转换为每 150 tick 区间的量（60000 ticks = 1天；NeedInterval 每 150 tick 一次）
             return growthPerDay * 150f / 60000f;
+        }
+
+        /// <summary>
+        /// 体魄对皮质醇每日涨幅的修正（点数/日，MaxLevel=10000，100点=1%）。
+        /// 按当前 severity 档位 + 体魄阶段查表（设计表C：体魄越强壮，皮质醇涨得越慢甚至下降）。
+        /// 表C（%/日 → 点数/日 ×100）：
+        ///   档位\体魄   frail  average  fit    strong  peak
+        ///   0≤S&lt;0.33   +200   0       -100   -600    -1000
+        ///   0.33≤S&lt;0.66 +300   +100    0      -400    -700
+        ///   0.66≤S≤1.0   +500   +300    +200   0       -500
+        /// </summary>
+        private float GetPhysiqueGrowthPerDay(float severity)
+        {
+            int tier = severity < 0.33f ? 0 : (severity < 0.66f ? 1 : 2);
+            PhysiqueStage phys = PhysiqueLgc.GetPhysiqueStage(pawn);
+
+            if (tier == 0)
+            {
+                switch (phys)
+                {
+                    case PhysiqueStage.Frail: return 200f;
+                    case PhysiqueStage.Average: return 0f;
+                    case PhysiqueStage.Fit: return -100f;
+                    case PhysiqueStage.Strong: return -600f;
+                    case PhysiqueStage.Peak: return -1000f;
+                }
+            }
+            else if (tier == 1)
+            {
+                switch (phys)
+                {
+                    case PhysiqueStage.Frail: return 300f;
+                    case PhysiqueStage.Average: return 100f;
+                    case PhysiqueStage.Fit: return 0f;
+                    case PhysiqueStage.Strong: return -400f;
+                    case PhysiqueStage.Peak: return -700f;
+                }
+            }
+            else
+            {
+                switch (phys)
+                {
+                    case PhysiqueStage.Frail: return 500f;
+                    case PhysiqueStage.Average: return 300f;
+                    case PhysiqueStage.Fit: return 200f;
+                    case PhysiqueStage.Strong: return 0f;
+                    case PhysiqueStage.Peak: return -500f;
+                }
+            }
+            return 0f;
         }
 
         /// <summary>
@@ -507,7 +585,7 @@ namespace Hormones
         /// 流程日志：每 5 次 NeedInterval（约 750 tick）打印一次，
         /// 直接展示引擎是否在工作、哪些应激源在生效、净变化量。
         /// </summary>
-        private void LogCortisolFlow(float severityBefore, float decay, float growth)
+        private void LogCortisolFlow(float severityBefore, float decay, float growth, float physiqueGrowth)
         {
             logFlowCounter++;
             if (logFlowCounter % 5 != 0)
@@ -522,9 +600,7 @@ namespace Hormones
             if (HasInsultedMood()) stressors += "被辱 ";
             if (stressors == "") stressors = "无";
 
-            Log.Message($"[Cortisol-Flow] {pawn?.Name?.ToStringShort ?? "?"} " +
-                       $"S前={severityBefore:P1} S后={(CurLevel / MaxLevel):P1} " +
-                       $"衰减={decay:F3} 增长={growth:F3} 净={(growth - decay):F3} 应激=[{stressors}]");
+
         }
 
         /// <summary>
@@ -541,9 +617,10 @@ namespace Hormones
             float severity = CurLevel / MaxLevel;
             float probability = GetNeurastheniaProbability(severity);
 
-            Log.Message($"[皮质醇-神经衰弱检测] {pawn.Name?.ToStringFull ?? "Unknown"} | " +
-                       $"严重度: {severity:P0} | 档位: {GetCortisolLevel()} | " +
-                       $"触发概率: {probability:P0}");
+            // 飘字：每次 roll 都显示当前概率（每 6000 tick 一次），便于确认检测在跑
+            ShowMote($"神经衰弱检测 {probability:P0}");
+
+            // 注：检测日志已按用户要求暂时关闭，飘字仍保留。
 
             if (Rand.Value < probability)
             {
@@ -578,6 +655,8 @@ namespace Hormones
             Hediff neurasthenia = HediffMaker.MakeHediff(neurastheniaDef, pawn);
             neurasthenia.Severity = 1.0f;
             pawn.health.AddHediff(neurasthenia);
+
+            ShowMote("神经衰弱 触发!");
 
             Log.Warning($"[皮质醇-神经衰弱触发] 🔴 {pawn.Name?.ToStringFull ?? "Unknown"} 患上了神经衰弱！");
         }

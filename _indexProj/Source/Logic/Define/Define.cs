@@ -88,9 +88,9 @@ namespace Hormones
         // 皮质醇档位阈值（Need CurLevel 范围 0~100）
         // 严重度 = CurLevel / 100
         // ========================================
-        // 正常波动: 0 ≤ S < 33 - 衰减9%/日，冒犯权重-50%，神经衰弱0%
-        // 承压: 33 ≤ S < 66 - 衰减5%/日，冒犯权重+200%，神经衰弱3%
-        // 高压: 66 ≤ S ≤ 100 - 衰减3%/日，冒犯权重+400%，神经衰弱8%
+        // 正常波动: 0 ≤ S < 33 - 衰减13%/日，冒犯权重-50%，神经衰弱0%，心情+2
+        // 承压: 33 ≤ S < 66 - 衰减8%/日，冒犯权重+200%，神经衰弱3%，心情-1
+        // 高压: 66 ≤ S ≤ 100 - 衰减3%/日，冒犯权重+400%，神经衰弱8%，心情-5
         public const float CortisolThresholdNormal = 33f;
         public const float CortisolThresholdStress = 66f;
         public const float CortisolThresholdOverload = 100f;
@@ -98,8 +98,8 @@ namespace Hormones
         // ========================================
         // 基础衰减（每日，占最大值百分比；MaxLevel=10000，常量已 ×100）
         // ========================================
-        public const float CortisolDecayNormal = 900f;     // 正常波动：9%/日
-        public const float CortisolDecayStress = 500f;     // 承压：5%/日
+        public const float CortisolDecayNormal = 1300f;    // 正常波动：13%/日
+        public const float CortisolDecayStress = 800f;     // 承压：8%/日
         public const float CortisolDecayHighStress = 300f; // 高压：3%/日
 
         // ========================================
