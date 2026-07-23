@@ -3,6 +3,7 @@ using RimWorld;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Text;
 using Hormones;
 using Hormones.Logic.PhysiqueLogic;
 
@@ -80,6 +81,38 @@ namespace Hormones
                 hasLoggedInit = true;
                 Log.Warning($"[Cortisol-Init] SetInitialLevel 调用: pawn={(pawn?.Name?.ToStringShort ?? "null")}, CurLevel={CurLevel}");
             }
+
+            // 添加皮质醇状态显示 Hediff 到健康面板
+            AddCortisolStatusHediff();
+        }
+
+        /// <summary>
+        /// 添加皮质醇状态显示 Hediff（用于健康面板显示）
+        /// </summary>
+        private void AddCortisolStatusHediff()
+        {
+            try
+            {
+                if (pawn?.health == null) return;
+
+                // 检查是否为有效 pawn（排除动物等）
+                if (pawn.RaceProps == null || pawn.RaceProps.intelligence == Intelligence.Animal)
+                    return;
+
+                var cortisolStatusDef = DefDatabase<HediffDef>.GetNamed("CortisolStatus", false);
+                if (cortisolStatusDef == null) return;
+
+                // 如果已存在则不重复添加
+                if (pawn.health.hediffSet.HasHediff(cortisolStatusDef))
+                    return;
+
+                var hediff = HediffMaker.MakeHediff(cortisolStatusDef, pawn);
+                pawn.health.AddHediff(hediff);
+            }
+            catch (System.Exception)
+             {
+                 // 忽略添加 Hediff 失败的情况
+             }
         }
 
         // RimWorld 原生 NeedInterval 固定每 150 tick（≈2.5秒）调用一次，
@@ -116,6 +149,11 @@ namespace Hormones
                 float growth = GetGrowthPerInterval();
                 // 体魄对皮质醇每日涨幅的修正（表C：体魄越强壮涨得越慢甚至下降）
                 float physiqueGrowth = GetPhysiqueGrowthPerDay(severity) * 150f / 60000f;
+
+                // 整体变化速率 ×5
+                decay *= 5f;
+                growth *= 5f;
+                physiqueGrowth *= 5f;
 
                 CurLevel -= decay;
                 CurLevel += growth;
@@ -626,6 +664,51 @@ namespace Hormones
             {
                 ApplyNeurasthenia();
             }
+
+            // 神经衰弱存在时，按概率触发「失眠发作」不可控精神状态（2小时）
+            TryTriggerInsomniaBreak();
+        }
+
+        /// <summary>
+        /// 神经衰弱存在时，按概率触发「失眠发作」不可控精神状态（复用 WanderOwnRoom 游荡行为，强制 2 小时）。
+        /// 通过 ThinkTree patch 把本 def 加入 Wander_OwnRoom 的 ConditionalMentalStates 节点，
+        /// 使 pawn 在发作期间无法被玩家控制地游荡。forced:true 绕过卧室限制，forceWake:true 即使
+        /// 睡着也发作（失眠本义）。每 6000 tick 检测一次。
+        /// </summary>
+        private void TryTriggerInsomniaBreak()
+        {
+            // 仅当存在神经衰弱 Hediff 时才可能发作
+            HediffDef neurastheniaDef = DefDatabase<HediffDef>.GetNamed("CortisolNeurasthenia", false);
+            if (neurastheniaDef == null || !pawn.health.hediffSet.HasHediff(neurastheniaDef))
+                return;
+
+            // 保护逻辑：失眠发作只能在睡眠状态下触发（白天/清醒状态绝不触发）
+            if (!(pawn.jobs?.curDriver?.asleep == true))
+                return;
+
+            // 已处于任何精神状态时不叠加
+            if (pawn.mindState.mentalStateHandler.InMentalState)
+                return;
+
+            // 每次检测都显示飘字，确认系统在跑（检测日志按用户要求关闭）
+            ShowMote("失眠检测");
+
+            MentalStateDef insomniaDef = DefDatabase<MentalStateDef>.GetNamed("NeurastheniaInsomnia", false);
+            if (insomniaDef == null)
+                return;
+
+            if (Rand.Value < Define.CortisolInsomniaTriggerChancePerCheck)
+            {
+                // forced:true 绕过卧室/StateCanOccur 限制；forceWake:true 即使睡着也发作（失眠本义）
+                bool started = pawn.mindState.mentalStateHandler.TryStartMentalState(
+                    insomniaDef, "神经衰弱引发的失眠发作", forced: true, forceWake: true);
+
+                if (started)
+                {
+                    ShowMote("失眠发作!");
+                    Log.Warning($"[皮质醇-失眠发作] {pawn.Name?.ToStringFull ?? "Unknown"} 陷入 2 小时失眠发作（无法控制）！");
+                }
+            }
         }
 
         /// <summary>
@@ -634,13 +717,56 @@ namespace Hormones
         /// 0.33-0.66: 3%
         /// 0.66-1.0: 8%
         /// </summary>
-        private float GetNeurastheniaProbability(float severity)
+        public float GetNeurastheniaProbability(float severity)
         {
             if (severity < 0.33f)
                 return 0f;
             if (severity < 0.66f)
                 return 0.03f;
             return 0.08f;
+        }
+
+        /// <summary>
+        /// 获取当前应激源描述（用于显示）
+        /// </summary>
+        public string GetCurrentStressors()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (pawn.needs?.mood != null && pawn.needs.mood.CurLevel < Define.CortisolMoodLowThreshold)
+                sb.Append("心情差 ");
+            if (pawn.needs?.beauty != null && (int)pawn.needs.beauty.CurCategory <= (int)BeautyCategory.Ugly)
+                sb.Append("环境差 ");
+            if (HasHungerHediff())
+                sb.Append("饥饿 ");
+            if (pawn.health?.hediffSet != null && pawn.health.hediffSet.PainTotal > 0f)
+                sb.Append("疼痛 ");
+            if (HasAnyIllness())
+                sb.Append("疾病 ");
+            if (HasInsultedMood())
+                sb.Append("被辱 ");
+
+            return sb.Length > 0 ? sb.ToString().TrimEnd() : "无";
+        }
+
+        /// <summary>
+        /// 获取当前变化趋势描述（用于显示）
+        /// </summary>
+        public string GetChangeTrend()
+        {
+            float severity = CurLevel / MaxLevel;
+            float decay = GetDecayPerInterval(severity);
+            float growth = GetGrowthPerInterval();
+            float netChange = growth - decay;
+
+            if (netChange > 0.5f)
+                return "↑ 快速上升";
+            if (netChange > 0.1f)
+                return "↗ 缓慢上升";
+            if (netChange < -0.5f)
+                return "↓ 快速下降";
+            if (netChange < -0.1f)
+                return "↘ 缓慢下降";
+            return "→ 稳定";
         }
 
         /// <summary>

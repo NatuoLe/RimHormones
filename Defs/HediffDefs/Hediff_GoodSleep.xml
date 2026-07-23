@@ -3,16 +3,17 @@
   <HediffDef>
     <defName>GoodSleep</defName>
     <label>优质睡眠</label>
-    <description>在美观的房间中获得了充足的优质睡眠。身心得到充分恢复。</description>
+    <description>在美观的房间中获得了充足的优质睡眠。精神饱满，工作更有干劲。</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>false</isBad>
     <makesAlert>false</makesAlert>
     <stages>
       <li>
         <minSeverity>0</minSeverity>
-        <statOffsets>
-          <RestFallRateFactor>-0.1</RestFallRateFactor>
-        </statOffsets>
+        <statFactors>
+          <!-- 全局工作效率 +10%（乘法） -->
+          <WorkSpeedGlobal>1.1</WorkSpeedGlobal>
+        </statFactors>
       </li>
     </stages>
     <comps>

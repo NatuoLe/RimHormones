@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+  <!-- 把自定义的「失眠发作」精神状态加入 Wander_OwnRoom 的 ConditionalMentalStates 节点，
+       这样处于该精神状态的 pawn 会被路由进「在房间内游荡」子树（JobGiver_WanderOwnRoom），
+       表现为无法被玩家控制的游荡。原节点仅识别 defName=Wander_OwnRoom。
+       注意：RimWorld think tree 节点标签名都是 <li>，类型靠 Class 属性区分，故用 @Class 匹配。 -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>//ThinkTreeDef[defName='MentalStateNonCritical']//li[@Class='ThinkNode_ConditionalMentalStates'][states/li[text()='Wander_OwnRoom']]/states</xpath>
+    <value>
+      <li>NeurastheniaInsomnia</li>
+    </value>
+  </Operation>
+</Patch>

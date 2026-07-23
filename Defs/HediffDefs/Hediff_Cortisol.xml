@@ -1,54 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
+  <!-- 皮质醇状态显示用 Hediff（用于在健康面板显示浓度） -->
   <HediffDef>
-    <defName>Cortisol</defName>
-    <label>皮质醇</label>
-    <description>皮质醇激素，代表慢性压力积累。严重程度表示激素浓度水平。高皮质醇会导致疲劳、免疫抑制和新陈代谢变化。</description>
-    <hediffClass>HediffWithComps</hediffClass>
+    <defName>CortisolStatus</defName>
+    <label>皮质醇状态</label>
+    <description>当前慢性压力水平。显示在健康面板中。</description>
+    <hediffClass>Hormones.HediffComp_CortisolStatus</hediffClass>
     <isBad>false</isBad>
     <makesAlert>false</makesAlert>
     <stages>
       <li>
-        <label>睡眠剥夺</label>
         <minSeverity>0</minSeverity>
-        <capMods>
-          <li>
-            <capacity>Consciousness</capacity>
-            <offset>-0.05</offset>
-          </li>
-        </capMods>
-        <statFactors>
-          <RestFallRateFactor>1.2</RestFallRateFactor>
-        </statFactors>
-      </li>
-      <li>
-        <label>正常</label>
-        <minSeverity>0.33</minSeverity>
-      </li>
-      <li>
-        <label>慢性压力</label>
-        <minSeverity>0.66</minSeverity>
-        <capMods>
-          <li>
-            <capacity>Consciousness</capacity>
-            <offset>0.03</offset>
-          </li>
-          <li>
-            <capacity>Metabolism</capacity>
-            <offset>0.10</offset>
-          </li>
-          <li>
-            <capacity>BloodPumping</capacity>
-            <offset>-0.05</offset>
-          </li>
-        </capMods>
-        <statFactors>
-          <InjuryHealingFactor>0.95</InjuryHealingFactor>
-          <ImmunityGainSpeedFactor>0.95</ImmunityGainSpeedFactor>
-        </statFactors>
-        <hungerRateFactorOffset>0.15</hungerRateFactorOffset>
       </li>
     </stages>
+  </HediffDef>
+
+  <!-- 废弃：皮质醇效果已迁移至 Need_Cortisol -->
+  <HediffDef>
+    <defName>Cortisol</defName>
+    <label>皮质醇（废弃）</label>
+    <description>废弃：皮质醇效果已迁移至 Need 系统。当前浓度请查看 Need 界面。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <makesAlert>false</makesAlert>
   </HediffDef>
 
   <HediffDef>
@@ -63,8 +37,8 @@
       <li>
         <minSeverity>0</minSeverity>
         <statFactors>
-          <!-- 休息效率直接 -50%：乘 RestRateMultiplier（睡眠时休息值回复速度），UI「休息效率乘数」会显示 ×50% -->
-          <RestRateMultiplier>0.5</RestRateMultiplier>
+          <!-- 休息效率 -13%：乘 RestRateMultiplier（睡眠时休息值回复速度），UI「休息效率乘数」会显示 ×87% -->
+          <RestRateMultiplier>0.87</RestRateMultiplier>
         </statFactors>
       </li>
     </stages>

@@ -99,16 +99,16 @@ namespace Hormones
         // 基础衰减（每日，占最大值百分比；MaxLevel=10000，常量已 ×100）
         // ========================================
         public const float CortisolDecayNormal = 1300f;    // 正常波动：13%/日
-        public const float CortisolDecayStress = 800f;     // 承压：8%/日
-        public const float CortisolDecayHighStress = 300f; // 高压：3%/日
+        public const float CortisolDecayStress = 1000f;     // 承压：10%/日
+        public const float CortisolDecayHighStress = 1000f; // 高压：10%/日
 
         // ========================================
         // 额外衰减（可叠加）
         // ========================================
-        public const float CortisolDecayHighMood = 800f;      // 心情>0.8：额外-8%/日
+        public const float CortisolDecayHighMood = 1000f;      // 心情>0.7：额外-10%/日
         public const float CortisolDecayDeliciousFood = 800f; // 美食Hediff：额外-8%/日
-        public const float CortisolDecayGoodSleep = 800f;    // 优质睡眠Hediff：额外-8%/日
-        public const float CortisolMoodHighThreshold = 0.8f; // 高心情触发额外衰减阈值（mood need 0~1，不缩放）
+        public const float CortisolDecayGoodSleep = 1300f;    // 优质睡眠Hediff：额外-13%/日
+        public const float CortisolMoodHighThreshold = 0.7f; // 高心情触发额外衰减阈值（mood need 0~1，不缩放）
 
         // ========================================
         // 增长（每日，占最大值百分比，可叠加）
@@ -145,6 +145,14 @@ namespace Hormones
         public const float CortisolNeurastheniaBaseProb = 0.15f;      // 基础触发概率
         public const float CortisolNeurastheniaMaxProb = 0.6f;        // 最大触发概率（封顶60%）
         public const float CortisolNeurastheniaSeverityFactor = 0.03f;// 浓度影响因子
+
+        // ========================================
+        // 失眠发作（神经衰弱引发的不可控精神状态）
+        // ========================================
+        // 神经衰弱 Hediff 存在期间，每 6000 tick 检测一次，按此概率触发「失眠发作」
+        // （复用 WanderOwnRoom 游荡行为，强制持续 2 小时 = 5000 tick，forced 绕过卧室限制）
+        // 0.05f ≈ 游戏内约每 2.4 小时一次判定，调高则更易发作
+        public const float CortisolInsomniaTriggerChancePerCheck = 0.10f;
 
         // ========================================
         // 肾上腺素联动参数（保留）

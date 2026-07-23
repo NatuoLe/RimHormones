@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 神经衰弱引发的「失眠发作」：不可控精神状态，复用 WanderOwnRoom 的游荡行为，
+       固定持续 2 小时（5000 tick）后自动恢复。由 Need_Cortisol 以 forced:true 触发，
+       绕过卧室限制；并通过 ThinkTree patch 接入 Wander_OwnRoom 的游荡子树。
+       字段严格对齐本版本原版 Wander_OwnRoom（仅 Misc 等合法枚举/字段）。 -->
+  <MentalStateDef ParentName="BaseMentalState">
+    <defName>NeurastheniaInsomnia</defName>
+    <stateClass>MentalState_WanderOwnRoom</stateClass>
+    <workerClass>MentalStateWorker_WanderOwnRoom</workerClass>
+    <label>失眠发作</label>
+    <category>Misc</category>
+    <colonistsOnly>true</colonistsOnly>
+    <!-- 固定 2 小时恢复：min=max=5000，recoveryMtbDays=-1 禁用随机恢复，纯按年龄恢复 -->
+    <minTicksBeforeRecovery>5000</minTicksBeforeRecovery>
+    <maxTicksBeforeRecovery>5000</maxTicksBeforeRecovery>
+    <recoveryMtbDays>-1</recoveryMtbDays>
+    <!-- 失眠：睡眠不会提前结束发作 -->
+    <recoverFromSleep>false</recoverFromSleep>
+    <blockNormalThoughts>true</blockNormalThoughts>
+    <nameColor>(0.85, 0.55, 0.25)</nameColor>
+    <recoveryMessage>{0} 的失眠发作结束了。</recoveryMessage>
+    <beginLetterLabel>失眠发作</beginLetterLabel>
+    <beginLetter>{0} 因长期神经衰弱陷入失眠发作，无法自控地在四处游荡，持续约 2 小时。</beginLetter>
+    <beginLetterDef>NegativeEvent</beginLetterDef>
+    <baseInspectLine>精神状态：失眠发作</baseInspectLine>
+    <allowBeatfire>true</allowBeatfire>
+    <escapingPrisonersIgnore>true</escapingPrisonersIgnore>
+  </MentalStateDef>
+</Defs>

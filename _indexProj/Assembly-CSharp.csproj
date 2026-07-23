@@ -29,6 +29,7 @@
     <Compile Include="Source\Harmony_CortisolNeedInit.cs" />
     <Compile Include="Source\Comps\HediffComp_PhysiqueDisplay.cs" />
     <Compile Include="Source\Comps\HediffComp_Cortisol.cs" />
+    <Compile Include="Source\Comps\HediffComp_CortisolStatus.cs" />
     <Compile Include="Source\Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>

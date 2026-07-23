@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
   <!-- 皮质醇心情（含体魄修正）。stage 索引 = tier*5 + physiqueIdx（Frail=0 Average=1 Fit=2 Strong=3 Peak=4）
-       心情 = 档位基础(+2/-2/-5) + 体魄偏移，见 ThoughtWorker_CortisolMood。 -->
+       档位\体魄      frail average fit   strong peak
+       正常波动(+2)   +1    +2     +3   +3     +3
+       承压(-2)      -2    -1     -1   0     0
+       高压(-5)      -5    -3     -2   -1    0 -->
   <ThoughtDef>
     <defName>CortisolMoodEffect</defName>
-    <label>皮质醇状态</label>
+    <label>皮质醇</label>
     <description>皮质醇水平对心情的影响，体魄越强壮越能缓冲承压与高压带来的负面情绪。</description>
     <workerClass>Hormones.ThoughtWorker_CortisolMood</workerClass>
     <stages>
-      <!-- tier 0：正常波动（基础 +2） -->
-      <li><label>皮质醇正常·虚弱</label><baseMoodEffect>1</baseMoodEffect></li>
-      <li><label>皮质醇正常·一般</label><baseMoodEffect>2</baseMoodEffect></li>
-      <li><label>皮质醇正常·健壮</label><baseMoodEffect>3</baseMoodEffect></li>
-      <li><label>皮质醇正常·强壮</label><baseMoodEffect>3</baseMoodEffect></li>
-      <li><label>皮质醇正常·巅峰</label><baseMoodEffect>3</baseMoodEffect></li>
-      <!-- tier 1：承压（基础 -2） -->
-      <li><label>皮质醇承压·虚弱</label><baseMoodEffect>-4</baseMoodEffect></li>
-      <li><label>皮质醇承压·一般</label><baseMoodEffect>-2</baseMoodEffect></li>
-      <li><label>皮质醇承压·健壮</label><baseMoodEffect>-1</baseMoodEffect></li>
-      <li><label>皮质醇承压·强壮</label><baseMoodEffect>-1</baseMoodEffect></li>
-      <li><label>皮质醇承压·巅峰</label><baseMoodEffect>-1</baseMoodEffect></li>
-      <!-- tier 2：高压（基础 -5） -->
-      <li><label>皮质醇高压·虚弱</label><baseMoodEffect>-8</baseMoodEffect></li>
-      <li><label>皮质醇高压·一般</label><baseMoodEffect>-6</baseMoodEffect></li>
-      <li><label>皮质醇高压·健壮</label><baseMoodEffect>-4</baseMoodEffect></li>
-      <li><label>皮质醇高压·强壮</label><baseMoodEffect>-3</baseMoodEffect></li>
-      <li><label>皮质醇高压·巅峰</label><baseMoodEffect>-2</baseMoodEffect></li>
+      <!-- tier 0：正常波动（+2） -->
+      <li><label>皮质醇(正常)</label><baseMoodEffect>1</baseMoodEffect></li>
+      <li><label>皮质醇(正常)</label><baseMoodEffect>2</baseMoodEffect></li>
+      <li><label>皮质醇(正常)</label><baseMoodEffect>3</baseMoodEffect></li>
+      <li><label>皮质醇(正常)</label><baseMoodEffect>3</baseMoodEffect></li>
+      <li><label>皮质醇(正常)</label><baseMoodEffect>3</baseMoodEffect></li>
+      <!-- tier 1：承压（-2） -->
+      <li><label>皮质醇(承压)</label><baseMoodEffect>-2</baseMoodEffect></li>
+      <li><label>皮质醇(承压)</label><baseMoodEffect>-1</baseMoodEffect></li>
+      <li><label>皮质醇(承压)</label><baseMoodEffect>-1</baseMoodEffect></li>
+      <li><label>皮质醇(承压)</label><baseMoodEffect>0</baseMoodEffect></li>
+      <li><label>皮质醇(承压)</label><baseMoodEffect>0</baseMoodEffect></li>
+      <!-- tier 2：高压（-5） -->
+      <li><label>皮质醇(高压)</label><baseMoodEffect>-5</baseMoodEffect></li>
+      <li><label>皮质醇(高压)</label><baseMoodEffect>-3</baseMoodEffect></li>
+      <li><label>皮质醇(高压)</label><baseMoodEffect>-2</baseMoodEffect></li>
+      <li><label>皮质醇(高压)</label><baseMoodEffect>-1</baseMoodEffect></li>
+      <li><label>皮质醇(高压)</label><baseMoodEffect>0</baseMoodEffect></li>
     </stages>
   </ThoughtDef>
 </Defs>

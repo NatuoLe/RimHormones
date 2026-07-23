@@ -5,5 +5,5 @@
   <MuscleStrain.label>肌肉劳损</MuscleStrain.label>
   <MuscleStrain.description>肌肉疲劳和劳损程度。劳损越高越容易受伤，仅在睡觉时恢复。</MuscleStrain.description>
   <Cortisol.label>皮质醇</Cortisol.label>
-  <Cortisol.description>皮质醇水平代表慢性压力。高水平会增加打架概率和神经衰弱概率。</Cortisol.description>
+  <Cortisol.description>皮质醇水平反映长期压力状态。高值时心情受抑、争端易起，并提升神经衰弱风险；体魄越强缓冲越佳。</Cortisol.description>
 </LanguageData>
