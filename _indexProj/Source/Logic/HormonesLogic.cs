@@ -163,6 +163,19 @@ public static class StatWorker_GetValue_Patch
                 {
                     __result *= (1 + effects.MoveSpeed);
                 }
+                else if (stat == StatDefOf.MeleeDamageFactor)
+                {
+                    __result *= (1 + effects.MeleeDamage);
+                }
+                else if (stat == StatDefOf.MeleeDodgeChance)
+                {
+                    __result *= (1 + effects.Dodge);
+                }
+                else if (stat == StatDefOf.MeleeHitChance)
+                {
+                    // MeleeHitReduction 为负值（战斗应激手抖），此处按比例降低命中率
+                    __result *= (1 + effects.MeleeHitReduction);
+                }
             }
         }
     }

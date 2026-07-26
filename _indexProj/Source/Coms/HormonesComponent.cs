@@ -138,21 +138,14 @@ public class HormonesComponent : ThingComp, IExposable
     }
     
     /// <summary>
-    /// 添加皮质醇 Hediff 到殖民者
+    /// 添加体魄可视化 Hediff 到殖民者
     /// 延迟到第一次 Tick 时添加，确保 HediffDef 已加载
     /// </summary>
-    private bool cortisolAdded = false;
     private bool physiqueDisplayAdded = false;
     
     public override void CompTick()
     {
         base.CompTick();
-        
-        // 延迟添加皮质醇 Hediff（确保 HediffDef 已加载）
-        if (!cortisolAdded && Pawn != null && Pawn.IsHashIntervalTick(60))
-        {
-            AddCortisolHediff();
-        }
         
         // 延迟添加体魄可视化 Hediff
         if (!physiqueDisplayAdded && Pawn != null && Pawn.IsHashIntervalTick(60))
@@ -167,40 +160,6 @@ public class HormonesComponent : ThingComp, IExposable
         }
     }
     
-    /// <summary>
-    /// 添加皮质醇 Hediff 到殖民者
-    /// </summary>
-    private void AddCortisolHediff()
-    {
-        if (cortisolAdded) return;
-        if (Pawn == null) return;
-        
-        // 检查是否已经有皮质醇 Hediff
-        if (Pawn.health?.hediffSet == null) return;
-        
-        HediffDef cortisolDef = DefDatabase<HediffDef>.GetNamed("Cortisol", false);
-        if (cortisolDef == null)
-        {
-            Log.Warning("[Hormones] Cortisol HediffDef not found! Will retry next tick...");
-            return;
-        }
-        
-        // 检查是否已经有皮质醇 Hediff
-        if (Pawn.health.hediffSet.HasHediff(cortisolDef))
-        {
-            cortisolAdded = true;
-            return; // 已经有了，不再添加
-        }
-        
-        // 添加皮质醇 Hediff，初始严重度为正常区间下限 0.15
-        Hediff cortisolHediff = HediffMaker.MakeHediff(cortisolDef, Pawn);
-        cortisolHediff.Severity = 0.15f; // 从正常区间开始
-        Pawn.health.AddHediff(cortisolHediff);
-        
-        cortisolAdded = true;
-        Log.Message($"[皮质醇-初始化] {Pawn?.Name?.ToStringFull ?? "Unknown"} 添加了皮质醇 Hediff，初始浓度: 0.15");
-    }
-
     /// <summary>
     /// 添加体魄可视化 Hediff 到殖民者
     /// </summary>

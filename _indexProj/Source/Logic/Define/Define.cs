@@ -25,9 +25,9 @@ namespace Hormones
         public const float AdrenalineOverexertBaseChance = 0.2f;
         public const float AdrenalineOverexertChancePerPhysique = 0.04f;
 
-        public const float AdrenalineMeleeAttackBase = 0.08f;
-        public const float AdrenalineRangedAttackBase = 0.04f;
-        public const float AdrenalineHitBase = 0.15f;
+        public const float AdrenalineMeleeAttackBase = 0.03f;
+        public const float AdrenalineRangedAttackBase = 0f;
+        public const float AdrenalineHitBase = 0.10f;
 
         public const float AdrenalineBaseDecay = 0.02f;
         public const float AdrenalineDecayPerPhysique = 0.003f;
@@ -125,19 +125,6 @@ namespace Hormones
         // ========================================
         public const float CortisolHungerThreshold = 0.2f;    // 饥饿触发阈值（食物 CurLevel < 0.2）
         public const float CortisolMoodLowThreshold = 0.3f;   // 低心情触发增长阈值（心情 CurLevel < 0.3）
-
-        // ========================================
-        // 旧版常量（保留给 HediffComp_Cortisol 使用）
-        // ========================================
-        public const float CortisolBaseDecay = 0.008f;      // 基础衰减速率（用于日志对比）
-        public const float CortisolBaseGrowthMin = 0.001f;   // 基础增长最小值
-        public const float CortisolBaseGrowthMax = 0.003f;   // 基础增长最大值
-        public const float CortisolNeurastheniaGrowth = 0.005f; // 神经衰弱增长
-        public const float CortisolAdrenalineLinkGrowth = 0.001f; // 肾上腺素联动增长
-        public const float CortisolHungerGrowth = 0.002f;    // 饥饿增长（旧版）
-        public const float CortisolUglyEnvGrowth = 0.0015f;  // 环境增长（旧版）
-        public const float CortisolPainGrowth = 0.002f;     // 疼痛增长（旧版）
-        public const float CortisolLowMoodGrowth = 0.0015f; // 心情增长（旧版）
 
         // ========================================
         // 神经衰弱触发参数（保留）

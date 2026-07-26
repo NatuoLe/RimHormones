@@ -15,16 +15,6 @@
     </stages>
   </HediffDef>
 
-  <!-- 废弃：皮质醇效果已迁移至 Need_Cortisol -->
-  <HediffDef>
-    <defName>Cortisol</defName>
-    <label>皮质醇（废弃）</label>
-    <description>废弃：皮质醇效果已迁移至 Need 系统。当前浓度请查看 Need 界面。</description>
-    <hediffClass>HediffWithComps</hediffClass>
-    <isBad>false</isBad>
-    <makesAlert>false</makesAlert>
-  </HediffDef>
-
   <HediffDef>
     <defName>CortisolNeurasthenia</defName>
     <label>神经衰弱</label>

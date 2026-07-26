@@ -21,7 +21,7 @@ namespace Hormones
     // 依赖关系：
     //   - 输入依赖：Define（常量配置）、PhysiqueTraitUtility（特质偏移计算）、Helpers（通用工具方法）
     //   - 输出消费者：HormonesLogic、AdrenalineLogic、AdrenalineProducer、HormonesComponent、
-    //                 HediffComp_Cortisol、HediffComp_PhysiqueDisplay
+    //                 HediffComp_PhysiqueDisplay
     //
     // 体魄等级计算模型：
     //   PhysiqueLevel = BaseSkillLevel + TraitOffset

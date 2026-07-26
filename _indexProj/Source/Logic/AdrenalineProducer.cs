@@ -100,9 +100,10 @@ namespace Hormones
                 return;
 
             float netChange = CalculateNetChangePerSecond(pawn);
-            float changePerTick = netChange / 60f;
 
-            adrenaline.Severity = Math.Min(Math.Max(adrenaline.Severity + changePerTick, 0f), 1f);
+            // Pawn_Tick_Patch 每 60 tick 调用一次（≈1 秒），netChange 已是"每秒"变化，直接加
+            float newSeverity = Math.Min(Math.Max(adrenaline.Severity + netChange, 0f), 1f);
+            adrenaline.Severity = newSeverity;
 
             if (adrenaline.Severity <= 0)
             {
@@ -121,8 +122,12 @@ namespace Hormones
 
             int physique = PhysiqueLgc.GetPhysiqueLevel(attacker);
             float gain = GetAttackAdrenalineGain(isMelee, physique);
+            float oldSeverity = adrenaline.Severity;
+            float newSeverity = Math.Min(oldSeverity + gain, 1f);
             
-            adrenaline.Severity = Math.Min(adrenaline.Severity + gain, 1f);
+            adrenaline.Severity = newSeverity;
+            string reason = isMelee ? "近战" : "远程";
+            AdrenalineLogic.ShowAdrenalineMote(attacker, reason, newSeverity - oldSeverity, newSeverity);
         }
 
         public static void OnHit(Pawn victim)
@@ -136,8 +141,11 @@ namespace Hormones
 
             int physique = PhysiqueLgc.GetPhysiqueLevel(victim);
             float gain = GetHitAdrenalineGain(physique);
+            float oldSeverity = adrenaline.Severity;
+            float newSeverity = Math.Min(oldSeverity + gain, 1f);
             
-            adrenaline.Severity = Math.Min(adrenaline.Severity + gain, 1f);
+            adrenaline.Severity = newSeverity;
+            AdrenalineLogic.ShowAdrenalineMote(victim, "受伤", newSeverity - oldSeverity, newSeverity);
         }
 
     }

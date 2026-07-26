@@ -294,6 +294,16 @@ namespace Hormones
         }
 
         /// <summary>
+        /// 静态便捷接口：直接从 pawn 的皮质醇 Need 读取当前浓度（0~1）。
+        /// 供 Harmony 交互加权等外部模块调用，取代已废弃的 Hediff 取值。
+        /// </summary>
+        public static float GetCortisolSeverity(Pawn pawn)
+        {
+            var need = pawn?.needs?.TryGetNeed<Need_Cortisol>();
+            return need?.GetSeverity() ?? 0f;
+        }
+
+        /// <summary>
         /// 获取衰减速率（每tick）
         /// 心情>0.8、美食、优质睡眠会额外增加衰减
         /// </summary>

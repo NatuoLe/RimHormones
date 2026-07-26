@@ -2,6 +2,7 @@ using Verse;
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Hormones
 {
@@ -217,6 +218,28 @@ namespace Hormones
             {
                 pawn.health.RemoveHediff(adrenaline);
             }
+        }
+
+        /// <summary>
+        /// 显示肾上腺素飘字（Mote）。受 RimHormonesMod.Settings.ShowAdrenalineMotes 控制。
+        /// </summary>
+        /// <param name="pawn">目标角色</param>
+        /// <param name="reason">归因标签，如 "受伤""近战""远程"</param>
+        /// <param name="change">原始变化量（Severity 尺度，0~1）</param>
+        /// <param name="newSeverity">变化后的 Severity</param>
+        public static void ShowAdrenalineMote(Pawn pawn, string reason, float change, float newSeverity)
+        {
+            if (!RimHormonesMod.Settings.ShowAdrenalineMotes)
+                return;
+            if (pawn?.Map == null)
+                return;
+
+            int changeDisplay = Mathf.RoundToInt(Mathf.Abs(change) * 100f);
+            int currentDisplay = Mathf.RoundToInt(newSeverity * 100f);
+            string sign = change >= 0 ? "+" : "-";
+            string text = $"肾上腺[{reason}]：{sign}{changeDisplay} [{currentDisplay}/100]";
+
+            MoteMaker.ThrowText(pawn.DrawPos, pawn.Map, text, new Color(1f, 0.7f, 0.2f), -1f);
         }
 
     }

@@ -5,14 +5,14 @@
   <ThoughtDef>
     <defName>NeurastheniaMood</defName>
     <label>神经衰弱</label>
-    <description>神经衰弱带来的持续低落情绪，体魄越强壮越能缓冲。</description>
+    <description>神经衰弱带来的持续低落情绪，身体素质越好的人对于神经衰弱的影响越轻。</description>
     <workerClass>Hormones.ThoughtWorker_NeurastheniaMood</workerClass>
     <stages>
-      <li><label>神经衰弱·虚弱</label><baseMoodEffect>-7</baseMoodEffect></li>
-      <li><label>神经衰弱·一般</label><baseMoodEffect>-5</baseMoodEffect></li>
-      <li><label>神经衰弱·健壮</label><baseMoodEffect>-4</baseMoodEffect></li>
-      <li><label>神经衰弱·强壮</label><baseMoodEffect>-2</baseMoodEffect></li>
-      <li><label>神经衰弱·巅峰</label><baseMoodEffect>-1</baseMoodEffect></li>
+      <li><label>严重的神经衰弱</label><description>体魄虚弱的神经衰弱症状</description><baseMoodEffect>-7</baseMoodEffect></li>
+      <li><label>神经衰弱</label><description>体魄一般的神经衰弱症状</description><baseMoodEffect>-5</baseMoodEffect></li>
+      <li><label>神经衰弱</label><description>体魄强健的神经衰弱症状</description><baseMoodEffect>-4</baseMoodEffect></li>
+      <li><label>较弱的神经衰弱</label><description>体魄强壮的神经衰弱症状</description><baseMoodEffect>-2</baseMoodEffect></li>
+      <li><label>微弱的神经衰弱</label><description>体魄巅峰的神经衰弱症状</description><baseMoodEffect>-1</baseMoodEffect></li>
     </stages>
   </ThoughtDef>
 </Defs>

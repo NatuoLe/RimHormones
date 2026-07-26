@@ -26,6 +26,9 @@ namespace Hormones
             var harmony = new Harmony("thgold.hormones");
             harmony.PatchAll();
 
+            // Combat Extended 适配已拆分为独立补丁包（thgold.hormones.ce）。
+            // 本体只保留原版战斗逻辑；装了 CE 补丁包后由其重挂 CE 战斗入口。
+
             Log.Message("[Hormones] === Hormones Mod Loaded Successfully ===");
         }
     }

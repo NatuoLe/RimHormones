@@ -395,11 +395,13 @@
     <xpath>*/BackstoryDef[defName='Orphan15']/skillGains</xpath>
     <value><Physique>-3</Physique></value>
   </Operation>
-  <!-- Vatgrown 不存在，改为 VatgrownChild11 -->
+  <!-- VatgrownChild11 没有 skillGains 节点，无法添加，跳过 -->
+  <!--
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='VatgrownChild11']/skillGains</xpath>
     <value><Physique>-3</Physique></value>
   </Operation>
+  -->
   <!-- 新增 -3 苦难背景 -->
   <Operation Class="PatchOperationAdd">
     <xpath>*/BackstoryDef[defName='MentalPatient69']/skillGains</xpath>

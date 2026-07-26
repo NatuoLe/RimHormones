@@ -12,3 +12,4 @@ D:\RimMods\Rim-Hormones\RimHormones\_indexProj\obj\Release\net48\Assembly-CSharp
 D:\RimMods\Rim-Hormones\RimHormones\_indexProj\obj\Release\net48\Assembly.44154EF1.Up2Date
 D:\RimMods\Rim-Hormones\RimHormones\_indexProj\obj\Release\net48\RimHormones.dll
 D:\RimMods\Rim-Hormones\RimHormones\_indexProj\obj\Release\net48\RimHormones.pdb
+D:\RimMods\Rim-Hormones\RimHormones\_indexProj\bin\Release\net48\UnityEngine.CoreModule.dll

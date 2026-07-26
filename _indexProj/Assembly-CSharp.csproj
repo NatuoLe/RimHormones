@@ -28,8 +28,8 @@
     <Compile Include="Source\Logic\CortisolLogic\ThoughtWorker_NeurastheniaMood.cs" />
     <Compile Include="Source\Harmony_CortisolNeedInit.cs" />
     <Compile Include="Source\Comps\HediffComp_PhysiqueDisplay.cs" />
-    <Compile Include="Source\Comps\HediffComp_Cortisol.cs" />
     <Compile Include="Source\Comps\HediffComp_CortisolStatus.cs" />
+    <Compile Include="Source\Mods\RimHormonesMod.cs" />
     <Compile Include="Source\Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -37,5 +37,6 @@
     <Reference Include="Assembly-CSharp" HintPath="Assembly-CSharp.dll" />
     <Reference Include="Verse" HintPath="Assembly-CSharp.dll" />
     <Reference Include="UnityEngine" HintPath="UnityEngine.dll" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="UnityEngine.CoreModule.dll" />
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@ namespace Hormones
     {
         public static float GetSlightInsultWeightMultiplier(Pawn initiator)
         {
-            float severity = CortisolLogic.GetCortisolSeverity(initiator);
+            float severity = Need_Cortisol.GetCortisolSeverity(initiator);
             if (severity < 0.33f) return 0.5f;   // 正常波动
             if (severity < 0.66f) return 2.0f;   // 承压
             return 4.0f;                          // 高压
