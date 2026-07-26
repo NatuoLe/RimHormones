@@ -393,6 +393,33 @@ namespace Hormones
         }
 
         /// <summary>
+        /// 获取肌肉劳损【扣减】倍率：干活时基础strain × 此倍率。
+        /// 虚弱扣得快(易累)、强壮扛得住。体现"体魄越强越能持续劳作"。
+        /// </summary>
+        /// <param name="pawn">目标角色</param>
+        /// <returns>劳损扣减倍率</returns>
+        public static float GetMuscleStrainConsumeMultiplier(Pawn pawn)
+        {
+            PhysiqueStage stage = GetPhysiqueStage(pawn);
+
+            switch (stage)
+            {
+                case PhysiqueStage.Frail:
+                    return Define.PhysiqueStageFrailStrainConsumeMultiplier;
+                case PhysiqueStage.Average:
+                    return Define.PhysiqueStageAverageStrainConsumeMultiplier;
+                case PhysiqueStage.Fit:
+                    return Define.PhysiqueStageFitStrainConsumeMultiplier;
+                case PhysiqueStage.Strong:
+                    return Define.PhysiqueStageStrongStrainConsumeMultiplier;
+                case PhysiqueStage.Peak:
+                    return Define.PhysiqueStagePeakStrainConsumeMultiplier;
+                default:
+                    return Define.PhysiqueStageAverageStrainConsumeMultiplier;
+            }
+        }
+
+        /// <summary>
         /// 获取肌肉拉伤概率倍率
         /// 倍率 > 1 表示更容易拉伤，< 1 表示更不容易拉伤
         /// </summary>

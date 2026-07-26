@@ -227,6 +227,8 @@ namespace Hormones
         /// </summary>
         private void ShowCortisolChangeMote(float change)
         {
+            if (!RimHormonesMod.Settings.ShowCortisolMotes)
+                return;
             if (pawn == null || pawn.Map == null)
                 return;
 
@@ -255,6 +257,8 @@ namespace Hormones
         /// </summary>
         private void ShowMote(string text)
         {
+            if (!RimHormonesMod.Settings.ShowCortisolMotes)
+                return;
             if (pawn == null || pawn.Map == null)
                 return;
 

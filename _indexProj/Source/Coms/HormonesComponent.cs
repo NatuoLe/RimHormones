@@ -1,5 +1,7 @@
 using Verse;
 using RimWorld;
+using Verse.AI;
+using Hormones.Logic.PhysiqueLogic;
 
 namespace Hormones
 {
@@ -142,7 +144,10 @@ public class HormonesComponent : ThingComp, IExposable
     /// 延迟到第一次 Tick 时添加，确保 HediffDef 已加载
     /// </summary>
     private bool physiqueDisplayAdded = false;
-    
+
+    // A: 按工作时长累计结算 —— 累积“正在干白名单活”的 tick 数
+    private float workTickAccumulator = 0f;
+
     public override void CompTick()
     {
         base.CompTick();
@@ -152,12 +157,58 @@ public class HormonesComponent : ThingComp, IExposable
         {
             AddPhysiqueDisplayHediff();
         }
+
+        // A: 每 tick 判断是否在干白名单工作，累计并满周期结算
+        PhysiqueWorkTick();
         
         // 原有的激素间隔逻辑
         if (Pawn != null && Pawn.IsHashIntervalTick(200))
         {
             HormonesInterval();
         }
+    }
+
+    // ============================================================
+    // A: 体魄工作时长累计
+    //   粗档判断：只看 CurJob.def.defName 是否命中白名单（走去干活的路程也计入劳作）。
+    //   每累计满 WorkTicksPerSettle，就结算一份经验/劳损/拉伤，余数保留。
+    // ============================================================
+    private void PhysiqueWorkTick()
+    {
+        if (Pawn == null || Pawn.Dead || Pawn.Suspended) return;
+        if (Pawn.needs == null) return;
+
+        Job curJob = Pawn.CurJob;
+        if (curJob?.def == null) return;
+
+        if (!PhysiqueWorkSettle.TryGetWorkParams(curJob.def.defName, curJob, out float xp, out float strain, out float chance))
+        {
+            return;
+        }
+
+        workTickAccumulator += 1f;
+
+        if (workTickAccumulator >= Define.WorkTicksPerSettle)
+        {
+            workTickAccumulator -= Define.WorkTicksPerSettle;
+            PhysiqueWorkSettle.SettleWork(Pawn, xp, strain, chance, curJob, 1f);
+        }
+    }
+
+    /// <summary>
+    /// Job 结束时的处理。
+    /// 【2026-07-26 修复】原先此处按"余数/周期"比例补算并清零，导致碎片化短 Job
+    /// （种植 Sow、割除 CutPlant 等一格一个 Job）每次完成都被按极小 factor 补算后清零，
+    /// 累计器永远攒不满 400，单次只扣 1~2 点几乎不可见。
+    /// 现改为：Job 结束时【保留累计器余数，不清零】，让跨 Job 的连续劳作能正确累积，
+    /// 唯一结算路径为 PhysiqueWorkTick 的"满 400 大结算"。这样种够约 5 格就满一次周期，
+    /// 与挖矿/搬运等长 Job 的手感完全一致。
+    /// 余数随存档持久化（见 PostExposeData），跨会话不丢。
+    /// </summary>
+    public void SettleWorkRemainder()
+    {
+        // 有意保留累计器，不做任何补算/清零。
+        // 保留此方法仅为兼容 Patch_Job_End_PhysiqueXP 的调用点，未来若需"切到无关工作时衰减余数"可在此扩展。
     }
     
     /// <summary>
@@ -255,6 +306,7 @@ public class HormonesComponent : ThingComp, IExposable
     {
         Scribe_Values.Look(ref curLevelInt, "hormonesLevel", MaxLevel);
         Scribe_Values.Look(ref lastLevelInt, "hormonesLastLevel", MaxLevel);
+        Scribe_Values.Look(ref workTickAccumulator, "physiqueWorkTickAccumulator", 0f);
     }
 }
 

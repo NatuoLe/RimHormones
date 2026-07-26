@@ -41,16 +41,19 @@ namespace Hormones
         [HarmonyPostfix]
         public static void Postfix(Pawn __instance, Map map, bool respawningAfterLoad)
         {
-            if (__instance == null || respawningAfterLoad || map == null) return;
+            // 注意：读档时 respawningAfterLoad==true，但手动 AllComps.Add 的 comp 不随存档序列化，
+            // 因此读档后老殖民者身上没有 HormonesComponent，必须在这里补挂，否则 CompTick 不跑（体魄/激素全失效）。
+            if (__instance == null || map == null) return;
             if (!__instance.RaceProps.Humanlike) return;
 
+            // respawningAfterLoad 时不能用 initializedPawns 缓存跳过（该缓存跨存档不清空，会误判已初始化）
             int pawnId = __instance.thingIDNumber;
-            if (initializedPawns.Contains(pawnId)) return;
+            if (!respawningAfterLoad && initializedPawns.Contains(pawnId)) return;
 
             var hormonesComp = GetOrCreateHormonesComp(__instance);
             if (hormonesComp != null)
             {
-                Log.Message("[Hormones] HormonesComponent initialized for " + __instance.Name.ToStringFull);
+                Log.Message("[Hormones] HormonesComponent initialized for " + __instance.Name.ToStringFull + " (respawningAfterLoad=" + respawningAfterLoad + ")");
             }
 
             initializedPawns.Add(pawnId);

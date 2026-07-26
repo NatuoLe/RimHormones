@@ -98,6 +98,8 @@ namespace Hormones
         // 肌肉劳损基础配置
         // ============================================================
         public const float MuscleStrainBaseRecoveryPerHour = 100f;
+        // 娱乐(Joy)活动时的劳损恢复系数：相对睡觉恢复速率的比例（0.5 = 睡觉的一半）
+        public const float MuscleStrainJoyRecoveryFactor = 0.5f;
         public const float MuscleStrainDurationHours = 4f;
         public const float MuscleStrainOrganEfficiencyPenalty = -0.05f;
         public const int MuscleStrainMaxSeverity = 3;
@@ -105,29 +107,101 @@ namespace Hormones
         // ============================================================
         // 肌肉劳损操作配置
         // ============================================================
+        // 【劳损基础值重新标定 2026-07-26】
+        //   语义：每个结算周期（WorkTicksPerSettle=400tick≈6.6秒）扣一次。
+        //   标定基准：一般体魄(上限1000, 扣速×1.0)持续中等劳作约一个白天(12游戏时≈75次结算)到底；
+        //             虚弱(上限650, 扣速×2.0)持续劳作约半天(6游戏时≈37.5次)到底。
+        //   → 中活基准 ≈13/次(75×13≈975≈1000)；虚弱37.5×(13×2)=975>650 ⇒ 半天前就到底 ✔
+        //   工作分档：重活(挖矿/砍树/建造/拆除)=15、中活(搬运/宰杀)=13、轻活(收割/割草/播种)=6
         public const float MiningXP = 100f;
-        public const float MiningMuscleStrain = 50f;
+        public const float MiningMuscleStrain = 15f;
         public const float MiningStrainChance = 0.06f;
 
         public const float TreeCutXP = 50f;
-        public const float TreeCutMuscleStrain = 20f;
+        public const float TreeCutMuscleStrain = 15f;
         public const float TreeCutStrainChance = 0.03f;
 
         public const float PlantCutXP = 8f;
-        public const float PlantCutMuscleStrain = 2f;
+        public const float PlantCutMuscleStrain = 6f;
         public const float PlantCutStrainChance = 0.01f;
 
         public const float HarvestXP = 25f;
-        public const float HarvestMuscleStrain = 2f;
+        public const float HarvestMuscleStrain = 6f;
         public const float HarvestStrainChance = 0.01f;
 
         public const float ButcherXP = 25f;
-        public const float ButcherMuscleStrain = 10f;
+        public const float ButcherMuscleStrain = 13f;
         public const float ButcherStrainChance = 0.03f;
 
         public const float HaulXP = 25f;
-        public const float HaulMuscleStrain = 20f;
+        public const float HaulMuscleStrain = 13f;
         public const float HaulStrainChance = 0.01f;
+
+        // ============================================================
+        // B: 新增工作类型（建造/拆除/种植）
+        // ============================================================
+        public const float FinishFrameXP = 40f;
+        public const float FinishFrameMuscleStrain = 15f;
+        public const float FinishFrameStrainChance = 0.03f;
+
+        public const float DeconstructXP = 30f;
+        public const float DeconstructMuscleStrain = 15f;
+        public const float DeconstructStrainChance = 0.02f;
+
+        public const float SowXP = 10f;
+        public const float SowMuscleStrain = 6f;
+        public const float SowStrainChance = 0.01f;
+
+        // ============================================================
+        // 【2026-07-26 补齐】其它遗漏的体力工作
+        //   分档沿用：重活=15、中活=13、轻活=6
+        // ============================================================
+        // 挖树桩（重活，等同砍树）
+        public const float ExtractTreeXP = 50f;
+        public const float ExtractTreeMuscleStrain = 15f;
+        public const float ExtractTreeStrainChance = 0.03f;
+
+        // 操作深钻（重活）
+        public const float DeepDrillXP = 60f;
+        public const float DeepDrillMuscleStrain = 15f;
+        public const float DeepDrillStrainChance = 0.04f;
+
+        // 拆卸/拆除变体（重活，等同拆除）
+        public const float UninstallXP = 30f;
+        public const float UninstallMuscleStrain = 15f;
+        public const float UninstallStrainChance = 0.02f;
+
+        // 打磨地板/墙（重活，重复性体力）
+        public const float SmoothXP = 40f;
+        public const float SmoothMuscleStrain = 15f;
+        public const float SmoothStrainChance = 0.03f;
+
+        // 打猎（中活，追击+射击）
+        public const float HuntXP = 30f;
+        public const float HuntMuscleStrain = 13f;
+        public const float HuntStrainChance = 0.02f;
+
+        // 修理/维修故障建筑（中活）
+        public const float RepairXP = 25f;
+        public const float RepairMuscleStrain = 13f;
+        public const float RepairStrainChance = 0.01f;
+
+        // 移植/播种（轻活，等同种植）
+        public const float ReplantXP = 10f;
+        public const float ReplantMuscleStrain = 6f;
+        public const float ReplantStrainChance = 0.01f;
+
+        // ============================================================
+        // A: 按工作时长累计结算配置
+        // ============================================================
+        // 60 tick = 1 游戏秒。默认 400 tick ≈ 6.6 秒持续劳作结算一次。
+        // 玩家不可调（结算节奏），只调门槛与概率（见 Settings）。
+        public const int WorkTicksPerSettle = 400;
+
+        // 拉伤触发体力门槛默认值（CurLevel < MaxLevel * 此值 时才 roll 拉伤）
+        public const float DefaultStrainTriggerThresholdPct = 0.10f;
+        // 拉伤概率总倍率默认值
+        public const float DefaultStrainChanceMultiplier = 1.0f;
 
         // ============================================================
         // 体魄阶段 - 肌肉劳损配置
@@ -152,5 +226,16 @@ namespace Hormones
         public const float PhysiqueStagePeakMuscleStrainMax = 3000f;
         public const float PhysiqueStagePeakStrainChanceMultiplier = 0.25f;
         public const float PhysiqueStagePeakStrainRecoveryMultiplier = 3f;
+
+        // ============================================================
+        // 【阶段劳损扣减倍率 2026-07-26】干活时基础strain × 此倍率
+        //   虚弱扣得快(易累)、强壮扛得住。让"体魄成长=更能扛"手感明确。
+        //   虚弱×2.0：上限650、每次中活扣26 ⇒ 约25次(≈4游戏时)就到底，半天内必垮
+        // ============================================================
+        public const float PhysiqueStageFrailStrainConsumeMultiplier = 2.0f;
+        public const float PhysiqueStageAverageStrainConsumeMultiplier = 1.0f;
+        public const float PhysiqueStageFitStrainConsumeMultiplier = 0.75f;
+        public const float PhysiqueStageStrongStrainConsumeMultiplier = 0.5f;
+        public const float PhysiqueStagePeakStrainConsumeMultiplier = 0.3f;
     }
 }

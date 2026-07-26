@@ -1,5 +1,10 @@
 # Rim-Hormones 项目长期记忆
 
+## 发布信息（Steam 创意工坊）
+- **主 mod packageId 实际为 `Lenatuo.hormones`**（作者 Lenatuo，name「边缘体魄＆激素」）；旧记忆里的 `thgold.hormones` 已过时，凡引用本体 packageId 均以 `Lenatuo.hormones` 为准。
+- 主 mod 工坊 ID = **3771856492**（https://steamcommunity.com/sharedfiles/filedetails/?id=3771856492）。CE 补丁包 About.xml 里 `Lenatuo.hormones` 依赖已补 `steamWorkshopUrl` 指向此 ID。
+- CE 补丁包 packageId `thgold.hormones.ce`（作者 ThGold），依赖本体 `Lenatuo.hormones`。
+
 ## 部署约定（重要）
 - 项目源码：`D:\RimMods\Rim-Hormones\RimHormones\`（含 Source/ Defs/ Patches/ Assembly-CSharp.csproj）。真正编译工程在 `_indexProj/`（dotnet build -c Release，产物 `_indexProj/bin/Release/net48/RimHormones.dll`）。
 - 游戏实际读取：`D:\Steam\steamapps\common\RimWorld\Mods\Rim-Hormones\` —— **独立副本，非软链接**。
