@@ -39,4 +39,7 @@
   
   <Yes>是</Yes>
   <No>否</No>
+  
+  <!-- 击飞技能 -->
+  <Hormones_KnockbackCooldown>击飞冷却中：{0}</Hormones_KnockbackCooldown>
 </LanguageData>

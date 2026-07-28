@@ -125,7 +125,8 @@ namespace Hormones
             return effects;
         }
 
-        public static void TryApplyOverexertDamage(Pawn pawn)
+        // chanceMultiplier：透支概率倍率。近战传 1.0（默认），射击传较小值（见 Define.AdrenalineRangedOverexertChanceMultiplier）。
+        public static void TryApplyOverexertDamage(Pawn pawn, float chanceMultiplier = 1f)
         {
             Hediff adrenaline = pawn.health.hediffSet.GetFirstHediffOfDef(DefDatabase<HediffDef>.GetNamed("Adrenaline", false));
             if (adrenaline == null || adrenaline.Severity < Define.AdrenalineThresholdMedium)
@@ -135,8 +136,9 @@ namespace Hormones
             if (PhysiqueLgc.IsAdrenalineExempt(pawn))
                 return;
 
-            float chance = Define.AdrenalineOverexertBaseChance + 
-                          Define.AdrenalineOverexertChancePerPhysique * (Define.PhysiqueAdrenalineExemptionThreshold - physiqueLevel);
+            float chance = (Define.AdrenalineOverexertBaseChance + 
+                          Define.AdrenalineOverexertChancePerPhysique * (Define.PhysiqueAdrenalineExemptionThreshold - physiqueLevel))
+                          * chanceMultiplier;
             
             if (Rand.Value < chance)
             {
@@ -146,9 +148,11 @@ namespace Hormones
 
         private static void ApplyRandomOverexertHediff(Pawn pawn, int physiqueLevel)
         {
-            List<string> mildHediffs = new List<string> { "MuscleStrainHediff", "JointSprain" };
-            List<string> moderateHediffs = new List<string> { "TendonFatigue", "HeartPalpitations", "ShortnessOfBreath" };
-            List<string> severeHediffs = new List<string> { "LimbWeakness" };
+            // 已整合进新损伤池（见 文档/Hediff/身体损伤.md「现有 Hediff 整合」表）：
+            //   轻度 ← 肌肉/关节劳损；中度 ← 心肺透支；重度 ← 神经耗竭/坠落复合损伤
+            List<string> mildHediffs = new List<string> { "LaborMuscleStrain", "CombatJointStrain" };
+            List<string> moderateHediffs = new List<string> { "CardioOverexert", "SuffocationStrain" };
+            List<string> severeHediffs = new List<string> { "CombatEnduranceExhaust", "FallJointStrain" };
 
             float roll = Rand.Value;
             string hediffDefName;
@@ -182,13 +186,66 @@ namespace Hormones
             }
 
             HediffDef hediffDef = DefDatabase<HediffDef>.GetNamed(hediffDefName, false);
-            if (hediffDef != null && pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) == null)
+            if (hediffDef == null) return;
+
+            // 【2026-07-28 修复】按 defName 解析目标器官/肢体，避免损伤全部加到全身。
+            // targetPart 为 null 时（部件缺失或无映射）回退为全身附着（安全）。
+            BodyPartRecord targetPart = FindTargetPart(pawn, hediffDefName);
+
+            // 按“部件”判重（同一器官/肢体不重复叠新 Hediff；左右肢体可各自独立）。
+            bool alreadyHas = false;
+            foreach (var h in pawn.health.hediffSet.hediffs)
             {
-                Hediff hediff = HediffMaker.MakeHediff(hediffDef, pawn);
-                hediff.Severity = 0.3f + Rand.Value * 0.4f;
-                pawn.health.AddHediff(hediff);
-                Log.Message($"[Hormones] {pawn.Name?.ToStringFull ?? "Unknown"} suffered {hediffDef.label} from adrenaline overexertion");
+                if (h.def == hediffDef && h.Part == targetPart)
+                {
+                    alreadyHas = true;
+                    break;
+                }
             }
+            if (alreadyHas) return;
+
+            Hediff hediff = HediffMaker.MakeHediff(hediffDef, pawn, targetPart);
+            hediff.Severity = 0.3f + Rand.Value * 0.4f;
+            pawn.health.AddHediff(hediff, targetPart);
+            Log.Message($"[Hormones] {pawn.Name?.ToStringFull ?? "Unknown"} suffered {hediffDef.label} on {(targetPart != null ? targetPart.Label : "whole body")} from adrenaline overexertion");
+        }
+
+        // ============================================================
+        // 损伤 defName → 目标身体部件映射（与 Defs/HediffDefs/Hediff_StrainPool.xml 的器官注释一致）。
+        //   多个候选部件（如 Arm/Leg、Eye/Ear）时随机取一个存在的部件；左右独立。
+        //   找不到映射或部件缺失 → 返回 null（回退全身附着）。
+        // ============================================================
+        private static readonly Dictionary<string, string[]> HediffTargetParts = new Dictionary<string, string[]>
+        {
+            { "LaborMuscleStrain",      new[] { "Arm", "Leg" } },
+            { "DiggingMuscleStrain",    new[] { "Arm" } },
+            { "CardioOverexert",        new[] { "Heart" } },
+            { "SuffocationStrain",      new[] { "Lung" } },
+            { "CombatJointStrain",      new[] { "Arm", "Hand", "Foot" } },
+            { "FallJointStrain",        new[] { "Leg" } },
+            { "CombatEnduranceExhaust", new[] { "Brain" } },
+            { "MetabolicExhaust",       new[] { "Stomach", "Liver" } },
+            { "SensoryOverload",        new[] { "Eye", "Ear" } },
+        };
+
+        private static BodyPartRecord FindTargetPart(Pawn pawn, string hediffDefName)
+        {
+            if (pawn?.health?.hediffSet == null) return null;
+            if (!HediffTargetParts.TryGetValue(hediffDefName, out string[] partNames)) return null;
+
+            List<BodyPartRecord> candidates = new List<BodyPartRecord>();
+            foreach (var part in pawn.health.hediffSet.GetNotMissingParts())
+            {
+                foreach (var pn in partNames)
+                {
+                    if (part.def.defName == pn)
+                    {
+                        candidates.Add(part);
+                        break;
+                    }
+                }
+            }
+            return candidates.Count > 0 ? candidates.RandomElement() : null;
         }
 
         public static void AddAdrenaline(Pawn pawn, float amount)

@@ -244,6 +244,12 @@ public static class Verb_LaunchProjectile_TryCastShot_Patch
         if (attacker != null)
         {
             AdrenalineProducer.OnAttack(attacker, false);
+
+            AdrenalineEffects effects = AdrenalineLogic.CalculateAdrenalineEffects(attacker);
+            if (effects.HasActiveEffects && effects.Level >= AdrenalineLevel.High)
+            {
+                AdrenalineLogic.TryApplyOverexertDamage(attacker, Define.AdrenalineRangedOverexertChanceMultiplier);
+            }
         }
     }
 }

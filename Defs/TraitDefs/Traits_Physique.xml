@@ -98,4 +98,25 @@
       <li>Obese</li>
     </conflictingTraits>
   </TraitDef>
+
+  <TraitDef>
+    <defName>ExplosivePower</defName>
+    <commonality>0.5</commonality>
+    <degreeDatas>
+      <li>
+        <label>explosive power</label>
+        <description>{PAWN_nameDef} possesses explosive physical power, capable of launching enemies backward with sheer force.</description>
+        <skillGains>
+          <Physique>2</Physique>
+        </skillGains>
+        <statOffsets>
+          <MeleeDodgeChance>0.05</MeleeDodgeChance>
+        </statOffsets>
+      </li>
+    </degreeDatas>
+    <conflictingTraits>
+      <li>Anorexic</li>
+      <li>Slender</li>
+    </conflictingTraits>
+  </TraitDef>
 </Defs>

@@ -14,4 +14,7 @@
   
   <Agile.degreeDatas.0.label>身手矫健</Agile.degreeDatas.0.label>
   <Agile.degreeDatas.0.description>{PAWN_nameDef} 异常敏捷快速。{PAWN_pronoun} 能轻松闪避攻击，动作优雅。</Agile.degreeDatas.0.description>
+  
+  <ExplosivePower.degreeDatas.0.label>爆发力</ExplosivePower.degreeDatas.0.label>
+  <ExplosivePower.degreeDatas.0.description>{PAWN_nameDef} 拥有爆炸性的身体力量，能用纯粹的力量将近战敌人击飞。</ExplosivePower.degreeDatas.0.description>
 </LanguageData>

@@ -91,6 +91,30 @@ namespace Hormones.Logic.PhysiqueLogic
         }
 
         /// <summary>
+        /// 判断某工作是否属于“移动型劳作”——即移动本身就是工作的一部分，
+        /// 不能用“正在移动=赶路”来排除。
+        ///   · 搬运（Haul*）：扛着东西走本来就是体力活
+        /// 其余工作（挖矿/砍树/种植/建造/拆除/平整/修理/深钻/宰杀/收割/打猎等）都是
+        /// “走到目标 → 站定施工/开火”，因此移动阶段视为赶路、不累计劳损。
+        ///   · 打猎（Hunt）：移动接近 / 追击（“打野”）视为赶路，不累计；
+        ///     只在站定开火 / 近战攻击那一刻才结算。
+        /// </summary>
+        public static bool IsMobileWork(string jobDefName)
+        {
+            switch (jobDefName)
+            {
+                case "HaulToCell":
+                case "HaulToContainer":
+                case "HaulToStorage":
+                case "HaulToCaravan":
+                case "HaulToTransporter":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// 结算一次工作产出：加体魄经验、扣劳损值、按玩家设置 roll 拉伤 Hediff。
         /// factor: 结算比例（1.0 = 一个完整周期；Job 完成补算时按余数/周期给不足 1 的值）。
         /// </summary>

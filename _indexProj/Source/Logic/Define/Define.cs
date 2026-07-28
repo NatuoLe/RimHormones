@@ -24,6 +24,8 @@ namespace Hormones
 
         public const float AdrenalineOverexertBaseChance = 0.2f;
         public const float AdrenalineOverexertChancePerPhysique = 0.04f;
+        // 射击透支概率倍率：射击（远程）触发透支损伤的概率 = 近战概率 × 此倍率（<1 表示比近战更低）。
+        public const float AdrenalineRangedOverexertChanceMultiplier = 0.5f;
 
         public const float AdrenalineMeleeAttackBase = 0.03f;
         public const float AdrenalineRangedAttackBase = 0f;

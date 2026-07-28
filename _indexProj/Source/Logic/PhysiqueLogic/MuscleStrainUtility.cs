@@ -42,10 +42,11 @@ namespace Hormones.Logic.PhysiqueLogic
             BodyPartRecord targetPart = availableParts.RandomElement();
             Log.Message($"[Hormones] TryAddMuscleStrain: Selected part={targetPart.def.defName}, label={targetPart.Label}");
 
-            HediffDef strainDef = DefDatabase<HediffDef>.GetNamed("MuscleStrainHediff", false);
+            // 已整合进新损伤池：肌肉劳损统一使用 LaborMuscleStrain（0-1 连续 severity）
+            HediffDef strainDef = DefDatabase<HediffDef>.GetNamed("LaborMuscleStrain", false);
             if (strainDef == null)
             {
-                Log.Message($"[Hormones] TryAddMuscleStrain: HediffDef MuscleStrainHediff not found");
+                Log.Message($"[Hormones] TryAddMuscleStrain: HediffDef LaborMuscleStrain not found");
                 return;
             }
 
@@ -59,11 +60,14 @@ namespace Hormones.Logic.PhysiqueLogic
                 }
             }
 
+            // LaborMuscleStrain 为 0-1 连续 severity（阶段边界 0 / 0.4 / 0.75）。
+            // 每次触发累加 0.35，约 3 次达到重度封顶（1.0）。
+            const float SeverityStep = 0.35f;
             if (existingHediff != null)
             {
-                if (existingHediff.Severity < Define.MuscleStrainMaxSeverity)
+                if (existingHediff.Severity < 1f)
                 {
-                    existingHediff.Severity += 1f;
+                    existingHediff.Severity = System.Math.Min(existingHediff.Severity + SeverityStep, 1f);
                     Log.Message($"[Hormones] TryAddMuscleStrain: Stacked! Severity={existingHediff.Severity} on {targetPart.Label}");
                 }
                 else
@@ -75,9 +79,9 @@ namespace Hormones.Logic.PhysiqueLogic
             else
             {
                 Hediff hediff = HediffMaker.MakeHediff(strainDef, pawn, targetPart);
-                hediff.Severity = 1f;
+                hediff.Severity = SeverityStep;
                 pawn.health.AddHediff(hediff, targetPart);
-                Log.Message($"[Hormones] TryAddMuscleStrain: Success! Added MuscleStrain to {targetPart.Label}");
+                Log.Message($"[Hormones] TryAddMuscleStrain: Success! Added LaborMuscleStrain to {targetPart.Label}");
             }
 
             if (pawn.Map != null && pawn.Position.IsValid)

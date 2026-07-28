@@ -170,7 +170,10 @@ public class HormonesComponent : ThingComp, IExposable
 
     // ============================================================
     // A: 体魄工作时长累计
-    //   粗档判断：只看 CurJob.def.defName 是否命中白名单（走去干活的路程也计入劳作）。
+    //   判断 CurJob.def.defName 是否命中白名单；命中后再区分“赶路 vs 真正施工”：
+    //     · 静态工作（挖矿/砍树/种植/建造…）：pawn 正在寻路移动 = 走去干活的路上 → 不累计；
+    //       只有站定施工时才累计劳损/经验。
+    //     · 移动型工作（搬运/打猎，见 IsMobileWork）：移动本身就是体力劳作 → 移动时照常累计。
     //   每累计满 WorkTicksPerSettle，就结算一份经验/劳损/拉伤，余数保留。
     // ============================================================
     private void PhysiqueWorkTick()
@@ -182,6 +185,14 @@ public class HormonesComponent : ThingComp, IExposable
         if (curJob?.def == null) return;
 
         if (!PhysiqueWorkSettle.TryGetWorkParams(curJob.def.defName, curJob, out float xp, out float strain, out float chance))
+        {
+            return;
+        }
+
+        // 赶路排除：静态工作在寻路移动阶段不算劳作（走去干活的路上不掉劳损）。
+        // 搬运 / 打猎属于移动型劳作，移动时照常累计。
+        if (!PhysiqueWorkSettle.IsMobileWork(curJob.def.defName)
+            && Pawn.pather != null && Pawn.pather.Moving)
         {
             return;
         }

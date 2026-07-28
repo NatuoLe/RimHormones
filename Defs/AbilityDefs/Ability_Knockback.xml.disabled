@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <AbilityDef>
+    <defName>Hormones_Knockback</defName>
+    <label>击飞</label>
+    <description>用强大的力量将目标击飞，沿连线方向推飞并落地受到撞击伤害和短暂眩晕。</description>
+    <iconPath>UI/Abilities/Knockback</iconPath>
+    <cooldownTicksRange>1500~1800</cooldownTicksRange>
+    <jobDef>CastAbilityOnThingMelee</jobDef>
+    <hostile>true</hostile>
+    <targetRequired>true</targetRequired>
+    <aiCanUse>true</aiCanUse>
+    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass>
+      <label>击飞</label>
+      <warmupTime>0.3</warmupTime>
+      <range>1.9</range>
+      <requireLineOfSight>true</requireLineOfSight>
+      <targetParams>
+        <canTargetPawns>true</canTargetPawns>
+        <canTargetLocations>false</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetSelf>false</canTargetSelf>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="Hormones.CompProperties_AbilityKnockback">
+        <compClass>Hormones.CompAbilityEffect_Knockback</compClass>
+        <pushDistance>3</pushDistance>
+        <impactDamage>5</impactDamage>
+        <armorPenetration>0.1</armorPenetration>
+        <stunTicks>60</stunTicks>
+      </li>
+    </comps>
+  </AbilityDef>
+</Defs>

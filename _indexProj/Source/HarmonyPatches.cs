@@ -56,6 +56,9 @@ namespace Hormones
                 Log.Message("[Hormones] HormonesComponent initialized for " + __instance.Name.ToStringFull + " (respawningAfterLoad=" + respawningAfterLoad + ")");
             }
 
+            // 爆发力特质：授予击飞技能
+            GrantKnockbackAbilityIfHasTrait(__instance, respawningAfterLoad);
+
             initializedPawns.Add(pawnId);
         }
 
@@ -77,6 +80,38 @@ namespace Hormones
 
             Log.Message("[Hormones] HormonesComponent added to " + pawn.Name.ToStringFull);
             return comp;
+        }
+
+        private static void GrantKnockbackAbilityIfHasTrait(Pawn pawn, bool respawningAfterLoad)
+        {
+            if (pawn.story?.traits == null) return;
+
+            // 击飞技能已屏蔽：AbilityDef 未加载时直接跳过，避免 GetNamed 报错。
+            // 恢复方法：把 Ability_Knockback.xml / Thing_KnockbackFlyer.xml 的 .disabled 后缀去掉即可，此处逻辑会自动重新生效。
+            var abilityDef = DefDatabase<AbilityDef>.GetNamedSilentFail("Hormones_Knockback");
+            if (abilityDef == null) return;
+
+            bool hasTrait = false;
+            foreach (var trait in pawn.story.traits.allTraits)
+            {
+                if (trait.def.defName == "ExplosivePower")
+                {
+                    hasTrait = true;
+                    break;
+                }
+            }
+            if (!hasTrait) return;
+
+            if (pawn.abilities == null)
+            {
+                pawn.abilities = new Pawn_AbilityTracker(pawn);
+            }
+
+            if (pawn.abilities.GetAbility(abilityDef) == null)
+            {
+                pawn.abilities.GainAbility(abilityDef);
+                Log.Message("[Hormones] Knockback ability granted to " + pawn.Name.ToStringFull);
+            }
         }
     }
 }

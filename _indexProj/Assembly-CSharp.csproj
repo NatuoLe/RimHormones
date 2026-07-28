@@ -31,6 +31,8 @@
     <Compile Include="Source\Comps\HediffComp_CortisolStatus.cs" />
     <Compile Include="Source\Mods\RimHormonesMod.cs" />
     <Compile Include="Source\Utilities\Utils.cs" />
+    <Compile Include="Source\Abilities\PawnFlyer_Knockback.cs" />
+    <Compile Include="Source\Abilities\CompAbilityEffect_Knockback.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony" HintPath="0Harmony.dll" />

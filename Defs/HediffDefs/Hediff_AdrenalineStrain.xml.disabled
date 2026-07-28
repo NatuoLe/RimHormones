@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ============================================================
+       肾上腺素应激损伤系列
+       由肾上腺素长期/过量分泌导致的器官与肢体应激损伤。
+       severity 由 C# 逻辑驱动累计，配 SeverityPerDay 自然回落。
+       说明：
+         · × 号在能力（PawnCapacity）上用 postFactor 实现（乘算）
+         · × 号在属性（Stat）上用 statFactors 实现（乘算）
+         · PainOffset 为加算疼痛，用 painOffset
+       ============================================================ -->
+
+  <!-- 心血管：AdrenalineHeartStrain（附着于 Heart） -->
+  <HediffDef>
+    <defName>AdrenalineHeartStrain</defName>
+    <label>心血管应激</label>
+    <description>肾上腺素持续冲击心脏所造成的应激损伤，随程度加深会危及泵血与意识。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1.0, 0.35, 0.3)</defaultLabelColor>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <maxSeverity>1.0</maxSeverity>
+    <stages>
+      <li>
+        <label>心动过速</label>
+        <minSeverity>0</minSeverity>
+        <statFactors>
+          <MoveSpeed>0.95</MoveSpeed>
+        </statFactors>
+        <capMods>
+          <li><capacity>BloodPumping</capacity><postFactor>1.1</postFactor></li>
+        </capMods>
+      </li>
+      <li>
+        <label>心律失常</label>
+        <minSeverity>0.4</minSeverity>
+        <statFactors>
+          <WorkSpeedGlobal>0.90</WorkSpeedGlobal>
+        </statFactors>
+        <capMods>
+          <li><capacity>BloodPumping</capacity><postFactor>0.85</postFactor></li>
+        </capMods>
+      </li>
+      <li>
+        <label>心肌损伤</label>
+        <minSeverity>0.75</minSeverity>
+        <capMods>
+          <li><capacity>BloodPumping</capacity><postFactor>0.70</postFactor></li>
+          <li><capacity>Consciousness</capacity><postFactor>0.85</postFactor></li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-1.0</severityPerDay>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <!-- 呼吸：AdrenalineLungStrain（附着于 Lung） -->
+  <HediffDef>
+    <defName>AdrenalineLungStrain</defName>
+    <label>呼吸应激</label>
+    <description>肾上腺素引发的呼吸系统应激，从过度换气发展到支气管痉挛。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.6, 0.8, 1.0)</defaultLabelColor>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <maxSeverity>1.0</maxSeverity>
+    <stages>
+      <li>
+        <label>过度换气</label>
+        <minSeverity>0</minSeverity>
+        <capMods>
+          <li><capacity>Breathing</capacity><postFactor>1.1</postFactor></li>
+          <!-- 表格中的 Stamina×0.95：Stamina 非原版属性/能力，直接引用会导致 def 加载报错，
+               如需生效请先由其它 mod（或本 mod）定义 Stamina StatDef 后取消下面注释。
+          <li><capacity>Stamina</capacity><postFactor>0.95</postFactor></li> -->
+        </capMods>
+      </li>
+      <li>
+        <label>支气管痉挛</label>
+        <minSeverity>0.5</minSeverity>
+        <statFactors>
+          <MoveSpeed>0.90</MoveSpeed>
+        </statFactors>
+        <capMods>
+          <li><capacity>Breathing</capacity><postFactor>0.85</postFactor></li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-1.0</severityPerDay>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <!-- 运动-臂：AdrenalineArmStrain（附着于 Arm，左右独立） -->
+  <HediffDef>
+    <defName>AdrenalineArmStrain</defName>
+    <label>手臂劳损</label>
+    <description>肾上腺素驱动的过度用力对手臂造成的累积性损伤，从肌肉疲劳发展到肌肉撕裂。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1.0, 0.5, 0.25)</defaultLabelColor>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <maxSeverity>1.0</maxSeverity>
+    <stages>
+      <li>
+        <label>肌肉疲劳</label>
+        <minSeverity>0</minSeverity>
+        <painOffset>0.05</painOffset>
+        <capMods>
+          <li><capacity>Manipulation</capacity><postFactor>0.90</postFactor></li>
+        </capMods>
+      </li>
+      <li>
+        <label>肌腱损伤</label>
+        <minSeverity>0.4</minSeverity>
+        <statFactors>
+          <MoveSpeed>0.90</MoveSpeed>
+        </statFactors>
+        <capMods>
+          <li><capacity>Manipulation</capacity><postFactor>0.75</postFactor></li>
+        </capMods>
+      </li>
+      <li>
+        <label>肌肉撕裂</label>
+        <minSeverity>0.75</minSeverity>
+        <painOffset>0.20</painOffset>
+        <statFactors>
+          <MoveSpeed>0.80</MoveSpeed>
+        </statFactors>
+        <capMods>
+          <li><capacity>Manipulation</capacity><postFactor>0.55</postFactor></li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-0.75</severityPerDay>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <!-- 运动-腿：AdrenalineLegStrain（附着于 Leg，左右独立） -->
+  <HediffDef>
+    <defName>AdrenalineLegStrain</defName>
+    <label>腿部劳损</label>
+    <description>肾上腺素驱动的过度奔跑/负重对腿部造成的累积性损伤，从肌肉疲劳发展到肌肉撕裂。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1.0, 0.5, 0.25)</defaultLabelColor>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <maxSeverity>1.0</maxSeverity>
+    <stages>
+      <li>
+        <label>肌肉疲劳</label>
+        <minSeverity>0</minSeverity>
+        <painOffset>0.05</painOffset>
+        <capMods>
+          <li><capacity>Moving</capacity><postFactor>0.92</postFactor></li>
+        </capMods>
+      </li>
+      <li>
+        <label>肌腱损伤</label>
+        <minSeverity>0.4</minSeverity>
+        <statFactors>
+          <WorkSpeedGlobal>0.88</WorkSpeedGlobal>
+        </statFactors>
+        <capMods>
+          <li><capacity>Moving</capacity><postFactor>0.78</postFactor></li>
+        </capMods>
+      </li>
+      <li>
+        <label>肌肉撕裂</label>
+        <minSeverity>0.75</minSeverity>
+        <painOffset>0.20</painOffset>
+        <statFactors>
+          <MoveSpeed>0.75</MoveSpeed>
+        </statFactors>
+        <capMods>
+          <li><capacity>Moving</capacity><postFactor>0.60</postFactor></li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-0.75</severityPerDay>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <!-- 关节：AdrenalineJointStrain（附着于 Arm/Leg/Hand/Foot，共享同一 def） -->
+  <HediffDef>
+    <defName>AdrenalineJointStrain</defName>
+    <label>关节劳损</label>
+    <description>肾上腺素状态下高强度活动对关节造成的应激损伤，从关节扭伤发展到韧带损伤。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(1.0, 0.6, 0.2)</defaultLabelColor>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>true</tendable>
+    <maxSeverity>1.0</maxSeverity>
+    <stages>
+      <li>
+        <label>关节扭伤</label>
+        <minSeverity>0</minSeverity>
+        <statFactors>
+          <MoveSpeed>0.92</MoveSpeed>
+        </statFactors>
+        <capMods>
+          <li><capacity>Manipulation</capacity><postFactor>0.95</postFactor></li>
+        </capMods>
+      </li>
+      <li>
+        <label>韧带损伤</label>
+        <minSeverity>0.5</minSeverity>
+        <statFactors>
+          <MoveSpeed>0.80</MoveSpeed>
+        </statFactors>
+        <capMods>
+          <li><capacity>Manipulation</capacity><postFactor>0.82</postFactor></li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-0.75</severityPerDay>
+      </li>
+    </comps>
+  </HediffDef>
+
+</Defs>
