@@ -444,12 +444,15 @@
        恢复：SeverityPerDay -0.29/day（≈ -0.012/h，约 3.5 天回落满级）
        ============================================================ -->
 
-  <!-- 爆炸/枪击/高强度战斗：附着于 Eye(两眼共享)+Ear(两耳共享)。
-       SightRadius 用能力 Sight 近似 -->
+  <!-- 【2026-07-29 拆分】原 SensoryOverload 混合了视觉(Sight/Eye)与听觉(Hearing/Ear)，
+       但一个 Hediff 只能附着到单一部件，会出现"挂在眼睛上却降听力"的解剖错位。
+       故拆为两个独立 Hediff，各自附着到对应器官、只修正对应能力。 -->
+
+  <!-- 5a. 视觉过载：爆炸闪光/强光刺激 → 附着于 Eye（两眼共享，各自独立） -->
   <HediffDef>
-    <defName>SensoryOverload</defName>
-    <label>感官过载</label>
-    <description>爆炸闪光与持续枪声对视觉、听觉的过度刺激，从疲劳耳鸣发展到视网膜与听力损伤。</description>
+    <defName>VisualStrain</defName>
+    <label>视觉过载</label>
+    <description>爆炸闪光与强光对视觉的过度刺激，从视觉疲劳发展到眼肌痉挛、视网膜损伤。</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.9, 0.85, 0.4)</defaultLabelColor>
     <isBad>true</isBad>
@@ -458,30 +461,72 @@
     <maxSeverity>1.0</maxSeverity>
     <stages>
       <li>
-        <label>视觉疲劳与耳鸣</label>
+        <label>视觉疲劳</label>
         <minSeverity>0</minSeverity>
         <painOffset>0.02</painOffset>
         <capMods>
           <li><capacity>Sight</capacity><postFactor>0.90</postFactor></li>
-          <li><capacity>Hearing</capacity><postFactor>0.85</postFactor></li>
         </capMods>
       </li>
       <li>
-        <label>眼肌痉挛与听觉过敏</label>
+        <label>眼肌痉挛</label>
         <minSeverity>0.4</minSeverity>
         <painOffset>0.08</painOffset>
         <capMods>
           <li><capacity>Sight</capacity><postFactor>0.75</postFactor></li>
+        </capMods>
+      </li>
+      <li>
+        <label>视网膜损伤</label>
+        <minSeverity>0.75</minSeverity>
+        <painOffset>0.15</painOffset>
+        <capMods>
+          <li><capacity>Sight</capacity><postFactor>0.50</postFactor></li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-0.29</severityPerDay>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <!-- 5b. 听觉过载：持续枪声/爆炸声 → 附着于 Ear（两耳共享，各自独立）。
+       内耳前庭受损会联动影响平衡/意识，故 Consciousness 归到听觉侧 -->
+  <HediffDef>
+    <defName>AuditoryStrain</defName>
+    <label>听觉过载</label>
+    <description>持续枪声与爆炸声对听觉的过度刺激，从耳鸣发展到听觉过敏、听力损伤。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.85, 0.8, 0.5)</defaultLabelColor>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>false</tendable>
+    <maxSeverity>1.0</maxSeverity>
+    <stages>
+      <li>
+        <label>耳鸣</label>
+        <minSeverity>0</minSeverity>
+        <painOffset>0.02</painOffset>
+        <capMods>
+          <li><capacity>Hearing</capacity><postFactor>0.85</postFactor></li>
+        </capMods>
+      </li>
+      <li>
+        <label>听觉过敏</label>
+        <minSeverity>0.4</minSeverity>
+        <painOffset>0.08</painOffset>
+        <capMods>
           <li><capacity>Hearing</capacity><postFactor>0.65</postFactor></li>
           <li><capacity>Consciousness</capacity><postFactor>0.95</postFactor></li>
         </capMods>
       </li>
       <li>
-        <label>视网膜与听力损伤</label>
+        <label>听力损伤</label>
         <minSeverity>0.75</minSeverity>
         <painOffset>0.15</painOffset>
         <capMods>
-          <li><capacity>Sight</capacity><postFactor>0.50</postFactor></li>
           <li><capacity>Hearing</capacity><postFactor>0.40</postFactor></li>
           <li><capacity>Consciousness</capacity><postFactor>0.80</postFactor></li>
         </capMods>

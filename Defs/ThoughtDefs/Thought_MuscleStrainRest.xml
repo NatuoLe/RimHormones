@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 肌肉劳损触发后的休息欲望（可堆叠） -->
+  <ThoughtDef>
+    <defName>MuscleStrainRest</defName>
+    <label>疲惫</label>
+    <description>好累,想休息</description>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>0.25</durationDays>  <!-- 6小时 -->
+    <stackLimit>12</stackLimit>
+    <stages>
+      <li><label>疲惫</label><description>好累,想休息</description><baseMoodEffect>-3</baseMoodEffect></li>
+      <li><label>疲惫</label><description>好累,想休息</description><baseMoodEffect>-5</baseMoodEffect></li>
+      <li><label>筋疲力尽</label><description>我已经抬不动我的腿了</description><baseMoodEffect>-7</baseMoodEffect></li>
+      <li><label>筋疲力尽</label><description>我已经抬不动我的腿了</description><baseMoodEffect>-8</baseMoodEffect></li>
+    </stages>
+  </ThoughtDef>
+</Defs>

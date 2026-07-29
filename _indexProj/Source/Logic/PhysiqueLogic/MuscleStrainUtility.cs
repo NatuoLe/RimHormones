@@ -1,11 +1,16 @@
 using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
 using Verse;
 using RimWorld;
+using Hormones.UI;
 
 namespace Hormones.Logic.PhysiqueLogic
 {
     public static class MuscleStrainUtility
     {
+        // 劳损飘字颜色（暖橙偏红，表示肌体透支）。可按需替换。
+        public static Color StrainTextColor = new Color(1f, 0.55f, 0.35f);
         public static void TryAddMuscleStrain(Pawn pawn)
         {
             if (pawn == null || pawn.health == null || pawn.health.hediffSet == null)
@@ -41,6 +46,14 @@ namespace Hormones.Logic.PhysiqueLogic
 
             BodyPartRecord targetPart = availableParts.RandomElement();
             Log.Message($"[Hormones] TryAddMuscleStrain: Selected part={targetPart.def.defName}, label={targetPart.Label}");
+
+            // 【2026-07-29】仿生器官/假肢检查：若随机选中的肢体（或其祖先）已被人造部件替换，
+            // 本次直接放弃、且【不重新随机】（义肢不产生肌肉劳损）。
+            if (pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(targetPart))
+            {
+                Log.Message($"[Hormones] TryAddMuscleStrain: target part {targetPart.Label} is artificial/bionic, skipped (no reroll)");
+                return;
+            }
 
             // 已整合进新损伤池：肌肉劳损统一使用 LaborMuscleStrain（0-1 连续 severity）
             HediffDef strainDef = DefDatabase<HediffDef>.GetNamed("LaborMuscleStrain", false);
@@ -86,23 +99,40 @@ namespace Hormones.Logic.PhysiqueLogic
 
             if (pawn.Map != null && pawn.Position.IsValid)
             {
-                ShowMuscleStrainText(pawn.Position, pawn.Map, targetPart.Label);
+                ShowMuscleStrainText(pawn, targetPart.Label);
             }
+
+            // 添加心情：想休息
+            AddMuscleStrainRestMood(pawn);
         }
 
-        private static void ShowMuscleStrainText(IntVec3 pos, Map map, string partLabel)
+        /// <summary>
+        /// 添加肌肉劳损后的休息欲望心情
+        /// </summary>
+        private static void AddMuscleStrainRestMood(Pawn pawn)
         {
-            MoteText moteText = (MoteText)ThingMaker.MakeThing(ThingDefOf.Mote_Text);
-            object vector3 = PhysiqueDatas.GetVector3(pos.x + 0.5f, 0.5f, pos.z + 0.5f);
-            System.Reflection.FieldInfo field = typeof(MoteText).GetField("exactPosition");
-            if (field != null)
+            if (pawn == null || pawn.needs?.mood == null) return;
+
+            ThoughtDef restMoodDef = DefDatabase<ThoughtDef>.GetNamed("MuscleStrainRest", false);
+            if (restMoodDef == null)
             {
-                field.SetValue(moteText, vector3);
-                moteText.SetVelocity(Rand.Range(5, 35), Rand.Range(0.42f, 0.45f));
-                moteText.text = $"肌肉拉伤: {partLabel}";
-                GenSpawn.Spawn(moteText, pos, map);
-                PhysiqueDatas.ReturnVector3(vector3);
+                Log.Warning("[Hormones] MuscleStrainRest thought def not found");
+                return;
             }
+
+            pawn.needs.mood.thoughts.memories.TryGainMemory(restMoodDef, pawn);
+            Log.Message($"[Hormones] Added MuscleStrainRest mood to {pawn?.Name?.ToStringShort ?? "Unknown"}");
+        }
+
+        // 通过统一的 FlyTextMgr 显示劳损飘字：文本用池化 StringBuilder 拼接，颜色可替换。
+        private static void ShowMuscleStrainText(Pawn pawn, string partLabel)
+        {
+            if (RimHormonesMod.Settings == null || !RimHormonesMod.Settings.ShowBodyDamageMotes) return;
+            // 默认只显示玩家自己的殖民者；非玩家阵营需另开开关
+            if (!RimHormonesMod.Settings.ShowEnemyBodyDamageMotes && pawn.Faction != Faction.OfPlayer) return;
+            StringBuilder sb = FlyTextMgr.AcquireSB();
+            sb.Append("肌肉拉伤: ").Append(partLabel);
+            FlyTextMgr.Push(pawn, sb, StrainTextColor); // Push 会在内部归还 sb
         }
     }
 }

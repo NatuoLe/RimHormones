@@ -13,3 +13,5 @@ D:\RimMods\Rim-Hormones\RimHormones\_indexProj\obj\Release\net48\Assembly.44154E
 D:\RimMods\Rim-Hormones\RimHormones\_indexProj\obj\Release\net48\RimHormones.dll
 D:\RimMods\Rim-Hormones\RimHormones\_indexProj\obj\Release\net48\RimHormones.pdb
 D:\RimMods\Rim-Hormones\RimHormones\_indexProj\bin\Release\net48\UnityEngine.CoreModule.dll
+D:\RimMods\Rim-Hormones\RimHormones\_indexProj\bin\Release\net48\UnityEngine.IMGUIModule.dll
+D:\RimMods\Rim-Hormones\RimHormones\_indexProj\bin\Release\net48\UnityEngine.TextRenderingModule.dll

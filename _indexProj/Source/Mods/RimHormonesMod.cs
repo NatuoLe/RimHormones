@@ -22,6 +22,13 @@ namespace Hormones
                 "体魄经验获取、肌肉劳损等事件时，在角色上方显示飘字通知");
             listing.CheckboxLabeled("显示皮质醇飘字", ref Settings.ShowCortisolMotes,
                 "皮质醇浓度变化、神经衰弱检测/触发、失眠发作、优质睡眠等事件时，在角色上方显示飘字通知");
+            listing.CheckboxLabeled("显示身体损伤飘字", ref Settings.ShowBodyDamageMotes,
+                "肌肉拉伤、以及肾上腺素透支导致的身体损伤触发时，在角色上方显示飘字通知（部位 + 损伤名，按轻/中/重分色）");
+            if (Settings.ShowBodyDamageMotes)
+            {
+                listing.CheckboxLabeled("    └ 同时显示敌方/非玩家的身体损伤飘字", ref Settings.ShowEnemyBodyDamageMotes,
+                    "关闭时（默认）只显示玩家殖民者的身体损伤飘字；开启后，敌人、野生动物等非玩家阵营的身体损伤也会飘字");
+            }
 
             listing.GapLine();
             listing.Label("肌肉拉伤设置");
@@ -47,6 +54,8 @@ namespace Hormones
         public bool ShowAdrenalineMotes = false;
         public bool ShowPhysiqueMotes = false;
         public bool ShowCortisolMotes = false;
+        public bool ShowBodyDamageMotes = true;  // 身体损伤飘字（肌肉拉伤 + 透支损伤），默认开启
+        public bool ShowEnemyBodyDamageMotes = false;  // 是否显示非玩家阵营的身体损伤飘字，默认关闭（只显示自己殖民者）
 
         // D: 肌肉拉伤玩家可调项
         public float StrainTriggerThresholdPct = Define.DefaultStrainTriggerThresholdPct;
@@ -57,6 +66,8 @@ namespace Hormones
             Scribe_Values.Look(ref ShowAdrenalineMotes, "showAdrenalineMotes", false);
             Scribe_Values.Look(ref ShowPhysiqueMotes, "showPhysiqueMotes", false);
             Scribe_Values.Look(ref ShowCortisolMotes, "showCortisolMotes", false);
+            Scribe_Values.Look(ref ShowBodyDamageMotes, "showBodyDamageMotes", true);
+            Scribe_Values.Look(ref ShowEnemyBodyDamageMotes, "showEnemyBodyDamageMotes", false);
             Scribe_Values.Look(ref StrainTriggerThresholdPct, "strainTriggerThresholdPct", Define.DefaultStrainTriggerThresholdPct);
             Scribe_Values.Look(ref StrainChanceMultiplier, "strainChanceMultiplier", Define.DefaultStrainChanceMultiplier);
         }

@@ -680,7 +680,8 @@ namespace Hormones
             }
 
             // 神经衰弱存在时，按概率触发「失眠发作」不可控精神状态（2小时）
-            TryTriggerInsomniaBreak();
+            // TODO: 失眠功能暂时禁用，待调试
+            // TryTriggerInsomniaBreak();
         }
 
         /// <summary>
@@ -698,18 +699,36 @@ namespace Hormones
 
             // 保护逻辑：失眠发作只能在睡眠状态下触发（白天/清醒状态绝不触发）
             if (!(pawn.jobs?.curDriver?.asleep == true))
+            {
+                Log.Warning($"[失眠诊断] {pawn?.Name?.ToStringShort ?? "null"} 未在睡眠，asleep={pawn?.jobs?.curDriver?.asleep}");
                 return;
+            }
 
             // 已处于任何精神状态时不叠加
             if (pawn.mindState.mentalStateHandler.InMentalState)
+            {
+                Log.Warning($"[失眠诊断] {pawn?.Name?.ToStringShort ?? "null"} 已在精神状态中");
                 return;
+            }
 
             // 每次检测都显示飘字，确认系统在跑（检测日志按用户要求关闭）
             ShowMote("失眠检测");
 
             MentalStateDef insomniaDef = DefDatabase<MentalStateDef>.GetNamed("NeurastheniaInsomnia", false);
             if (insomniaDef == null)
+            {
+                Log.Warning("[失眠诊断] NeurastheniaInsomnia def 未找到");
                 return;
+            }
+
+            // 检查 StateCanOccur
+            if (!insomniaDef.Worker.StateCanOccur(pawn))
+            {
+                Log.Warning($"[失眠诊断] {pawn?.Name?.ToStringShort ?? "null"} StateCanOccur=false");
+                return;
+            }
+
+            Log.Warning($"[失眠诊断] {pawn?.Name?.ToStringShort ?? "null"} 准备触发失眠，forceWake=true");
 
             if (Rand.Value < Define.CortisolInsomniaTriggerChancePerCheck)
             {
@@ -720,7 +739,11 @@ namespace Hormones
                 if (started)
                 {
                     ShowMote("失眠发作!");
-                    Log.Warning($"[皮质醇-失眠发作] {pawn.Name?.ToStringFull ?? "Unknown"} 陷入 2 小时失眠发作（无法控制）！");
+                    Log.Warning($"[失眠发作] {pawn.Name?.ToStringFull ?? "Unknown"} 触发成功！forceWake={true}");
+                }
+                else
+                {
+                    Log.Warning($"[失眠发作] {pawn.Name?.ToStringFull ?? "Unknown"} 触发失败！");
                 }
             }
         }

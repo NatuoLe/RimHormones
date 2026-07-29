@@ -33,6 +33,7 @@
     <Compile Include="Source\Utilities\Utils.cs" />
     <Compile Include="Source\Abilities\PawnFlyer_Knockback.cs" />
     <Compile Include="Source\Abilities\CompAbilityEffect_Knockback.cs" />
+    <Compile Include="Source\UI\FlyTextMgr.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony" HintPath="0Harmony.dll" />
@@ -40,5 +41,7 @@
     <Reference Include="Verse" HintPath="Assembly-CSharp.dll" />
     <Reference Include="UnityEngine" HintPath="UnityEngine.dll" />
     <Reference Include="UnityEngine.CoreModule" HintPath="UnityEngine.CoreModule.dll" />
+    <Reference Include="UnityEngine.IMGUIModule" HintPath="UnityEngine.IMGUIModule.dll" />
+    <Reference Include="UnityEngine.TextRenderingModule" HintPath="UnityEngine.TextRenderingModule.dll" />
   </ItemGroup>
 </Project>

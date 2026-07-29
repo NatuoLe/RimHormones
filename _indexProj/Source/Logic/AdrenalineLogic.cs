@@ -192,6 +192,15 @@ namespace Hormones
             // targetPart 为 null 时（部件缺失或无映射）回退为全身附着（安全）。
             BodyPartRecord targetPart = FindTargetPart(pawn, hediffDefName);
 
+            // 【2026-07-29】仿生器官/假肢检查：若随机选中的目标部件（或其祖先）已被人造部件替换，
+            // 本次直接放弃添加，且【不重新随机】（义体不受生理透支损伤影响）。
+            // targetPart 为 null（全身附着）时不适用此检查。
+            if (targetPart != null && pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(targetPart))
+            {
+                Log.Message($"[Hormones] {hediffDef.label} skipped: target part {targetPart.Label} is an artificial/bionic part (no reroll)");
+                return;
+            }
+
             // 按“部件”判重（同一器官/肢体不重复叠新 Hediff；左右肢体可各自独立）。
             bool alreadyHas = false;
             foreach (var h in pawn.health.hediffSet.hediffs)
@@ -208,6 +217,33 @@ namespace Hormones
             hediff.Severity = 0.3f + Rand.Value * 0.4f;
             pawn.health.AddHediff(hediff, targetPart);
             Log.Message($"[Hormones] {pawn.Name?.ToStringFull ?? "Unknown"} suffered {hediffDef.label} on {(targetPart != null ? targetPart.Label : "whole body")} from adrenaline overexertion");
+
+            // 透支损伤飘字：按轻/中/重档区分颜色（轻=黄 / 中=橙 / 重=红），颜色可替换。
+            UnityEngine.Color tier =
+                severeHediffs.Contains(hediffDefName)   ? OverexertSevereColor :
+                moderateHediffs.Contains(hediffDefName) ? OverexertModerateColor :
+                                                          OverexertMildColor;
+            ShowOverexertText(pawn, hediffDef.LabelCap, targetPart, tier);
+        }
+
+        // 透支飘字分档颜色（可按需替换）。
+        public static UnityEngine.Color OverexertMildColor     = new UnityEngine.Color(1f, 0.85f, 0.3f);  // 黄
+        public static UnityEngine.Color OverexertModerateColor = new UnityEngine.Color(1f, 0.55f, 0.2f);  // 橙
+        public static UnityEngine.Color OverexertSevereColor   = new UnityEngine.Color(1f, 0.3f, 0.25f);  // 红
+
+        // 通过统一 FlyTextMgr 显示透支损伤飘字：池化 StringBuilder 拼接，颜色可替换。
+        private static void ShowOverexertText(Pawn pawn, string label, BodyPartRecord part, UnityEngine.Color color)
+        {
+            if (RimHormonesMod.Settings == null || !RimHormonesMod.Settings.ShowBodyDamageMotes) return;
+            // 默认只显示玩家自己的殖民者；非玩家阵营需另开开关
+            if (!RimHormonesMod.Settings.ShowEnemyBodyDamageMotes && pawn.Faction != Faction.OfPlayer) return;
+            System.Text.StringBuilder sb = Hormones.UI.FlyTextMgr.AcquireSB();
+            sb.Append(label);
+            if (part != null)
+            {
+                sb.Append(": ").Append(part.Label);
+            }
+            Hormones.UI.FlyTextMgr.Push(pawn, sb, color); // Push 内部归还 sb
         }
 
         // ============================================================
@@ -225,7 +261,8 @@ namespace Hormones
             { "FallJointStrain",        new[] { "Leg" } },
             { "CombatEnduranceExhaust", new[] { "Brain" } },
             { "MetabolicExhaust",       new[] { "Stomach", "Liver" } },
-            { "SensoryOverload",        new[] { "Eye", "Ear" } },
+            { "VisualStrain",           new[] { "Eye" } },
+            { "AuditoryStrain",         new[] { "Ear" } },
         };
 
         private static BodyPartRecord FindTargetPart(Pawn pawn, string hediffDefName)

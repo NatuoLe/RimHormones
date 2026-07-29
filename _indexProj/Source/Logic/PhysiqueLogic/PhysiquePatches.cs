@@ -115,6 +115,37 @@ namespace Hormones.Logic.PhysiqueLogic
         }
 
         /// <summary>
+        /// 判断是否为搬运工作
+        /// </summary>
+        public static bool IsHaulJob(string jobDefName)
+        {
+            switch (jobDefName)
+            {
+                case "HaulToCell":
+                case "HaulToContainer":
+                case "HaulToStorage":
+                case "HaulToCaravan":
+                case "HaulToTransporter":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// 获取搬运的物品
+        /// </summary>
+        private static Thing GetHauledThing(Job job)
+        {
+            if (job == null) return null;
+            // 搬运物品通常在 targetA
+            if (job.targetA.HasThing) return job.targetA.Thing;
+            // 也可能在 targetB
+            if (job.targetB.HasThing) return job.targetB.Thing;
+            return null;
+        }
+
+        /// <summary>
         /// 结算一次工作产出：加体魄经验、扣劳损值、按玩家设置 roll 拉伤 Hediff。
         /// factor: 结算比例（1.0 = 一个完整周期；Job 完成补算时按余数/周期给不足 1 的值）。
         /// </summary>
@@ -139,7 +170,23 @@ namespace Hormones.Logic.PhysiqueLogic
 
             // 阶段扣减倍率：虚弱扣得快、强壮扛得住
             float consumeMult = PhysiqueLgc.GetMuscleStrainConsumeMultiplier(pawn);
-            float finalStrain = strain * factor * consumeMult;
+
+            // 搬运：根据物品重量增加劳损
+            float weightMult = 1f;
+            if (IsHaulJob(curJob.def.defName))
+            {
+                Thing hauledThing = GetHauledThing(curJob);
+                if (hauledThing != null)
+                {
+                    float weight = hauledThing.GetStatValue(StatDefOf.Mass);
+                    // 重量修正：每 5kg 增加 20% 劳损，基准 25kg = 1.0
+                    weightMult = 1f + (weight - 25f) / 25f * 0.5f;
+                    if (weightMult < 0.5f) weightMult = 0.5f; // 最低 50%
+                    if (weightMult > 3f) weightMult = 3f; // 最高 300%
+                }
+            }
+
+            float finalStrain = strain * factor * consumeMult * weightMult;
 
             muscleStrain.AddStrain(finalStrain);
 
