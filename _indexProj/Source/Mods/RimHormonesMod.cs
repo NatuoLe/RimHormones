@@ -39,6 +39,11 @@ namespace Hormones
             listing.Label($"拉伤概率倍率：{Settings.StrainChanceMultiplier:F2}x  （统一缩放所有工作的拉伤概率，1.0 为默认）");
             Settings.StrainChanceMultiplier = listing.Slider(Settings.StrainChanceMultiplier, 0f, 3f);
 
+            listing.GapLine();
+            listing.Label("体魄日常衰减设置");
+            listing.Label($"体魄衰减总倍率：{Settings.PhysiqueDecayGlobalMult:F2}x  （用进废退：当天无任何体力劳作/锻炼才按体魄阶段衰减；调 0 = 关闭衰减，调高更硬核）");
+            Settings.PhysiqueDecayGlobalMult = listing.Slider(Settings.PhysiqueDecayGlobalMult, 0f, 3f);
+
             listing.End();
             Settings.Write();
         }
@@ -61,6 +66,9 @@ namespace Hormones
         public float StrainTriggerThresholdPct = Define.DefaultStrainTriggerThresholdPct;
         public float StrainChanceMultiplier = Define.DefaultStrainChanceMultiplier;
 
+        // 体魄日常衰减总倍率（0=关闭）
+        public float PhysiqueDecayGlobalMult = Define.DefaultPhysiqueDecayGlobalMult;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref ShowAdrenalineMotes, "showAdrenalineMotes", false);
@@ -70,6 +78,7 @@ namespace Hormones
             Scribe_Values.Look(ref ShowEnemyBodyDamageMotes, "showEnemyBodyDamageMotes", false);
             Scribe_Values.Look(ref StrainTriggerThresholdPct, "strainTriggerThresholdPct", Define.DefaultStrainTriggerThresholdPct);
             Scribe_Values.Look(ref StrainChanceMultiplier, "strainChanceMultiplier", Define.DefaultStrainChanceMultiplier);
+            Scribe_Values.Look(ref PhysiqueDecayGlobalMult, "physiqueDecayGlobalMult", Define.DefaultPhysiqueDecayGlobalMult);
         }
     }
 }

@@ -83,6 +83,18 @@ namespace Hormones
         /// </summary>
         /// <param name="pawn">目标角色</param>
         /// <returns>计算后的体魄等级（默认返回1）</returns>
+        /// <summary>
+        /// 是否为激素/体魄系统的作用对象。
+        /// 整套系统（肾上腺素、皮质醇、体魄、肌肉拉伤、透支损伤）仅对【类人生物】生效，
+        /// 动物、机械体等非类人 pawn 一律排除，避免在它们身上产生身体损伤 Hediff。
+        /// </summary>
+        public static bool IsHormoneSubject(Pawn pawn)
+        {
+            if (pawn == null) return false;
+            if (pawn.RaceProps == null || !pawn.RaceProps.Humanlike) return false;
+            return true;
+        }
+
         public static int GetPhysiqueLevel(Pawn pawn)
         {
             if (pawn == null) return 1;
@@ -480,6 +492,35 @@ namespace Hormones
             }
             
             return Define.MuscleStrainBaseRecoveryPerHour * multiplier;
+        }
+
+        /// <summary>
+        /// 获取体魄【日常衰减】的基础 XP（用进废退）。
+        /// 仅在“当天完全无体力活动”时才由 HormonesComponent 结算扣除。
+        /// 越高阶段衰减越多（维护顶级身材成本更高），虚弱阶段返回 0（保底）。
+        /// 注意：此处不含玩家可调的总倍率，倍率在结算处统一乘。
+        /// </summary>
+        /// <param name="pawn">目标角色</param>
+        /// <returns>该阶段每日闲置衰减的 Physique 经验</returns>
+        public static float GetDailyDecayXP(Pawn pawn)
+        {
+            PhysiqueStage stage = GetPhysiqueStage(pawn);
+
+            switch (stage)
+            {
+                case PhysiqueStage.Frail:
+                    return Define.PhysiqueDecayFrail;
+                case PhysiqueStage.Average:
+                    return Define.PhysiqueDecayAverage;
+                case PhysiqueStage.Fit:
+                    return Define.PhysiqueDecayFit;
+                case PhysiqueStage.Strong:
+                    return Define.PhysiqueDecayStrong;
+                case PhysiqueStage.Peak:
+                    return Define.PhysiqueDecayPeak;
+                default:
+                    return Define.PhysiqueDecayAverage;
+            }
         }
     }
 }

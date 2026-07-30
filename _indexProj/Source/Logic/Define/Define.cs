@@ -22,10 +22,10 @@ namespace Hormones
         public const float AdrenalineRestMultiplierMedium = 1.25f;
         public const float AdrenalineRestMultiplierHigh = 1.5f;
 
-        public const float AdrenalineOverexertBaseChance = 0.2f;
+        public const float AdrenalineOverexertBaseChance = 0.05f;
         public const float AdrenalineOverexertChancePerPhysique = 0.04f;
-        // 射击透支概率倍率：射击（远程）触发透支损伤的概率 = 近战概率 × 此倍率（<1 表示比近战更低）。
-        public const float AdrenalineRangedOverexertChanceMultiplier = 0.5f;
+        // 射击透支概率倍率：射击（远程）触发透支损伤的概率 = 近战概率 x 此倍率（<1 表示比近战更低）。
+        public const float AdrenalineRangedOverexertChanceMultiplier = 0.1f;
 
         public const float AdrenalineMeleeAttackBase = 0.03f;
         public const float AdrenalineRangedAttackBase = 0f;
@@ -40,7 +40,7 @@ namespace Hormones
 
         public static class AdrenalineLow
         {
-            public const float Consciousness = 0.03f;
+            public const float Consciousness = 0.08f;
             public const float MoveSpeed = 0.04f;
             public const float RespiratoryCirculatory = 0.07f;
             public const float Metabolism = 0.13f;
@@ -48,39 +48,39 @@ namespace Hormones
             public const float VisionReduction = -0.08f;
             public const float HearingReduction = -0.08f;
             
-            public const float MeleeDamage = 0.06f;
-            public const float Dodge = 0.036f;
-            public const float MeleeHitReduction = -0.024f;
+            public const float MeleeDamage = 0.10f;
+            public const float Dodge = 0f;
+            public const float MeleeHitReduction = -0.012f;
         }
 
         public static class AdrenalineMedium
         {
-            public const float Consciousness = 0.05f;
+            public const float Consciousness = 0.16f;
             public const float MoveSpeed = 0.07f;
             public const float RespiratoryCirculatory = 0.13f;
             public const float Metabolism = 0.26f;
             public const float PainReduction = -0.13f;
-            public const float VisionReduction = -0.14f;
-            public const float HearingReduction = -0.14f;
+            public const float VisionReduction = -0.10f;
+            public const float HearingReduction = -0.10f;
             
-            public const float MeleeDamage = 0.12f;
-            public const float Dodge = 0.072f;
-            public const float MeleeHitReduction = -0.048f;
+            public const float MeleeDamage = 0.20f;
+            public const float Dodge = 0f;
+            public const float MeleeHitReduction = -0.024f;
         }
 
         public static class AdrenalineHigh
         {
-            public const float Consciousness = 0.08f;
+            public const float Consciousness = 0.20f;
             public const float MoveSpeed = 0.10f;
             public const float RespiratoryCirculatory = 0.20f;
             public const float Metabolism = 0.40f;
             public const float PainReduction = -0.20f;
-            public const float VisionReduction = -0.20f;
-            public const float HearingReduction = -0.20f;
+            public const float VisionReduction = -0.12f;
+            public const float HearingReduction = -0.12f;
             
-            public const float MeleeDamage = 0.20f;
-            public const float Dodge = 0.12f;
-            public const float MeleeHitReduction = -0.08f;
+            public const float MeleeDamage = 0.30f;
+            public const float Dodge = 0f;
+            public const float MeleeHitReduction = -0.03f;
         }
 
         #endregion
@@ -90,15 +90,15 @@ namespace Hormones
         // 皮质醇档位阈值（Need CurLevel 范围 0~100）
         // 严重度 = CurLevel / 100
         // ========================================
-        // 正常波动: 0 ≤ S < 33 - 衰减13%/日，冒犯权重-50%，神经衰弱0%，心情+2
-        // 承压: 33 ≤ S < 66 - 衰减8%/日，冒犯权重+200%，神经衰弱3%，心情-1
-        // 高压: 66 ≤ S ≤ 100 - 衰减3%/日，冒犯权重+400%，神经衰弱8%，心情-5
+        // 正常波动: 0 <= S < 33 - 衰减13%/日，冒犯权重-50%，神经衰弱0%，心情+2
+        // 承压: 33 <= S < 66 - 衰减8%/日，冒犯权重+200%，神经衰弱3%，心情-1
+        // 高压: 66 <= S <= 100 - 衰减3%/日，冒犯权重+400%，神经衰弱8%，心情-5
         public const float CortisolThresholdNormal = 33f;
         public const float CortisolThresholdStress = 66f;
         public const float CortisolThresholdOverload = 100f;
 
         // ========================================
-        // 基础衰减（每日，占最大值百分比；MaxLevel=10000，常量已 ×100）
+        // 基础衰减（每日，占最大值百分比；MaxLevel=10000，常量已 x100）
         // ========================================
         public const float CortisolDecayNormal = 1300f;    // 正常波动：13%/日
         public const float CortisolDecayStress = 1000f;     // 承压：10%/日
@@ -110,16 +110,17 @@ namespace Hormones
         public const float CortisolDecayHighMood = 1000f;      // 心情>0.7：额外-10%/日
         public const float CortisolDecayDeliciousFood = 800f; // 美食Hediff：额外-8%/日
         public const float CortisolDecayGoodSleep = 1300f;    // 优质睡眠Hediff：额外-13%/日
+        public const float CortisolDecayRecreation = 3500f;   // 娱乐活动：额外-35%/日
         public const float CortisolMoodHighThreshold = 0.7f; // 高心情触发额外衰减阈值（mood need 0~1，不缩放）
 
         // ========================================
         // 增长（每日，占最大值百分比，可叠加）
         // ========================================
-        public const float CortisolGrowthLowMood = 1000f;    // 心情<0.3：+10%/日
-        public const float CortisolGrowthUglyEnv = 500f;     // 环境差：+5%/日
-        public const float CortisolGrowthHunger = 1200f;     // 饥饿Hediff：+12%/日
-        public const float CortisolGrowthPain = 500f;        // 疼痛Hediff：+5%/日
-        public const float CortisolGrowthIllness = 800f;     // 得病：+8%/日
+        public const float CortisolGrowthLowMood = 1200f;    // 心情<0.3：+10%/日
+        public const float CortisolGrowthUglyEnv = 600f;     // 环境差：+5%/日
+        public const float CortisolGrowthHunger = 1000f;     // 饥饿Hediff：+12%/日
+        public const float CortisolGrowthPain = 800f;        // 疼痛Hediff：+5%/日
+        public const float CortisolGrowthIllness = 800f;     // 得病：+3%/日
         public const float CortisolGrowthInsulted = 300f;    // 被侮辱Hediff：+3%/日
 
         // ========================================
@@ -140,7 +141,7 @@ namespace Hormones
         // ========================================
         // 神经衰弱 Hediff 存在期间，每 6000 tick 检测一次，按此概率触发「失眠发作」
         // （复用 WanderOwnRoom 游荡行为，强制持续 2 小时 = 5000 tick，forced 绕过卧室限制）
-        // 0.05f ≈ 游戏内约每 2.4 小时一次判定，调高则更易发作
+        // 0.05f ~ 游戏内约每 2.4 小时一次判定，调高则更易发作
         public const float CortisolInsomniaTriggerChancePerCheck = 0.10f;
 
         // ========================================
@@ -166,7 +167,7 @@ namespace Hormones
         // ========================================
 
         /// <summary>
-        /// 持续承压档（0.5 ≤ S < 0.75）属性效果
+        /// 持续承压档（0.5 <= S < 0.75）属性效果
         /// </summary>
         public static class CortisolChronicStress
         {
@@ -175,11 +176,11 @@ namespace Hormones
             public const float BloodPumping = -0.05f;           // 血液循环 -5%
             public const float InjuryHealingFactor = 0.95f;     // 伤口愈合 95%
             public const float ImmunityGainSpeedFactor = 0.95f; // 免疫效率 95%
-            public const float HungerRateFactor = 1.15f;        // 饥饿速率 ×1.15
+            public const float HungerRateFactor = 1.15f;        // 饥饿速率 x1.15
         }
 
         /// <summary>
-        /// 过载透支档（0.75 ≤ S ≤ 1.0）属性效果
+        /// 过载透支档（0.75 <= S <= 1.0）属性效果
         /// </summary>
         public static class CortisolOverload
         {
@@ -188,12 +189,12 @@ namespace Hormones
             public const float BloodPumping = -0.10f;           // 血液循环 -10%
             public const float InjuryHealingFactor = 0.97f;     // 伤口愈合 97%
             public const float ImmunityGainSpeedFactor = 0.90f; // 免疫效率 90%
-            public const float HungerRateFactor = 1.30f;        // 饥饿速率 ×1.30
+            public const float HungerRateFactor = 1.30f;        // 饥饿速率 x1.30
         }
 
         /// <summary>
         /// 过载耗竭状态属性效果
-        /// 触发条件：皮质醇≥0.75 持续超过2游戏天
+        /// 触发条件：皮质醇>=0.75 持续超过2游戏天
         /// </summary>
         public static class CortisolOverloadExhaustion
         {

@@ -128,8 +128,11 @@ namespace Hormones
         // chanceMultiplier：透支概率倍率。近战传 1.0（默认），射击传较小值（见 Define.AdrenalineRangedOverexertChanceMultiplier）。
         public static void TryApplyOverexertDamage(Pawn pawn, float chanceMultiplier = 1f)
         {
+            // 仅类人生物会因肾上腺素透支而受身体损伤；动物/机械体排除。
+            if (!PhysiqueLgc.IsHormoneSubject(pawn))
+                return;
             Hediff adrenaline = pawn.health.hediffSet.GetFirstHediffOfDef(DefDatabase<HediffDef>.GetNamed("Adrenaline", false));
-            if (adrenaline == null || adrenaline.Severity < Define.AdrenalineThresholdMedium)
+            if (adrenaline == null || adrenaline.Severity < Define.AdrenalineThresholdLow)
                 return;
 
             int physiqueLevel = PhysiqueLgc.GetPhysiqueLevel(pawn);

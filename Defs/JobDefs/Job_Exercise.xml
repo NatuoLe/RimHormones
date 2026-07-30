@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- 锻炼作业：由 JobDriver_Exercise (C#) 驱动，在锻炼点停留锻炼并给体魄加经验 -->
+  <JobDef>
+    <defName>Hormones_DoExercise</defName>
+    <driverClass>Hormones.Jobs.JobDriver_Exercise</driverClass>
+    <reportString>正在锻炼。</reportString>
+    <casualInterruptible>true</casualInterruptible>
+    <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
+  </JobDef>
+
+</Defs>

@@ -142,7 +142,7 @@ namespace Hormones
         // ============================================================
         public const float FinishFrameXP = 40f;
         public const float FinishFrameMuscleStrain = 15f;
-        public const float FinishFrameStrainChance = 0.03f;
+        public const float FinishFrameStrainChance = 0.02f;
 
         public const float DeconstructXP = 30f;
         public const float DeconstructMuscleStrain = 15f;
@@ -159,12 +159,12 @@ namespace Hormones
         // 挖树桩（重活，等同砍树）
         public const float ExtractTreeXP = 50f;
         public const float ExtractTreeMuscleStrain = 15f;
-        public const float ExtractTreeStrainChance = 0.03f;
+        public const float ExtractTreeStrainChance = 0.02f;
 
         // 操作深钻（重活）
         public const float DeepDrillXP = 60f;
         public const float DeepDrillMuscleStrain = 15f;
-        public const float DeepDrillStrainChance = 0.04f;
+        public const float DeepDrillStrainChance = 0.03f;
 
         // 拆卸/拆除变体（重活，等同拆除）
         public const float UninstallXP = 30f;
@@ -174,7 +174,7 @@ namespace Hormones
         // 打磨地板/墙（重活，重复性体力）
         public const float SmoothXP = 40f;
         public const float SmoothMuscleStrain = 15f;
-        public const float SmoothStrainChance = 0.03f;
+        public const float SmoothStrainChance = 0.02f;
 
         // 打猎（中活，追击+射击）
         public const float HuntXP = 30f;
@@ -237,5 +237,35 @@ namespace Hormones
         public const float PhysiqueStageFitStrainConsumeMultiplier = 0.75f;
         public const float PhysiqueStageStrongStrainConsumeMultiplier = 0.5f;
         public const float PhysiqueStagePeakStrainConsumeMultiplier = 0.3f;
+
+        // ============================================================
+        // 【锻炼配置 2026-07-30】锻炼消耗体力储备（劳损），并设最低门槛
+        // ============================================================
+        // 锻炼每 tick 扣除的“劳损储备”基础值（会再乘体魄消耗倍率）。
+        //   基准：一般体魄(上限1000,倍率×1.0)锻炼满一个疗程 5000tick 约扣 400，
+        //   即一次完整锻炼消耗约 40% 体力储备。0.08/tick × 5000 = 400。
+        public const float ExerciseStrainPerTick = 0.08f;
+        // 锻炼所需的最低体力储备比例：CurLevel/MaxLevel 低于此值则无法开始锻炼。
+        //   语义与拉伤门槛相反——这是“太累了练不动”的下限。
+        public const float ExerciseMinStrainPct = 0.35f;
+
+        // ============================================================
+        // 【体魄日常衰减 2026-07-30】用进废退
+        //   语义：每累计满 DecayTicksPerDay(=一个游戏日) 结算一次。
+        //   当天若发生过任意体力劳作或锻炼 → 打“今日已活动”标记 → 本日不衰减；
+        //   完全闲置的一天，才按体魄阶段扣 Physique 技能经验。
+        //   越高等级衰减越多（顶级身材维护成本最高），虚弱阶段保底不衰减。
+        //   最终扣减 = 阶段基础值 × PhysiqueDecayGlobalMult（玩家可调，0=关闭）。
+        // ============================================================
+        // 一个游戏日 = 60000 tick。
+        public const int DecayTicksPerDay = 60000;
+        // 各阶段每日闲置衰减的 Physique 经验（XP/天）。
+        public const float PhysiqueDecayFrail = 0f;    // 虚弱 0-4：保底不衰减
+        public const float PhysiqueDecayAverage = 2f;  // 一般 5-7
+        public const float PhysiqueDecayFit = 4f;      // 健康 8-12
+        public const float PhysiqueDecayStrong = 8f;   // 强壮 13-16
+        public const float PhysiqueDecayPeak = 14f;    // 卓越 17-20
+        // 玩家可调总倍率默认值（1.0=默认，0=完全关闭衰减）。
+        public const float DefaultPhysiqueDecayGlobalMult = 1f;
     }
 }

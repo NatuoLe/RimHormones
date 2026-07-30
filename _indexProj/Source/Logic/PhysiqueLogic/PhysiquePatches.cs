@@ -154,6 +154,9 @@ namespace Hormones.Logic.PhysiqueLogic
             if (pawn == null || factor <= 0f) return;
             if (xp <= 0f) return;
 
+            // 体魄日常衰减：标记“今日已有体力劳作”，本周期免于衰减（用进废退）
+            pawn.GetComp<HormonesComponent>()?.MarkActivityToday();
+
             // 1) 体魄经验
             SkillDef physiqueDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
             if (physiqueDef != null && pawn.skills != null)

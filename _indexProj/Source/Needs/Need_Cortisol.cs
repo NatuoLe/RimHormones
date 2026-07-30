@@ -1,4 +1,5 @@
 using Verse;
+using Verse.AI;
 using RimWorld;
 using System.Collections.Generic;
 using System.Reflection;
@@ -150,10 +151,10 @@ namespace Hormones
                 // 体魄对皮质醇每日涨幅的修正（表C：体魄越强壮涨得越慢甚至下降）
                 float physiqueGrowth = GetPhysiqueGrowthPerDay(severity) * 150f / 60000f;
 
-                // 整体变化速率 ×5
-                decay *= 5f;
-                growth *= 5f;
-                physiqueGrowth *= 5f;
+                // 整体变化速率 ×2
+                decay *= 2f;
+                growth *= 2f;
+                physiqueGrowth *= 2f;
 
                 CurLevel -= decay;
                 CurLevel += growth;
@@ -347,8 +348,23 @@ namespace Hormones
                 decayPerDay += Define.CortisolDecayGoodSleep;
             }
 
+            // 娱乐活动额外衰减（当前Job为娱乐/Joy类）
+            if (IsDoingRecreation())
+            {
+                decayPerDay += Define.CortisolDecayRecreation;
+            }
+
             // 转换为每 150 tick 区间的量（60000 ticks = 1天；NeedInterval 每 150 tick 一次）
             return decayPerDay * 150f / 60000f;
+        }
+
+        /// <summary>
+        /// 检测当前是否在进行娱乐活动（Joy类Job，joyKind != null）
+        /// </summary>
+        private bool IsDoingRecreation()
+        {
+            Job curJob = pawn.CurJob;
+            return curJob != null && curJob.def != null && curJob.def.joyKind != null;
         }
 
         /// <summary>
@@ -826,9 +842,9 @@ namespace Hormones
 
         /// <summary>
         /// 获取冒犯权重修正
-        /// 0-0.33: -50%
-        /// 0.33-0.66: +200%
-        /// 0.66-1.0: +400%
+        /// 0-0.33: ×0.5 (-50%)
+        /// 0.33-0.66: ×2.0 (+100%)
+        /// 0.66-1.0: ×4.0 (+300%)
         /// </summary>
         public float GetSocialFightChanceFactor()
         {
@@ -836,8 +852,8 @@ namespace Hormones
             if (severity < 0.33f)
                 return 0.5f;  // -50%
             if (severity < 0.66f)
-                return 3.0f;  // +200%
-            return 5.0f;      // +400%
+                return 2.0f;  // +100%
+            return 4.0f;      // +300%
         }
 
         public override int GUIChangeArrow

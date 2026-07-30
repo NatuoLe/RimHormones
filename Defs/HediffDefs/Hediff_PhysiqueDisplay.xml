@@ -83,7 +83,7 @@
         </statOffsets>
         <statFactors>
           <MeleeDamageFactor>1.05</MeleeDamageFactor>
-          <CarryingCapacity>1.10</CarryingCapacity>
+          <CarryingCapacity>1.25</CarryingCapacity>
           <Mass>1.10</Mass>
         </statFactors>
         <hungerRateFactorOffset>0.20</hungerRateFactorOffset>
@@ -116,7 +116,7 @@
           <MeleeDamageFactor>1.10</MeleeDamageFactor>
           <MoveSpeed>1.03</MoveSpeed>
           <WorkSpeedGlobal>1.03</WorkSpeedGlobal>
-          <CarryingCapacity>1.20</CarryingCapacity>
+          <CarryingCapacity>1.65</CarryingCapacity>
           <Mass>1.20</Mass>
         </statFactors>
         <hungerRateFactorOffset>0.60</hungerRateFactorOffset>
@@ -149,7 +149,7 @@
           <MeleeDamageFactor>1.15</MeleeDamageFactor>
           <MoveSpeed>1.08</MoveSpeed>
           <WorkSpeedGlobal>1.08</WorkSpeedGlobal>
-          <CarryingCapacity>1.30</CarryingCapacity>
+          <CarryingCapacity>2.25</CarryingCapacity>
           <Mass>1.25</Mass>
         </statFactors>
         <hungerRateFactorOffset>1.00</hungerRateFactorOffset>

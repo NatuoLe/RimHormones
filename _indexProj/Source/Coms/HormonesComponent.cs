@@ -148,6 +148,23 @@ public class HormonesComponent : ThingComp, IExposable
     // A: 按工作时长累计结算 —— 累积“正在干白名单活”的 tick 数
     private float workTickAccumulator = 0f;
 
+    // ============================================================
+    // 【体魄日常衰减 2026-07-30】用进废退
+    //   decayTickAccumulator：累计到 DecayTicksPerDay 触发一次日结算。
+    //   activeToday：本结算周期内是否发生过体力劳作/锻炼（由 MarkActivityToday 置位）。
+    // ============================================================
+    private int decayTickAccumulator = 0;
+    private bool activeToday = false;
+
+    /// <summary>
+    /// 由劳作结算（PhysiqueWorkSettle.SettleWork）与锻炼（JobDriver_Exercise）调用，
+    /// 标记该 pawn“今日已有体力活动”，本结算周期内免于体魄日常衰减。
+    /// </summary>
+    public void MarkActivityToday()
+    {
+        activeToday = true;
+    }
+
     public override void CompTick()
     {
         base.CompTick();
@@ -160,12 +177,58 @@ public class HormonesComponent : ThingComp, IExposable
 
         // A: 每 tick 判断是否在干白名单工作，累计并满周期结算
         PhysiqueWorkTick();
+
+        // 体魄日常衰减：累计满一个游戏日结算一次（用进废退）
+        PhysiqueDecayTick();
         
         // 原有的激素间隔逻辑
         if (Pawn != null && Pawn.IsHashIntervalTick(200))
         {
             HormonesInterval();
         }
+    }
+
+    // ============================================================
+    // 【体魄日常衰减 2026-07-30】每 tick 累计，满一个游戏日结算一次。
+    //   结算时：仅对类人生效；若本周期发生过体力活动(activeToday) → 跳过衰减；
+    //   否则按体魄阶段扣 Physique 技能经验（× 玩家可调总倍率）。结算后重置标记。
+    // ============================================================
+    private void PhysiqueDecayTick()
+    {
+        if (Pawn == null || Pawn.Dead || Pawn.Suspended) return;
+
+        decayTickAccumulator++;
+        if (decayTickAccumulator < Define.DecayTicksPerDay) return;
+
+        decayTickAccumulator = 0;
+        DailyPhysiqueDecay();
+        activeToday = false; // 进入下一个周期，重置活动标记
+    }
+
+    private void DailyPhysiqueDecay()
+    {
+        // 仅对类人生效（与整套激素/体魄系统一致）
+        if (!PhysiqueLgc.IsHormoneSubject(Pawn)) return;
+
+        // 本周期有过体力劳作/锻炼 → 用进，不衰减
+        if (activeToday) return;
+
+        // 总倍率（玩家可调，0=关闭）
+        float globalMult = RimHormonesMod.Settings != null
+            ? RimHormonesMod.Settings.PhysiqueDecayGlobalMult
+            : Define.DefaultPhysiqueDecayGlobalMult;
+        if (globalMult <= 0f) return;
+
+        float decayXP = PhysiqueLgc.GetDailyDecayXP(Pawn) * globalMult;
+        if (decayXP <= 0f) return; // 虚弱阶段保底不衰减
+
+        SkillDef physiqueDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
+        SkillRecord rec = Pawn.skills?.GetSkill(physiqueDef);
+        if (rec == null) return;
+
+        // 用原版 Learn 传负经验来衰减：direct=true 表示不乘学习速率/研究等增益，
+        // 净扣我们算好的 decayXP；内部会正确处理 xpSinceLastLevel 下溢与掉级。
+        rec.Learn(-decayXP, direct: true);
     }
 
     // ============================================================
@@ -318,6 +381,8 @@ public class HormonesComponent : ThingComp, IExposable
         Scribe_Values.Look(ref curLevelInt, "hormonesLevel", MaxLevel);
         Scribe_Values.Look(ref lastLevelInt, "hormonesLastLevel", MaxLevel);
         Scribe_Values.Look(ref workTickAccumulator, "physiqueWorkTickAccumulator", 0f);
+        Scribe_Values.Look(ref decayTickAccumulator, "physiqueDecayTickAccumulator", 0);
+        Scribe_Values.Look(ref activeToday, "physiqueActiveToday", false);
     }
 }
 

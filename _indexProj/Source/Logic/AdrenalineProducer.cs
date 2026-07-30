@@ -99,6 +99,13 @@ namespace Hormones
             if (adrenaline == null)
                 return;
 
+            // 非类人生物（含旧存档遗留）：直接移除肾上腺素，不再处理。
+            if (!PhysiqueLgc.IsHormoneSubject(pawn))
+            {
+                pawn.health.RemoveHediff(adrenaline);
+                return;
+            }
+
             float netChange = CalculateNetChangePerSecond(pawn);
 
             // Pawn_Tick_Patch 每 60 tick 调用一次（≈1 秒），netChange 已是"每秒"变化，直接加
@@ -113,6 +120,8 @@ namespace Hormones
 
         public static void OnAttack(Pawn attacker, bool isMelee)
         {
+            // 仅类人生物拥有肾上腺素系统；动物/机械体攻击不产生肾上腺素与后续透支损伤。
+            if (!PhysiqueLgc.IsHormoneSubject(attacker)) return;
             Hediff adrenaline = attacker.health.hediffSet.GetFirstHediffOfDef(DefDatabase<HediffDef>.GetNamed("Adrenaline", false));
             if (adrenaline == null)
             {
@@ -132,6 +141,8 @@ namespace Hormones
 
         public static void OnHit(Pawn victim)
         {
+            // 仅类人生物拥有肾上腺素系统。
+            if (!PhysiqueLgc.IsHormoneSubject(victim)) return;
             Hediff adrenaline = victim.health.hediffSet.GetFirstHediffOfDef(DefDatabase<HediffDef>.GetNamed("Adrenaline", false));
             if (adrenaline == null)
             {

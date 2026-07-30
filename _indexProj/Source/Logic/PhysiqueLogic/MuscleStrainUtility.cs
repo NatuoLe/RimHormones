@@ -19,6 +19,10 @@ namespace Hormones.Logic.PhysiqueLogic
                 return;
             }
 
+            // 仅类人生物会产生肌肉劳损；动物/机械体排除。
+            if (!PhysiqueLgc.IsHormoneSubject(pawn))
+                return;
+
             BodyPartDef armDef = DefDatabase<BodyPartDef>.GetNamed("Arm", false);
             BodyPartDef legDef = DefDatabase<BodyPartDef>.GetNamed("Leg", false);
 

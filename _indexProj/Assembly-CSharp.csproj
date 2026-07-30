@@ -21,6 +21,7 @@
     <Compile Include="Source\Logic\PhysiqueLogic\PhysiquePatches.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\PhysiqueDatas.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\MuscleStrainUtility.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\ExerciseWork.cs" />
     <Compile Include="Source\Needs\Need_Hormones.cs" />
     <Compile Include="Source\Needs\Need_MuscleStrain.cs" />
     <Compile Include="Source\Needs\Need_Cortisol.cs" />

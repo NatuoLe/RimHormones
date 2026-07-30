@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- 锻炼 WorkGiver：扫描地图上的简易锻炼点，派殖民者前去锻炼 -->
+  <WorkGiverDef>
+    <defName>Hormones_DoExercise</defName>
+    <label>锻炼</label>
+    <giverClass>Hormones.Jobs.WorkGiver_Exercise</giverClass>
+    <workType>Hormones_Exercise</workType>
+    <verb>锻炼</verb>
+    <gerund>锻炼于</gerund>
+    <priorityInType>50</priorityInType>
+    <requiredCapacities>
+      <li>Moving</li>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <prioritizeSustains>true</prioritizeSustains>
+  </WorkGiverDef>
+
+</Defs>

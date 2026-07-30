@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- 简易锻炼点：可建造的杂项建筑物，殖民者在此进行「锻炼」工作，提升体魄 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>Hormones_ExerciseSpot</defName>
+    <label>简易锻炼点</label>
+    <description>用木料与石块搭起的简易健身架。殖民者可以在这里进行体能锻炼，长期坚持能提升体魄等级，增强肉体耐受与损伤恢复能力。锻炼会让人略感疲惫。</description>
+    <!-- 借用原版「手工加工点」贴图占位，后续可替换为专属贴图 -->
+    <graphicData>
+      <texPath>Things/Building/Production/CraftingSpot</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>60</pathCost>
+    <blockWind>false</blockWind>
+    <fillPercent>0.4</fillPercent>
+    <useHitPoints>true</useHitPoints>
+    <statBases>
+      <MaxHitPoints>120</MaxHitPoints>
+      <WorkToBuild>1200</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-2</Beauty>
+    </statBases>
+    <size>(1,1)</size>
+    <rotatable>false</rotatable>
+    <selectable>true</selectable>
+    <neverMultiSelect>false</neverMultiSelect>
+    <costList>
+      <WoodLog>45</WoodLog>
+      <Steel>10</Steel>
+    </costList>
+    <building>
+      <isEdifice>false</isEdifice>
+    </building>
+    <designationCategory>Misc</designationCategory>
+    <constructEffect>ConstructMetal</constructEffect>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationHotKey>Misc10</designationHotKey>
+    <researchPrerequisites Inherit="False" />
+  </ThingDef>
+
+</Defs>
