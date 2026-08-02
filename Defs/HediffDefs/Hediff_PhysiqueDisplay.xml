@@ -8,9 +8,9 @@
     <isBad>false</isBad>
     <defaultLabelColor>(0.8, 0.8, 0.8)</defaultLabelColor>
 
-    <!-- 使用 stages 根据体魄等级显示不同效果 -->
+    <!-- Uses stages to display different effects based on physique level -->
     <stages>
-      <!-- 等级 0-4: frail 虚弱 (Severity 0.00-0.24) -->
+      <!-- Level 0-4: frail (Severity 0.00-0.24) -->
       <li>
         <label>frail</label>
         <minSeverity>0</minSeverity>
@@ -43,7 +43,7 @@
         <hungerRateFactorOffset>-0.20</hungerRateFactorOffset>
       </li>
 
-      <!-- 等级 5-7: average 一般 (Severity 0.25-0.39) -->
+      <!-- Level 5-7: average (Severity 0.25-0.39) -->
       <li>
         <label>average</label>
         <minSeverity>0.25</minSeverity>
@@ -66,7 +66,7 @@
         </statFactors>
       </li>
 
-      <!-- 等级 8-12: fit 健康 (Severity 0.40-0.64) -->
+      <!-- Level 8-12: fit (Severity 0.40-0.64) -->
       <li>
         <label>fit</label>
         <minSeverity>0.40</minSeverity>
@@ -89,7 +89,7 @@
         <hungerRateFactorOffset>0.20</hungerRateFactorOffset>
       </li>
 
-      <!-- 等级 13-16: strong 强壮 (Severity 0.65-0.84) -->
+      <!-- Level 13-16: strong (Severity 0.65-0.84) -->
       <li>
         <label>strong</label>
         <minSeverity>0.65</minSeverity>
@@ -122,7 +122,7 @@
         <hungerRateFactorOffset>0.60</hungerRateFactorOffset>
       </li>
 
-      <!-- 等级 17-20: peak 卓越 (Severity 0.85-1.0) -->
+      <!-- Level 17-20: peak (Severity 0.85-1.0) -->
       <li>
         <label>peak</label>
         <minSeverity>0.85</minSeverity>

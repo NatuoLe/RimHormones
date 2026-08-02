@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-  <name>边缘体魄＆激素</name>
+  <name>RimPhysique</name>
   <author>Lenatuo</author>
   <packageId>Lenatuo.hormones</packageId>
   <description>原版环世界殖民者肉体近乎无限容错：无休止采矿、搬运、重体力劳作，持续近身厮杀负伤，仅靠绷带包扎、睡一觉就能彻底复原；不存在长期肌肉透支、体质下滑、运动损伤累积、应激后遗症，肉体没有长期代价，缺少真实生存压迫感。
@@ -12,7 +12,7 @@
 • 皮质醇：慢性压力积累，承压/高压影响心情，诱发神经衰弱
 • 肾上腺素：战斗应激反应，提升战斗能力但有透支风险
 • 神经衰弱：高压长期累积导致的睡眠与情绪问题</description>
-  <modVersion>beta 0.4.4</modVersion>
+  <modVersion>beta 0.4.6</modVersion>
   <supportedVersions>
     <li>1.6</li>
   </supportedVersions>

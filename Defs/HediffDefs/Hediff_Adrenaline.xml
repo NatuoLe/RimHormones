@@ -69,8 +69,8 @@
     </stages>
   </HediffDef>
 
-  <!-- 旧损伤 JointSprain / TendonFatigue / HeartPalpitations / ShortnessOfBreath / LimbWeakness
-       已整合进 Hediff_StrainPool.xml 的新体系（见 文档/Hediff/身体损伤.md「现有 Hediff 整合」表），
-       故从此处移除。C# 中的引用已同步改为新 defName。 -->
+  <!-- Old injuries JointSprain / TendonFatigue / HeartPalpitations / ShortnessOfBreath / LimbWeakness
+       have been integrated into the new system in Hediff_StrainPool.xml (see docs/Hediff/body_injuries.md "Existing Hediff Integration" table),
+       so they are removed from here. C# references have been updated to use the new defNames. -->
 
 </Defs>

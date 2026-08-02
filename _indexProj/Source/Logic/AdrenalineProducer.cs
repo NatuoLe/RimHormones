@@ -38,16 +38,33 @@ namespace Hormones
             return baseValue * multiplier;
         }
 
+        /// <summary>
+        /// 【2026-08-02 新增】每秒因流血产生的肾上腺素。
+        /// 流血速率(HediffSet.BleedRateTotal) &lt;150% 用 AdrenalineBloodingLowBase，
+        /// &gt;150% 用 AdrenalineBloodingHighBase，再乘体魄生成系数；不流血为 0。
+        /// </summary>
+        public static float GetBleedingAdrenalineGain(Pawn pawn, int physique)
+        {
+            float bleedRate = pawn.health.hediffSet.BleedRateTotal;
+            if (bleedRate <= 0f) return 0f;
+            float baseValue = bleedRate < Define.AdrenalineBloodingThreshold
+                ? Define.AdrenalineBloodingLowBase
+                : Define.AdrenalineBloodingHighBase;
+            return baseValue * CalculateGenerationMultiplier(physique);
+        }
+
         public static float CalculateNetChangePerSecond(Pawn pawn)
         {
             int physique = PhysiqueLgc.GetPhysiqueLevel(pawn);
-            
+
             float decay = GetDecayPerSecond(physique);
-            
+
             bool inCombatZone = IsInCombatZone(pawn);
             float combatGain = inCombatZone ? GetCombatInterpolationGain(physique) : 0f;
-            
-            return combatGain - decay;
+
+            float bleedingGain = GetBleedingAdrenalineGain(pawn, physique);
+
+            return combatGain + bleedingGain - decay;
         }
 
         public static bool IsInCombatZone(Pawn pawn)
@@ -95,14 +112,28 @@ namespace Hormones
 
         public static void ProcessAdrenalineDynamic(Pawn pawn)
         {
-            Hediff adrenaline = pawn.health.hediffSet.GetFirstHediffOfDef(DefDatabase<HediffDef>.GetNamed("Adrenaline", false));
-            if (adrenaline == null)
-                return;
+            HediffDef adrenalineDef = DefDatabase<HediffDef>.GetNamed("Adrenaline", false);
+            Hediff adrenaline = pawn.health.hediffSet.GetFirstHediffOfDef(adrenalineDef);
 
             // 非类人生物（含旧存档遗留）：直接移除肾上腺素，不再处理。
             if (!PhysiqueLgc.IsHormoneSubject(pawn))
             {
-                pawn.health.RemoveHediff(adrenaline);
+                if (adrenaline != null)
+                    pawn.health.RemoveHediff(adrenaline);
+                return;
+            }
+
+            // 【2026-08-02】无肾上腺素但正在流血：流血本身即可唤起肾上腺素
+            // （否则旧伤流血时 hediff 已衰减移除，流血产肾上腺素永远不生效）。
+            if (adrenaline == null)
+            {
+                float createGain = GetBleedingAdrenalineGain(pawn, PhysiqueLgc.GetPhysiqueLevel(pawn));
+                if (createGain > 0f)
+                {
+                    adrenaline = HediffMaker.MakeHediff(adrenalineDef, pawn);
+                    adrenaline.Severity = Math.Min(createGain, 1f);
+                    pawn.health.AddHediff(adrenaline);
+                }
                 return;
             }
 

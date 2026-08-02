@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <Hormones_StrainBlock.label>禁止过劳</Hormones_StrainBlock.label>
+  <Hormones_StrainBlock.headerTip>当劳损储备过低时，此殖民者不会承担重体力工作（采矿、搬运、建造、种植、狩猎）。不会锁定工作能力；手动分配仍然有效。休息后自动解除。可在Mod设置中调整阈值。</Hormones_StrainBlock.headerTip>
+</LanguageData>

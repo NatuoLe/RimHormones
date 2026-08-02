@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Anorexic.degreeDatas.0.label>anorexic</Anorexic.degreeDatas.0.label>
+  <Anorexic.degreeDatas.0.description>{PAWN_nameDef} struggles with anorexia. {PAWN_pronoun} has a reduced appetite and needs less food to survive, but suffers from poor physique.</Anorexic.degreeDatas.0.description>
+  
+  <Brawny.degreeDatas.0.label>brawny</Brawny.degreeDatas.0.label>
+  <Brawny.degreeDatas.0.description>{PAWN_nameDef} is exceptionally strong and muscular. {PAWN_pronoun} has impressive physical capabilities and excels in tasks requiring raw strength.</Brawny.degreeDatas.0.description>
+  
+  <Obese.degreeDatas.0.label>obese</Obese.degreeDatas.0.label>
+  <Obese.degreeDatas.0.description>{PAWN_nameDef} carries excess weight. {PAWN_pronoun} moves slower and is less attractive, but doesn't lack endurance.</Obese.degreeDatas.0.description>
+  
+  <Slender.degreeDatas.0.label>slender</Slender.degreeDatas.0.label>
+  <Slender.degreeDatas.0.description>{PAWN_nameDef} has a thin, graceful build. {PAWN_pronoun} is attractive but lacks physical strength.</Slender.degreeDatas.0.description>
+  
+  <Agile.degreeDatas.0.label>agile</Agile.degreeDatas.0.label>
+  <Agile.degreeDatas.0.description>{PAWN_nameDef} is exceptionally nimble and quick. {PAWN_pronoun} dodges attacks easily and moves with grace.</Agile.degreeDatas.0.description>
+  
+  <ExplosivePower.degreeDatas.0.label>explosive power</ExplosivePower.degreeDatas.0.label>
+  <ExplosivePower.degreeDatas.0.description>{PAWN_nameDef} possesses explosive physical power, capable of launching enemies backward with sheer force.</ExplosivePower.degreeDatas.0.description>
+</LanguageData>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ============================================================
+       Adrenaline buildup injury · Stage → Tier mapping
+       Corresponds to "docs/Hediff/injury_hediff_and_trigger_logic.xlsx" → Hediff Overview
+       column [Hediffs caused by sustained adrenaline buildup].
+
+       Mechanism: while in high adrenaline state, checked every 600 ticks (10 game seconds),
+                  probability = (0.010 − 0.000583 × physique level) × stage multiplier × player global multiplier
+                  Physique 0 → 1.00%/check; Physique 12 → 0.30%/check; Physique ≥13 exempt.
+                  On trigger, draws one from the injury pool of the [current stage's corresponding tier].
+
+       Pool members determined by each HediffDef's StrainHediffExt.onAdrenalineBuildup
+       (see Defs/HediffDefs/Hediff_StrainPool.xml),
+       tier determined by the co-located severityTier.
+
+       Stage descriptions (severity thresholds in Define.cs):
+         Dormant  < 0.15        No trigger (no stress response)
+         Low      0.5 ~ 0.75    No trigger — mild stress is normal physiological response, no organ damage
+         Medium   0.75 ~ 1.0    → Moderate injury (cardiopulmonary overexertion / hyperventilation)
+         High     ≥ 1.0         → Severe injury (neural exhaustion / metabolic overexertion)
+
+       Adjustment: toggle enabled to enable/disable a stage; change tier to swap tier;
+                   chanceFactor gives a stage-specific bonus (multiplied on top of physique formula).
+       ============================================================ -->
+  <Hormones.StrainAdrenalineStageRulesDef>
+    <defName>Hormones_StrainAdrenalineStageRules</defName>
+    <rules>
+      <li>
+        <level>Low</level>
+        <enabled>false</enabled>
+        <tier>Mild</tier>
+        <chanceFactor>1.0</chanceFactor>
+      </li>
+      <li>
+        <level>Medium</level>
+        <enabled>true</enabled>
+        <tier>Moderate</tier>
+        <chanceFactor>1.0</chanceFactor>
+      </li>
+      <li>
+        <level>High</level>
+        <enabled>true</enabled>
+        <tier>Severe</tier>
+        <chanceFactor>1.0</chanceFactor>
+      </li>
+    </rules>
+  </Hormones.StrainAdrenalineStageRulesDef>
+
+</Defs>

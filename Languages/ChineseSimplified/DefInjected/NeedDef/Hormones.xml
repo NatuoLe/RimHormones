@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <Hormones.label>Hormones</Hormones.label>
-  <Hormones.description>The current hormones level of the pawn. High hormones means the pawn stays calm in battle, while low hormones causes fear and panic.</Hormones.description>
+  <Hormones.label>激素</Hormones.label>
+  <Hormones.description>殖民者当前的激素水平。高激素意味着殖民者在战斗中保持冷静，而低激素会导致恐惧和恐慌。</Hormones.description>
   <MuscleStrain.label>肌肉劳损</MuscleStrain.label>
   <MuscleStrain.description>肌肉疲劳和劳损程度。劳损越高越容易受伤。睡觉时恢复最快；进行娱乐活动（如打桌球、看云、喝酒等）也能以约一半的速度恢复。</MuscleStrain.description>
   <Cortisol.label>皮质醇</Cortisol.label>

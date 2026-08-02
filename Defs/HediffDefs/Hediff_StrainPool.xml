@@ -2,47 +2,58 @@
 <Defs>
 
   <!-- ============================================================
-       透支损伤池（Strain Pool）
-       按「触发活动类型」分类，同一器官来自不同活动是不同的 Hediff。
-       参考文档：文档/Hediff/身体损伤.md
+       Strain Pool
+       Categorized by "trigger activity type". Different activities on the same organ produce different Hediffs.
+       Reference: docs/Hediff/body_injuries.md
 
-       字段映射说明（已按 RimWorld 1.6 核实）：
-         · 能力（PawnCapacity）修正 → capMods + postFactor（乘算）
-           可用能力：Manipulation / Moving / BloodPumping / Breathing /
-                     Consciousness / Sight / Hearing / BloodFiltration /
-                     Metabolism / Eating / Talking
-         · 属性（Stat）修正 → statFactors（乘算）
-           如 MoveSpeed / WorkSpeedGlobal / MentalBreakThreshold
-         · 疼痛加算 → painOffset（正=加痛，负=减痛）
-         · 饥饿速率 → HediffStage 直接字段 hungerRateFactor（非 stat）
-         · md 中的 "SightRadius" 非原版属性，用能力 Sight 近似（postFactor）
-         · md 中的 "Spine" 是身体部件、非能力，附着于 Arm/Leg 的 hediff
-           无法直接修正脊柱，改用 Manipulation/Moving 代偿其联动损伤
-       恢复机制：
-         · Disappears  → HediffCompProperties_Disappears（固定时间自动消失）
-         · 时间渐减    → HediffCompProperties_SeverityPerDay（severityPerDay 负值）
-                        24 游戏小时 = 1 天，-0.36/day ≈ -0.015/h
+       Field mapping (verified against RimWorld 1.6):
+         · PawnCapacity mods → capMods + postFactor (multiplicative)
+           Available: Manipulation / Moving / BloodPumping / Breathing /
+                      Consciousness / Sight / Hearing / BloodFiltration /
+                      Metabolism / Eating / Talking
+         · Stat mods → statFactors (multiplicative)
+           e.g. MoveSpeed / WorkSpeedGlobal / MentalBreakThreshold
+         · Pain addition → painOffset (positive = more pain, negative = less)
+         · Hunger rate → HediffStage field hungerRateFactor (not a stat)
+         · "SightRadius" from md is not a vanilla stat; approximated via Sight capacity (postFactor)
+         · "Spine" from md is a body part, not a capacity; hediffs attached to Arm/Leg
+           Cannot directly modify spine; use Manipulation/Moving to compensate linked damage
+       Recovery mechanisms:
+         · Disappears → HediffCompProperties_Disappears (auto-removes after fixed time)
+         · Time decay → HediffCompProperties_SeverityPerDay (negative severityPerDay)
+                        24 game hours = 1 day, -0.36/day ≈ -0.015/h
        ============================================================ -->
 
   <!-- ============================================================
-       一、肌肉劳损类（体力劳作触发）
-       恢复：Disappears 60000 ticks（1 游戏天）
+       I. Muscle Strain (triggered by physical labor)
+       Recovery: Disappears 60000 ticks (1 game day)
        ============================================================ -->
 
-  <!-- 采矿/砍树/搬运等重体力：附着于 Arm/Leg（左右独立叠加） -->
+  <!-- Heavy labor (mining/cutting/hauling): attached to Arm/Leg (left/right stack independently) -->
   <HediffDef>
     <defName>LaborMuscleStrain</defName>
-    <label>肌肉劳损</label>
-    <description>长时间重体力劳作导致的肌肉透支，从疲劳发展到拉伤、撕裂。</description>
+    <label>muscle strain</label>
+    <description>Muscle overexertion from prolonged heavy labor, progressing from fatigue to strain to tear.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(1.0, 0.5, 0.25)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
+    <!-- [2026-08-02] xlsx overview: all injuries unified as "tendable = no" -->
     <tendable>false</tendable>
     <maxSeverity>1.0</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>false</combatTriggered>
+        <onShoot>false</onShoot>
+        <onMelee>false</onMelee>
+        <onMeleeHitTaken>false</onMeleeHitTaken>
+        <onAdrenalineBuildup>false</onAdrenalineBuildup>
+        <severityTier>Mild</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>肌肉疲劳</label>
+        <label>muscle fatigue</label>
         <minSeverity>0</minSeverity>
         <painOffset>0.02</painOffset>
         <capMods>
@@ -51,7 +62,7 @@
         </capMods>
       </li>
       <li>
-        <label>肌肉拉伤</label>
+        <label>muscle strain</label>
         <minSeverity>0.4</minSeverity>
         <painOffset>0.08</painOffset>
         <capMods>
@@ -60,7 +71,7 @@
         </capMods>
       </li>
       <li>
-        <label>肌肉撕裂</label>
+        <label>muscle tear</label>
         <minSeverity>0.75</minSeverity>
         <painOffset>0.20</painOffset>
         <capMods>
@@ -77,21 +88,32 @@
     </comps>
   </HediffDef>
 
-  <!-- 挖掘（锄头动作）：肩袖+脊柱联动，附着于 Arm(R 主手)。
-       md 里的 Spine 用 Moving 近似代偿 -->
+  <!-- Digging (hoe motion): rotator cuff + spine linkage, attached to Arm(R dominant hand).
+       Spine from md approximated via Moving capacity -->
   <HediffDef>
     <defName>DiggingMuscleStrain</defName>
-    <label>肩背劳损</label>
-    <description>挖掘等锄头动作对肩关节与脊柱造成的联动性劳损，从酸痛发展到肩关节脱位。</description>
+    <label>shoulder-back strain</label>
+    <description>Combined strain on shoulder joint and spine from digging motions, progressing from soreness to strain to dislocation.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(1.0, 0.45, 0.2)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
+    <!-- [2026-08-02] xlsx overview: all injuries unified as "tendable = no" -->
     <tendable>false</tendable>
     <maxSeverity>1.0</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>false</combatTriggered>
+        <onShoot>false</onShoot>
+        <onMelee>false</onMelee>
+        <onMeleeHitTaken>false</onMeleeHitTaken>
+        <onAdrenalineBuildup>false</onAdrenalineBuildup>
+        <severityTier>Mild</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>肩部酸痛</label>
+        <label>soreness</label>
         <minSeverity>0</minSeverity>
         <painOffset>0.03</painOffset>
         <capMods>
@@ -100,7 +122,7 @@
         </capMods>
       </li>
       <li>
-        <label>肩袖损伤</label>
+        <label>strain</label>
         <minSeverity>0.4</minSeverity>
         <painOffset>0.10</painOffset>
         <capMods>
@@ -109,7 +131,7 @@
         </capMods>
       </li>
       <li>
-        <label>肩关节脱位</label>
+        <label>joint dislocation</label>
         <minSeverity>0.75</minSeverity>
         <painOffset>0.25</painOffset>
         <capMods>
@@ -127,24 +149,34 @@
   </HediffDef>
 
   <!-- ============================================================
-       二、心肺爆发类（跑动/追逐/逃跑/窒息）
-       恢复：SeverityPerDay -0.36/day（≈ -0.015/h，约 3 天回落满级）
+       II. Cardiopulmonary Overexertion (running/chasing/fleeing/suffocation)
+       Recovery: SeverityPerDay -0.36/day (≈ -0.015/h, ~3 days to full recovery)
        ============================================================ -->
 
-  <!-- 逃跑/冲刺/追逐：附着于 Heart -->
+  <!-- Fleeing/sprinting/chasing: attached to Heart -->
   <HediffDef>
     <defName>CardioOverexert</defName>
-    <label>心肺透支</label>
-    <description>爆发性剧烈运动使心肺系统过载，从心悸发展到心肌缺氧、肺水肿。</description>
+    <label>cardiopulmonary overexertion</label>
+    <description>Burst activities like fleeing or sprinting overexcite the cardiopulmonary system, initially enhancing pumping and breathing; sustained overexertion leads to arrhythmia and myocardial ischemia.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(1.0, 0.35, 0.3)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
     <tendable>false</tendable>
     <maxSeverity>1.0</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>false</combatTriggered>
+        <onShoot>false</onShoot>
+        <onMelee>false</onMelee>
+        <onMeleeHitTaken>false</onMeleeHitTaken>
+        <onAdrenalineBuildup>true</onAdrenalineBuildup>
+        <severityTier>Moderate</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>心悸</label>
+        <label>overexcited</label>
         <minSeverity>0</minSeverity>
         <capMods>
           <li><capacity>BloodPumping</capacity><postFactor>1.1</postFactor></li>
@@ -152,25 +184,20 @@
         </capMods>
       </li>
       <li>
-        <label>心律失常与过度换气</label>
+        <label>arrhythmia</label>
         <minSeverity>0.4</minSeverity>
-        <statFactors>
-          <MoveSpeed>0.90</MoveSpeed>
-        </statFactors>
         <capMods>
-          <li><capacity>BloodPumping</capacity><postFactor>0.85</postFactor></li>
-          <li><capacity>Breathing</capacity><postFactor>0.85</postFactor></li>
+          <li><capacity>BloodPumping</capacity><postFactor>1.15</postFactor></li>
+          <li><capacity>Breathing</capacity><postFactor>1.15</postFactor></li>
         </capMods>
       </li>
+      <!-- [2026-08-02 re-enabled] xlsx marks "allowed to trigger", stage name myocardial ischemia, BloodPumping user confirmed ×0.80 -->
       <li>
-        <label>心肌缺氧与肺水肿</label>
+        <label>myocardial ischemia</label>
         <minSeverity>0.75</minSeverity>
-        <statFactors>
-          <MoveSpeed>0.75</MoveSpeed>
-        </statFactors>
         <capMods>
-          <li><capacity>BloodPumping</capacity><postFactor>0.70</postFactor></li>
-          <li><capacity>Breathing</capacity><postFactor>0.65</postFactor></li>
+          <li><capacity>BloodPumping</capacity><postFactor>0.80</postFactor></li>
+          <li><capacity>Breathing</capacity><postFactor>0.88</postFactor></li>
           <li><capacity>Consciousness</capacity><postFactor>0.85</postFactor></li>
         </capMods>
       </li>
@@ -182,20 +209,30 @@
     </comps>
   </HediffDef>
 
-  <!-- 窒息/溺水后恢复：附着于 Lung -->
+  <!-- Post-suffocation/drowning recovery: attached to Lung -->
   <HediffDef>
     <defName>SuffocationStrain</defName>
-    <label>缺氧损伤</label>
-    <description>窒息或溺水后的呼吸系统损伤，从肺部灼热发展到肺水肿。</description>
+    <label>hyperventilation</label>
+    <description>Disordered breathing rhythm after suffocation or drowning recovery, progressing from hyperventilation to alkalosis to respiratory failure.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.6, 0.8, 1.0)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
     <tendable>false</tendable>
     <maxSeverity>1.0</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>false</combatTriggered>
+        <onShoot>false</onShoot>
+        <onMelee>false</onMelee>
+        <onMeleeHitTaken>false</onMeleeHitTaken>
+        <onAdrenalineBuildup>true</onAdrenalineBuildup>
+        <severityTier>Moderate</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>肺部灼热</label>
+        <label>hyperventilation</label>
         <minSeverity>0</minSeverity>
         <capMods>
           <li><capacity>Breathing</capacity><postFactor>0.90</postFactor></li>
@@ -203,22 +240,20 @@
         </capMods>
       </li>
       <li>
-        <label>呼吸困难</label>
+        <label>alkalosis</label>
         <minSeverity>0.4</minSeverity>
-        <statFactors>
-          <MoveSpeed>0.92</MoveSpeed>
-        </statFactors>
         <capMods>
-          <li><capacity>Breathing</capacity><postFactor>0.75</postFactor></li>
-          <li><capacity>BloodPumping</capacity><postFactor>0.85</postFactor></li>
+          <li><capacity>Breathing</capacity><postFactor>0.8</postFactor></li>
+          <li><capacity>BloodPumping</capacity><postFactor>0.9</postFactor></li>
         </capMods>
       </li>
+      <!-- [2026-08-02 re-enabled] xlsx marks "allowed to trigger", stage name respiratory failure -->
       <li>
-        <label>肺水肿</label>
+        <label>respiratory failure</label>
         <minSeverity>0.75</minSeverity>
         <capMods>
           <li><capacity>Breathing</capacity><postFactor>0.60</postFactor></li>
-          <li><capacity>BloodPumping</capacity><postFactor>0.70</postFactor></li>
+          <li><capacity>BloodPumping</capacity><postFactor>0.8</postFactor></li>
           <li><capacity>Consciousness</capacity><postFactor>0.80</postFactor></li>
         </capMods>
       </li>
@@ -231,24 +266,35 @@
   </HediffDef>
 
   <!-- ============================================================
-       三、关节韧带类（近战/扭转/摔倒）
-       恢复：Disappears 60000 ticks（1 游戏天）
+       III. Joint/Ligament (melee/twisting/falling)
+       Recovery: Disappears 60000 ticks (1 game day)
        ============================================================ -->
 
-  <!-- 近战攻击/举砍：附着于 Arm/Hand/Foot（共享） -->
+  <!-- Melee attacks/lifting & chopping: attached to Arm/Hand/Foot (shared) -->
   <HediffDef>
     <defName>CombatJointStrain</defName>
-    <label>关节劳损</label>
-    <description>近战搏斗与扭转动作对关节韧带的应激损伤，从扭伤发展到关节脱位。</description>
+    <label>joint injury</label>
+    <description>Strain on joint ligaments from melee combat lifting and twisting motions, progressing from sprain to dislocation.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(1.0, 0.6, 0.2)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
+    <!-- [2026-08-02] xlsx overview: all injuries unified as "tendable = no" -->
     <tendable>false</tendable>
     <maxSeverity>1.0</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>true</combatTriggered>
+        <onShoot>false</onShoot>
+        <onMelee>true</onMelee>
+        <onMeleeHitTaken>true</onMeleeHitTaken>
+        <onAdrenalineBuildup>false</onAdrenalineBuildup>
+        <severityTier>Mild</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>关节扭伤</label>
+        <label>sprain</label>
         <minSeverity>0</minSeverity>
         <painOffset>0.03</painOffset>
         <statFactors>
@@ -259,7 +305,7 @@
         </capMods>
       </li>
       <li>
-        <label>韧带损伤</label>
+        <label>sprain</label>
         <minSeverity>0.4</minSeverity>
         <painOffset>0.12</painOffset>
         <statFactors>
@@ -270,7 +316,7 @@
         </capMods>
       </li>
       <li>
-        <label>关节脱位</label>
+        <label>joint dislocation</label>
         <minSeverity>0.75</minSeverity>
         <painOffset>0.25</painOffset>
         <statFactors>
@@ -289,41 +335,51 @@
     </comps>
   </HediffDef>
 
-  <!-- 扭伤：腿+脊柱复合，附着于 Leg。Spine 用 Consciousness/Moving 代偿 -->
+  <!-- Sprain: leg + spine compound, attached to Leg. Spine approximated via Consciousness/Moving -->
   <HediffDef>
     <defName>FallJointStrain</defName>
-    <label>扭伤</label>
-    <description>扭伤造成的腿部与脊柱复合损伤，从踝关节扭伤发展到脊柱挫伤。</description>
+    <label>sprain</label>
+    <description>Leg joint injury from imbalance and twisting in melee combat, progressing from joint sprain to leg ligament tear.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.9, 0.55, 0.25)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
+    <!-- [2026-08-02] xlsx overview: all injuries unified as "tendable = no" -->
     <tendable>false</tendable>
     <maxSeverity>1.0</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>true</combatTriggered>
+        <onShoot>false</onShoot>
+        <onMelee>true</onMelee>
+        <onMeleeHitTaken>true</onMeleeHitTaken>
+        <onAdrenalineBuildup>false</onAdrenalineBuildup>
+        <severityTier>Severe</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>踝关节扭伤</label>
+        <label>joint sprain</label>
         <minSeverity>0</minSeverity>
         <painOffset>0.05</painOffset>
         <capMods>
-          <li><capacity>Moving</capacity><postFactor>0.90</postFactor></li>
+          <li><capacity>Moving</capacity><postFactor>0.95</postFactor></li>
         </capMods>
       </li>
       <li>
-        <label>膝关节扭伤与腰背拉伤</label>
+        <label>joint sprain</label>
         <minSeverity>0.4</minSeverity>
         <painOffset>0.15</painOffset>
         <capMods>
-          <li><capacity>Moving</capacity><postFactor>0.75</postFactor></li>
-          <li><capacity>Manipulation</capacity><postFactor>0.85</postFactor></li>
+          <li><capacity>Moving</capacity><postFactor>0.85</postFactor></li>
         </capMods>
       </li>
       <li>
-        <label>脊柱挫伤与腿部韧带撕裂</label>
+        <label>leg ligament tear</label>
         <minSeverity>0.75</minSeverity>
         <painOffset>0.30</painOffset>
         <capMods>
-          <li><capacity>Moving</capacity><postFactor>0.60</postFactor></li>
+          <li><capacity>Moving</capacity><postFactor>0.85</postFactor></li>
           <li><capacity>Consciousness</capacity><postFactor>0.90</postFactor></li>
         </capMods>
       </li>
@@ -337,41 +393,56 @@
   </HediffDef>
 
   <!-- ============================================================
-       四、神经代谢类（长时间战斗/肾上腺素积压）
-       恢复：SeverityPerDay -0.12/day（≈ -0.005/h，极慢，约 8 天回落满级）
+       IV. Neural/Metabolic (prolonged combat / adrenaline buildup)
+       Recovery: SeverityPerDay -0.12/day (≈ -0.005/h, very slow, ~8 days to full recovery)
        ============================================================ -->
 
-  <!-- 持续战斗 >3 分钟：附着于 Brain。SightRadius 用能力 Sight 近似 -->
+  <!-- Sustained combat >3 min: attached to Brain. SightRadius approximated via Sight capacity -->
   <HediffDef>
     <defName>CombatEnduranceExhaust</defName>
-    <label>神经耗竭</label>
-    <description>长时间高强度战斗使神经系统从过度兴奋滑向耗竭，影响感知与情绪稳定。</description>
+    <label>neural exhaustion</label>
+    <description>Prolonged intense combat causes the nervous system to slide from overexcitement to exhaustion, affecting perception and emotional stability.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.7, 0.5, 0.9)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
     <tendable>false</tendable>
-    <maxSeverity>1.0</maxSeverity>
+    <!-- [2026-08-02] xlsx stage details mark third stage as "cannot trigger": capped at 0.74, severity never reaches 0.75 -->
+    <maxSeverity>0.74</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>false</combatTriggered>
+        <onShoot>false</onShoot>
+        <onMelee>false</onMelee>
+        <onMeleeHitTaken>false</onMeleeHitTaken>
+        <onAdrenalineBuildup>true</onAdrenalineBuildup>
+        <severityTier>Severe</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>神经兴奋</label>
+        <label>neural excitement</label>
         <minSeverity>0</minSeverity>
-        <painOffset>-0.05</painOffset>
+        <painOffset>-0.1</painOffset>
         <capMods>
           <li><capacity>Sight</capacity><postFactor>1.05</postFactor></li>
-          <li><capacity>Consciousness</capacity><postFactor>1.05</postFactor></li>
+          <li><capacity>Consciousness</capacity><postFactor>1.2</postFactor></li>
         </capMods>
       </li>
       <li>
-        <label>神经抑制</label>
+        <label>neural exhaustion</label>
         <minSeverity>0.4</minSeverity>
         <capMods>
           <li><capacity>Sight</capacity><postFactor>0.90</postFactor></li>
-          <li><capacity>Consciousness</capacity><postFactor>0.85</postFactor></li>
+          <li><capacity>Consciousness</capacity><postFactor>0.9</postFactor></li>
         </capMods>
       </li>
+      <!-- [2026-08-02 disabled] xlsx stage details mark as "cannot trigger", maxSeverity 0.74 ensures this stage is never reached.
+           To re-enable: restore the li below and set maxSeverity back to 1.0.
+           Stage name: neural exhaustion; painOffset +0.10; statFactors MentalBreakThreshold ×1.3;
+           capMods: Sight ×0.70, Consciousness ×0.8
       <li>
-        <label>神经耗竭</label>
+        <label>neural exhaustion</label>
         <minSeverity>0.75</minSeverity>
         <painOffset>0.10</painOffset>
         <statFactors>
@@ -379,9 +450,10 @@
         </statFactors>
         <capMods>
           <li><capacity>Sight</capacity><postFactor>0.70</postFactor></li>
-          <li><capacity>Consciousness</capacity><postFactor>0.70</postFactor></li>
+          <li><capacity>Consciousness</capacity><postFactor>0.8</postFactor></li>
         </capMods>
       </li>
+      -->
     </stages>
     <comps>
       <li Class="HediffCompProperties_SeverityPerDay">
@@ -390,45 +462,55 @@
     </comps>
   </HediffDef>
 
-  <!-- 肾上腺素 High 持续积压：附着于 Stomach/Liver。
-       HungerRate 用 HediffStage 字段 hungerRateFactor；Metabolism 为能力 -->
+  <!-- Adrenaline High sustained buildup: attached to Stomach/Liver.
+       HungerRate via HediffStage field hungerRateFactor; Metabolism is a capacity -->
   <HediffDef>
     <defName>MetabolicExhaust</defName>
-    <label>代谢透支</label>
-    <description>肾上腺素长期高位使代谢系统过载，从代谢紊乱发展到器官过载，显著加剧饥饿。</description>
+    <label>metabolic overexertion</label>
+    <description>Sustained high adrenaline overloads the metabolic system, progressing from metabolic disorder to organ overload, significantly increasing hunger.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.8, 0.7, 0.3)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
     <tendable>false</tendable>
     <maxSeverity>1.0</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>false</combatTriggered>
+        <onShoot>false</onShoot>
+        <onMelee>false</onMelee>
+        <onMeleeHitTaken>false</onMeleeHitTaken>
+        <onAdrenalineBuildup>true</onAdrenalineBuildup>
+        <severityTier>Severe</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>代谢紊乱</label>
+        <label>metabolic disorder</label>
         <minSeverity>0</minSeverity>
         <hungerRateFactor>1.2</hungerRateFactor>
         <capMods>
-          <li><capacity>Metabolism</capacity><postFactor>1.15</postFactor></li>
-          <li><capacity>BloodFiltration</capacity><postFactor>1.05</postFactor></li>
+          <li><capacity>Metabolism</capacity><postFactor>0.9</postFactor></li>
+          <li><capacity>BloodFiltration</capacity><postFactor>0.95</postFactor></li>
         </capMods>
       </li>
       <li>
-        <label>消化抑制</label>
+        <label>digestive suppression</label>
         <minSeverity>0.4</minSeverity>
         <hungerRateFactor>1.35</hungerRateFactor>
         <capMods>
-          <li><capacity>Metabolism</capacity><postFactor>0.80</postFactor></li>
-          <li><capacity>BloodFiltration</capacity><postFactor>0.90</postFactor></li>
+          <li><capacity>Metabolism</capacity><postFactor>0.85</postFactor></li>
+          <li><capacity>BloodFiltration</capacity><postFactor>0.95</postFactor></li>
         </capMods>
       </li>
       <li>
-        <label>器官过载</label>
+        <label>organ overload</label>
         <minSeverity>0.75</minSeverity>
         <hungerRateFactor>1.5</hungerRateFactor>
         <capMods>
-          <li><capacity>Metabolism</capacity><postFactor>0.60</postFactor></li>
-          <li><capacity>BloodFiltration</capacity><postFactor>0.70</postFactor></li>
-          <li><capacity>BloodPumping</capacity><postFactor>0.80</postFactor></li>
+          <li><capacity>Metabolism</capacity><postFactor>0.80</postFactor></li>
+          <li><capacity>BloodFiltration</capacity><postFactor>0.85</postFactor></li>
+          <li><capacity>BloodPumping</capacity><postFactor>0.85</postFactor></li>
         </capMods>
       </li>
     </stages>
@@ -440,44 +522,53 @@
   </HediffDef>
 
   <!-- ============================================================
-       五、感官过载类（战斗强度过高）
-       恢复：SeverityPerDay -0.29/day（≈ -0.012/h，约 3.5 天回落满级）
+       V. Sensory Overload (high combat intensity)
+       Recovery: SeverityPerDay -0.29/day (≈ -0.012/h, ~3.5 days to full recovery)
        ============================================================ -->
 
-  <!-- 【2026-07-29 拆分】原 SensoryOverload 混合了视觉(Sight/Eye)与听觉(Hearing/Ear)，
-       但一个 Hediff 只能附着到单一部件，会出现"挂在眼睛上却降听力"的解剖错位。
-       故拆为两个独立 Hediff，各自附着到对应器官、只修正对应能力。 -->
+  <!-- [2026-07-29 split] Original SensoryOverload mixed vision (Sight/Eye) and hearing (Hearing/Ear),
+       but a Hediff can only attach to one body part, causing anatomical mismatch like "attached to eye but reducing hearing".
+       Split into two independent Hediffs, each attached to the corresponding organ and only modifying the corresponding capacity. -->
 
-  <!-- 5a. 视觉过载：爆炸闪光/强光刺激 → 附着于 Eye（两眼共享，各自独立） -->
+  <!-- 5a. Visual overload: explosion flash/bright light → attached to Eye (both eyes shared, each independent) -->
   <HediffDef>
     <defName>VisualStrain</defName>
-    <label>视觉过载</label>
-    <description>爆炸闪光与强光对视觉的过度刺激，从视觉疲劳发展到眼肌痉挛、视网膜损伤。</description>
+    <label>visual overload</label>
+    <description>Overstimulation of vision from explosion flashes and bright light, progressing from photophobia to light burn to retinal damage.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.9, 0.85, 0.4)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
     <tendable>false</tendable>
     <maxSeverity>1.0</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>true</combatTriggered>
+        <onShoot>true</onShoot>
+        <onMelee>false</onMelee>
+        <onMeleeHitTaken>false</onMeleeHitTaken>
+        <onAdrenalineBuildup>false</onAdrenalineBuildup>
+        <severityTier>Moderate</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>视觉疲劳</label>
+        <label>photophobia</label>
         <minSeverity>0</minSeverity>
-        <painOffset>0.02</painOffset>
         <capMods>
-          <li><capacity>Sight</capacity><postFactor>0.90</postFactor></li>
+          <li><capacity>Sight</capacity><postFactor>0.95</postFactor></li>
         </capMods>
       </li>
       <li>
-        <label>眼肌痉挛</label>
+        <label>light burn</label>
         <minSeverity>0.4</minSeverity>
         <painOffset>0.08</painOffset>
         <capMods>
-          <li><capacity>Sight</capacity><postFactor>0.75</postFactor></li>
+          <li><capacity>Sight</capacity><postFactor>0.9</postFactor></li>
         </capMods>
       </li>
       <li>
-        <label>视网膜损伤</label>
+        <label>retinal damage</label>
         <minSeverity>0.75</minSeverity>
         <painOffset>0.15</painOffset>
         <capMods>
@@ -492,21 +583,32 @@
     </comps>
   </HediffDef>
 
-  <!-- 5b. 听觉过载：持续枪声/爆炸声 → 附着于 Ear（两耳共享，各自独立）。
-       内耳前庭受损会联动影响平衡/意识，故 Consciousness 归到听觉侧 -->
+  <!-- 5b. Auditory overload: sustained gunfire/explosions → attached to Ear (both ears shared, each independent).
+       Inner ear vestibular damage also affects balance/consciousness, so Consciousness goes on the auditory side -->
   <HediffDef>
     <defName>AuditoryStrain</defName>
-    <label>听觉过载</label>
-    <description>持续枪声与爆炸声对听觉的过度刺激，从耳鸣发展到听觉过敏、听力损伤。</description>
+    <label>auditory overload</label>
+    <description>Overstimulation of hearing from sustained gunfire and explosions, progressing from tinnitus to hearing damage; inner ear vestibular damage also affects consciousness.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.85, 0.8, 0.5)</defaultLabelColor>
     <isBad>true</isBad>
     <makesAlert>false</makesAlert>
     <tendable>false</tendable>
-    <maxSeverity>1.0</maxSeverity>
+    <!-- [2026-08-02] xlsx stage details mark third stage as "cannot trigger": capped at 0.74, severity never reaches 0.75 -->
+    <maxSeverity>0.74</maxSeverity>
+    <modExtensions>
+      <li Class="Hormones.StrainHediffExt">
+        <combatTriggered>true</combatTriggered>
+        <onShoot>true</onShoot>
+        <onMelee>false</onMelee>
+        <onMeleeHitTaken>false</onMeleeHitTaken>
+        <onAdrenalineBuildup>false</onAdrenalineBuildup>
+        <severityTier>Moderate</severityTier>
+      </li>
+    </modExtensions>
     <stages>
       <li>
-        <label>耳鸣</label>
+        <label>tinnitus</label>
         <minSeverity>0</minSeverity>
         <painOffset>0.02</painOffset>
         <capMods>
@@ -514,7 +616,7 @@
         </capMods>
       </li>
       <li>
-        <label>听觉过敏</label>
+        <label>hearing damage</label>
         <minSeverity>0.4</minSeverity>
         <painOffset>0.08</painOffset>
         <capMods>
@@ -522,8 +624,11 @@
           <li><capacity>Consciousness</capacity><postFactor>0.95</postFactor></li>
         </capMods>
       </li>
+      <!-- [2026-08-02 disabled] xlsx stage details mark as "cannot trigger", maxSeverity 0.74 ensures this stage is never reached.
+           To re-enable: restore the li below and set maxSeverity back to 1.0.
+           Stage name: hearing damage; painOffset +0.15; capMods: Hearing ×0.40, Consciousness ×0.80
       <li>
-        <label>听力损伤</label>
+        <label>hearing damage</label>
         <minSeverity>0.75</minSeverity>
         <painOffset>0.15</painOffset>
         <capMods>
@@ -531,12 +636,41 @@
           <li><capacity>Consciousness</capacity><postFactor>0.80</postFactor></li>
         </capMods>
       </li>
+      -->
     </stages>
     <comps>
       <li Class="HediffCompProperties_SeverityPerDay">
         <severityPerDay>-0.29</severityPerDay>
       </li>
     </comps>
+  </HediffDef>
+
+  <!-- ============================================================
+       Exhaustion (soft work block state marker, not an injury)
+       Mechanism: Auto-applied by HormonesComponent when strain reserve (Need_MuscleStrain)
+       drops below the set threshold; auto-removed when recovered to threshold+10% (hysteresis).
+       Behavior (reworked 2026-08-01): acts only as a "state marker". Soft blocking is implemented
+       by StrainWorkBlockPatches postfixing Pawn_WorkSettings.WorkGiversInOrder* getters —
+       AI skips mining/hauling/construction/planting/hunting WorkGivers when scanning jobs,
+       but does NOT mark as "unable" (work tab not grayed out);
+       right-click manual priority assignment still works (analogous to research bench "forbid":
+       doesn't lock ability, recovers anytime).
+       ============================================================ -->
+  <HediffDef>
+    <defName>PhysiqueStrainExhausted</defName>
+    <label>exhausted</label>
+    <description>Physical reserve is depleted. Will not take on heavy physical work automatically (manual assignment still works). Rest or leisure recovers physical reserve.</description>
+    <defaultLabelColor>(0.55, 0.75, 1.0)</defaultLabelColor>
+    <isBad>true</isBad>
+    <makesAlert>false</makesAlert>
+    <tendable>false</tendable>
+    <maxSeverity>1.0</maxSeverity>
+    <stages>
+      <li>
+        <label>exhausted</label>
+        <minSeverity>0</minSeverity>
+      </li>
+    </stages>
   </HediffDef>
 
 </Defs>

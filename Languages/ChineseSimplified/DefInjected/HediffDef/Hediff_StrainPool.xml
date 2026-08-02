@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <!-- 肌肉劳损分类 -->
+  <LaborMuscleStrain.label>肌肉劳损</LaborMuscleStrain.label>
+  <LaborMuscleStrain.description>长期重体力劳动导致的肌肉过度使用，从疲劳发展为劳损再到撕裂。</LaborMuscleStrain.description>
+  <LaborMuscleStrain.stages.0.label>肌肉疲劳</LaborMuscleStrain.stages.0.label>
+  <LaborMuscleStrain.stages.1.label>肌肉劳损</LaborMuscleStrain.stages.1.label>
+  <LaborMuscleStrain.stages.2.label>肌肉撕裂</LaborMuscleStrain.stages.2.label>
+
+  <DiggingMuscleStrain.label>腰背劳损</DiggingMuscleStrain.label>
+  <DiggingMuscleStrain.description>挖掘动作对肩关节和脊柱的综合劳损，从酸痛发展为劳损再到脱位。</DiggingMuscleStrain.description>
+  <DiggingMuscleStrain.stages.0.label>酸痛</DiggingMuscleStrain.stages.0.label>
+  <DiggingMuscleStrain.stages.1.label>劳损</DiggingMuscleStrain.stages.1.label>
+  <DiggingMuscleStrain.stages.2.label>关节脱位</DiggingMuscleStrain.stages.2.label>
+
+  <!-- 心肺类别 -->
+  <CardioOverexert.label>心肺过度劳累</CardioOverexert.label>
+  <CardioOverexert.description>逃跑或冲刺等爆发性活动过度刺激心肺系统，初期增强泵血和呼吸；持续过度劳累导致心律失常和心肌缺血。</CardioOverexert.description>
+  <CardioOverexert.stages.0.label>过度兴奋</CardioOverexert.stages.0.label>
+  <CardioOverexert.stages.1.label>心律失常</CardioOverexert.stages.1.label>
+  <CardioOverexert.stages.2.label>心肌缺血</CardioOverexert.stages.2.label>
+
+  <SuffocationStrain.label>过度换气</SuffocationStrain.label>
+  <SuffocationStrain.description>窒息或溺水恢复后的呼吸节奏紊乱，从过度换气发展为碱中毒再到呼吸衰竭。</SuffocationStrain.description>
+  <SuffocationStrain.stages.0.label>过度换气</SuffocationStrain.stages.0.label>
+  <SuffocationStrain.stages.1.label>碱中毒</SuffocationStrain.stages.1.label>
+  <SuffocationStrain.stages.2.label>呼吸衰竭</SuffocationStrain.stages.2.label>
+
+  <!-- 关节/韧带类别 -->
+  <CombatJointStrain.label>关节损伤</CombatJointStrain.label>
+  <CombatJointStrain.description>近战战斗中举重和扭转动作对关节韧带的劳损，从扭伤发展为脱位。</CombatJointStrain.description>
+  <CombatJointStrain.stages.0.label>扭伤</CombatJointStrain.stages.0.label>
+  <CombatJointStrain.stages.1.label>扭伤</CombatJointStrain.stages.1.label>
+  <CombatJointStrain.stages.2.label>关节脱位</CombatJointStrain.stages.2.label>
+
+  <FallJointStrain.label>扭伤</FallJointStrain.label>
+  <FallJointStrain.description>近战中失去平衡和扭转导致的腿部关节损伤，从关节扭伤发展到腿部韧带撕裂。</FallJointStrain.description>
+  <FallJointStrain.stages.0.label>关节扭伤</FallJointStrain.stages.0.label>
+  <FallJointStrain.stages.1.label>关节扭伤</FallJointStrain.stages.1.label>
+  <FallJointStrain.stages.2.label>腿部韧带撕裂</FallJointStrain.stages.2.label>
+
+  <!-- 神经/代谢类别 -->
+  <CombatEnduranceExhaust.label>神经疲惫</CombatEnduranceExhaust.label>
+  <CombatEnduranceExhaust.description>长时间激烈战斗导致神经系统从过度兴奋滑向疲惫，影响感知和情绪稳定。</CombatEnduranceExhaust.description>
+  <CombatEnduranceExhaust.stages.0.label>神经兴奋</CombatEnduranceExhaust.stages.0.label>
+  <CombatEnduranceExhaust.stages.1.label>神经疲惫</CombatEnduranceExhaust.stages.1.label>
+
+  <MetabolicExhaust.label>代谢过度劳累</MetabolicExhaust.label>
+  <MetabolicExhaust.description>持续的肾上腺素过载使代谢系统负荷过重，从代谢紊乱发展到器官过载，饥饿感显著增加。</MetabolicExhaust.description>
+  <MetabolicExhaust.stages.0.label>代谢紊乱</MetabolicExhaust.stages.0.label>
+  <MetabolicExhaust.stages.1.label>消化抑制</MetabolicExhaust.stages.1.label>
+  <MetabolicExhaust.stages.2.label>器官过载</MetabolicExhaust.stages.2.label>
+
+  <!-- 感官过载类别 -->
+  <VisualStrain.label>视觉过载</VisualStrain.label>
+  <VisualStrain.description>爆炸闪光和强光对视觉的过度刺激，从畏光发展为光烧灼再到视网膜损伤。</VisualStrain.description>
+  <VisualStrain.stages.0.label>畏光</VisualStrain.stages.0.label>
+  <VisualStrain.stages.1.label>光烧灼</VisualStrain.stages.1.label>
+  <VisualStrain.stages.2.label>视网膜损伤</VisualStrain.stages.2.label>
+
+  <AuditoryStrain.label>听觉过载</AuditoryStrain.label>
+  <AuditoryStrain.description>持续枪声和爆炸对听力的过度刺激，从耳鸣发展到听力损伤；内耳前庭损伤也影响意识。</AuditoryStrain.description>
+  <AuditoryStrain.stages.0.label>耳鸣</AuditoryStrain.stages.0.label>
+  <AuditoryStrain.stages.1.label>听力损伤</AuditoryStrain.stages.1.label>
+
+  <!-- 疲惫状态 -->
+  <PhysiqueStrainExhausted.label>精疲力竭</PhysiqueStrainExhausted.label>
+  <PhysiqueStrainExhausted.description>体力储备已耗尽。不会自动承担重体力工作（手动分配仍然有效）。休息或娱乐可恢复体力储备。</PhysiqueStrainExhausted.description>
+  <PhysiqueStrainExhausted.stages.0.label>精疲力竭</PhysiqueStrainExhausted.stages.0.label>
+</LanguageData>

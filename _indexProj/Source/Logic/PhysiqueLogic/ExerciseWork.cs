@@ -113,7 +113,17 @@ namespace Hormones.Jobs
                 if (physique != null)
                 {
                     SkillRecord rec = pawn.skills?.GetSkill(physique);
-                    rec?.Learn(XpPerTick, false);
+                    // 检查是否有果蔬汁Buff (经验+30%)
+                    float xpMultiplier = 1.0f;
+                    if (pawn.health != null)
+                    {
+                        Hediff fruitJuiceBuff = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkFruitJuice"));
+                        if (fruitJuiceBuff != null)
+                        {
+                            xpMultiplier = 1.3f;
+                        }
+                    }
+                    rec?.Learn(XpPerTick * xpMultiplier, false);
                 }
 
                 // 体魄日常衰减：标记“今日已有体力活动（锻炼）”，本周期免于衰减

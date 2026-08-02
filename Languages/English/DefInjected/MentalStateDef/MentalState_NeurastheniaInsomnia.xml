@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <NeurastheniaInsomnia.label>insomnia episode</NeurastheniaInsomnia.label>
+  <NeurastheniaInsomnia.recoveryMessage>{0}'s insomnia episode has ended.</NeurastheniaInsomnia.recoveryMessage>
+  <NeurastheniaInsomnia.beginLetterLabel>insomnia episode</NeurastheniaInsomnia.beginLetterLabel>
+  <NeurastheniaInsomnia.beginLetter>{0} has fallen into an insomnia episode due to prolonged neurasthenia, wandering uncontrollably for about 2 hours.</NeurastheniaInsomnia.beginLetter>
+  <NeurastheniaInsomnia.baseInspectLine>Mental state: insomnia episode</NeurastheniaInsomnia.baseInspectLine>
+</LanguageData>

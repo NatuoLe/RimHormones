@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ============================================================
+       Combat overexertion injury · Tier draw ratio configuration
+       Corresponds to "docs/Hediff/injury_hediff_and_trigger_logic.xlsx" → Trigger Logic table
+       "Physique tier → Mild/Moderate/Severe injury draw ratio".
+
+       Determination (roll once per trigger, roll = Rand.Value):
+         roll < severeChance    → Severe tier
+         roll < moderateChance  → Moderate tier
+         otherwise              → Mild tier
+       Rules match first hit in ascending maxPhysiqueLevel (exclusive).
+
+       Which tier each injury belongs to is determined by that Hediff's own StrainHediffExt.severityTier
+       (see Defs/HediffDefs/Hediff_StrainPool.xml).
+       If a tier is empty in the current trigger source's pool, it falls back to a lighter tier.
+       ============================================================ -->
+  <Hormones.StrainTierRulesDef>
+    <defName>Hormones_StrainTierRules</defName>
+    <rules>
+      <!-- Physique 0~4 (frail): Severe 30% / Moderate 30% (0.30~0.60) / Mild 40% -->
+      <li>
+        <maxPhysiqueLevel>5</maxPhysiqueLevel>
+        <severeChance>0.30</severeChance>
+        <moderateChance>0.60</moderateChance>
+      </li>
+      <!-- Physique 5~7 (average): Severe 15% / Moderate 35% (0.15~0.50) / Mild 50% -->
+      <li>
+        <maxPhysiqueLevel>8</maxPhysiqueLevel>
+        <severeChance>0.15</severeChance>
+        <moderateChance>0.50</moderateChance>
+      </li>
+      <!-- Physique 8+ (fit/strong/peak): Severe 5% / Moderate 25% (0.05~0.30) / Mild 70% -->
+      <li>
+        <maxPhysiqueLevel>999</maxPhysiqueLevel>
+        <severeChance>0.05</severeChance>
+        <moderateChance>0.30</moderateChance>
+      </li>
+    </rules>
+  </Hormones.StrainTierRulesDef>
+
+</Defs>

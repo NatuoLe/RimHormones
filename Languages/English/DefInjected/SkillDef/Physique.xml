@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <Physique.label>physique</Physique.label>
+  <Physique.skillLabel>Physique</Physique.skillLabel>
+  <Physique.description>Represents a pawn's physical fitness, cardiorespiratory endurance, stress resilience, and hormone metabolism efficiency. Higher physique improves hormone recovery rate and reduces hormone loss from damage.</Physique.description>
+</LanguageData>

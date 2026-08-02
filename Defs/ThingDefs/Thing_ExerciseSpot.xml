@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <!-- 简易锻炼点：可建造的杂项建筑物，殖民者在此进行「锻炼」工作，提升体魄 -->
+  <!-- Simple exercise spot: buildable misc building where colonists perform "exercise" work to improve Physique -->
   <ThingDef ParentName="BuildingBase">
     <defName>Hormones_ExerciseSpot</defName>
-    <label>简易锻炼点</label>
-    <description>用木料与石块搭起的简易健身架。殖民者可以在这里进行体能锻炼，长期坚持能提升体魄等级，增强肉体耐受与损伤恢复能力。锻炼会让人略感疲惫。</description>
-    <!-- 借用原版「手工加工点」贴图占位，后续可替换为专属贴图 -->
+    <label>exercise spot</label>
+    <description>A simple fitness frame built from wood and stone. Colonists can exercise here to improve their physique over time, enhancing physical endurance and injury recovery. Exercise causes mild fatigue.</description>
+    <!-- Using vanilla "crafting spot" texture as placeholder, replaceable with dedicated texture later -->
     <graphicData>
       <texPath>Things/Building/Production/CraftingSpot</texPath>
       <graphicClass>Graphic_Single</graphicClass>

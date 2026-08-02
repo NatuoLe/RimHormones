@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <!-- 皮质醇状态显示用 Hediff（用于在健康面板显示浓度） -->
+  <!-- Cortisol status display Hediff (shown in health panel) -->
   <HediffDef>
     <defName>CortisolStatus</defName>
-    <label>皮质醇状态</label>
-    <description>当前慢性压力水平。显示在健康面板中。</description>
+    <label>cortisol status</label>
+    <description>Current chronic stress level. Displayed in the health panel.</description>
     <hediffClass>Hormones.HediffComp_CortisolStatus</hediffClass>
     <isBad>false</isBad>
     <makesAlert>false</makesAlert>
@@ -17,8 +17,8 @@
 
   <HediffDef>
     <defName>CortisolNeurasthenia</defName>
-    <label>神经衰弱</label>
-    <description>长期高皮质醇导致的神经耗竭。睡眠效率下降、情绪低落，且可叠加。</description>
+    <label>neurasthenia</label>
+    <description>Neural exhaustion caused by prolonged high cortisol. Reduced sleep efficiency, low mood, and stackable.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>true</isBad>
     <makesAlert>true</makesAlert>
@@ -27,13 +27,13 @@
       <li>
         <minSeverity>0</minSeverity>
         <statFactors>
-          <!-- 休息效率 -13%：乘 RestRateMultiplier（睡眠时休息值回复速度），UI「休息效率乘数」会显示 ×87% -->
+          <!-- Rest efficiency -13%: multiplies RestRateMultiplier (rest recovery speed during sleep), UI shows ×87% -->
           <RestRateMultiplier>0.87</RestRateMultiplier>
         </statFactors>
       </li>
     </stages>
     <comps>
-      <!-- 心情惩罚改由 ThoughtWorker_NeurastheniaMood 按体魄分档评估（见 Thought_Neurasthenia.xml），不再用 ThoughtSetter -->
+      <!-- Mood penalty now evaluated by ThoughtWorker_NeurastheniaMood based on physique tiers (see Thought_Neurasthenia.xml), no longer uses ThoughtSetter -->
       <li Class="HediffCompProperties_Disappears">
         <disappearsAfterTicks>180000</disappearsAfterTicks>
       </li>
@@ -42,8 +42,8 @@
 
   <HediffDef>
     <defName>CortisolOverloadExhaustion</defName>
-    <label>过载衰竭</label>
-    <description>持续皮质醇过载导致的严重衰竭。所有身体功能都显著受损。</description>
+    <label>overload exhaustion</label>
+    <description>Severe exhaustion from sustained cortisol overload. All bodily functions are significantly impaired.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>true</isBad>
     <makesAlert>true</makesAlert>

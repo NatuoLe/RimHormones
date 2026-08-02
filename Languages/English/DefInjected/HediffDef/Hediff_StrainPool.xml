@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <!-- Muscle strain category -->
+  <LaborMuscleStrain.label>muscle strain</LaborMuscleStrain.label>
+  <LaborMuscleStrain.description>Muscle overexertion from prolonged heavy labor, progressing from fatigue to strain to tear.</LaborMuscleStrain.description>
+  <LaborMuscleStrain.stages.0.label>muscle fatigue</LaborMuscleStrain.stages.0.label>
+  <LaborMuscleStrain.stages.1.label>muscle strain</LaborMuscleStrain.stages.1.label>
+  <LaborMuscleStrain.stages.2.label>muscle tear</LaborMuscleStrain.stages.2.label>
+
+  <DiggingMuscleStrain.label>shoulder-back strain</DiggingMuscleStrain.label>
+  <DiggingMuscleStrain.description>Combined strain on shoulder joint and spine from digging motions, progressing from soreness to strain to dislocation.</DiggingMuscleStrain.description>
+  <DiggingMuscleStrain.stages.0.label>soreness</DiggingMuscleStrain.stages.0.label>
+  <DiggingMuscleStrain.stages.1.label>strain</DiggingMuscleStrain.stages.1.label>
+  <DiggingMuscleStrain.stages.2.label>joint dislocation</DiggingMuscleStrain.stages.2.label>
+
+  <!-- Cardiopulmonary category -->
+  <CardioOverexert.label>cardiopulmonary overexertion</CardioOverexert.label>
+  <CardioOverexert.description>Burst activities like fleeing or sprinting overexcite the cardiopulmonary system, initially enhancing pumping and breathing; sustained overexertion leads to arrhythmia and myocardial ischemia.</CardioOverexert.description>
+  <CardioOverexert.stages.0.label>overexcited</CardioOverexert.stages.0.label>
+  <CardioOverexert.stages.1.label>arrhythmia</CardioOverexert.stages.1.label>
+  <CardioOverexert.stages.2.label>myocardial ischemia</CardioOverexert.stages.2.label>
+
+  <SuffocationStrain.label>hyperventilation</SuffocationStrain.label>
+  <SuffocationStrain.description>Disordered breathing rhythm after suffocation or drowning recovery, progressing from hyperventilation to alkalosis to respiratory failure.</SuffocationStrain.description>
+  <SuffocationStrain.stages.0.label>hyperventilation</SuffocationStrain.stages.0.label>
+  <SuffocationStrain.stages.1.label>alkalosis</SuffocationStrain.stages.1.label>
+  <SuffocationStrain.stages.2.label>respiratory failure</SuffocationStrain.stages.2.label>
+
+  <!-- Joint/ligament category -->
+  <CombatJointStrain.label>joint injury</CombatJointStrain.label>
+  <CombatJointStrain.description>Strain on joint ligaments from melee combat lifting and twisting motions, progressing from sprain to dislocation.</CombatJointStrain.description>
+  <CombatJointStrain.stages.0.label>sprain</CombatJointStrain.stages.0.label>
+  <CombatJointStrain.stages.1.label>sprain</CombatJointStrain.stages.1.label>
+  <CombatJointStrain.stages.2.label>joint dislocation</CombatJointStrain.stages.2.label>
+
+  <FallJointStrain.label>sprain</FallJointStrain.label>
+  <FallJointStrain.description>Leg joint injury from imbalance and twisting in melee combat, progressing from joint sprain to leg ligament tear.</FallJointStrain.description>
+  <FallJointStrain.stages.0.label>joint sprain</FallJointStrain.stages.0.label>
+  <FallJointStrain.stages.1.label>joint sprain</FallJointStrain.stages.1.label>
+  <FallJointStrain.stages.2.label>leg ligament tear</FallJointStrain.stages.2.label>
+
+  <!-- Neural/metabolic category -->
+  <CombatEnduranceExhaust.label>neural exhaustion</CombatEnduranceExhaust.label>
+  <CombatEnduranceExhaust.description>Prolonged intense combat causes the nervous system to slide from overexcitement to exhaustion, affecting perception and emotional stability.</CombatEnduranceExhaust.description>
+  <CombatEnduranceExhaust.stages.0.label>neural excitement</CombatEnduranceExhaust.stages.0.label>
+  <CombatEnduranceExhaust.stages.1.label>neural exhaustion</CombatEnduranceExhaust.stages.1.label>
+
+  <MetabolicExhaust.label>metabolic overexertion</MetabolicExhaust.label>
+  <MetabolicExhaust.description>Sustained high adrenaline overloads the metabolic system, progressing from metabolic disorder to organ overload, significantly increasing hunger.</MetabolicExhaust.description>
+  <MetabolicExhaust.stages.0.label>metabolic disorder</MetabolicExhaust.stages.0.label>
+  <MetabolicExhaust.stages.1.label>digestive suppression</MetabolicExhaust.stages.1.label>
+  <MetabolicExhaust.stages.2.label>organ overload</MetabolicExhaust.stages.2.label>
+
+  <!-- Sensory overload category -->
+  <VisualStrain.label>visual overload</VisualStrain.label>
+  <VisualStrain.description>Overstimulation of vision from explosion flashes and bright light, progressing from photophobia to light burn to retinal damage.</VisualStrain.description>
+  <VisualStrain.stages.0.label>photophobia</VisualStrain.stages.0.label>
+  <VisualStrain.stages.1.label>light burn</VisualStrain.stages.1.label>
+  <VisualStrain.stages.2.label>retinal damage</VisualStrain.stages.2.label>
+
+  <AuditoryStrain.label>auditory overload</AuditoryStrain.label>
+  <AuditoryStrain.description>Overstimulation of hearing from sustained gunfire and explosions, progressing from tinnitus to hearing damage; inner ear vestibular damage also affects consciousness.</AuditoryStrain.description>
+  <AuditoryStrain.stages.0.label>tinnitus</AuditoryStrain.stages.0.label>
+  <AuditoryStrain.stages.1.label>hearing damage</AuditoryStrain.stages.1.label>
+
+  <!-- Exhaustion state -->
+  <PhysiqueStrainExhausted.label>exhausted</PhysiqueStrainExhausted.label>
+  <PhysiqueStrainExhausted.description>Physical reserve is depleted. Will not take on heavy physical work automatically (manual assignment still works). Rest or leisure recovers physical reserve.</PhysiqueStrainExhausted.description>
+  <PhysiqueStrainExhausted.stages.0.label>exhausted</PhysiqueStrainExhausted.stages.0.label>
+</LanguageData>

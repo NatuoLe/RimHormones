@@ -267,5 +267,27 @@ namespace Hormones
         public const float PhysiqueDecayPeak = 14f;    // 卓越 17-20
         // 玩家可调总倍率默认值（1.0=默认，0=完全关闭衰减）。
         public const float DefaultPhysiqueDecayGlobalMult = 1f;
+
+        // ============================================================
+        // 【肾上腺素长期堆积损伤 2026-08-02】
+        //   语义：不同于「战斗透支」（每次攻击判定一次），这是持续高肾上腺素
+        //   状态本身造成的慢性损伤——每 BuildupCheckIntervalTicks 检测一次。
+        //   概率公式：chance = (Base − PerPhysique × 体魄等级) × 总倍率
+        //     体魄 0  → 1.00%/次
+        //     体魄 12 → 0.30%/次
+        //     体魄 ≥13 → 0（复用 IsAdrenalineExempt 豁免）
+        //   换算：持续高肾上腺素约十几分钟~近一小时吃一次损伤（长期堆积而非瞬时爆伤）。
+        //   阶段 → 档位映射（Low 不触发 / Medium→中度 / High→重度）配置在
+        //   Defs/MiscDefs/StrainAdrenalineStageRules.xml，改映射无需编译。
+        //   参与抽取的损伤由 HediffDef 的 StrainHediffExt.onAdrenalineBuildup 决定。
+        // ============================================================
+        // 检测间隔：600 tick = 10 游戏秒。
+        public const int AdrenalineBuildupCheckIntervalTicks = 600;
+        // 体魄 0 时的单次触发概率。
+        public const float AdrenalineBuildupBaseChance = 0.010f;
+        // 每点体魄递减的概率（(0.010 − 0.003) / 12 ≈ 0.000583）。
+        public const float AdrenalineBuildupChancePerPhysique = 0.000583f;
+        // 玩家可调总倍率默认值（1.0=默认，0=完全关闭长期堆积损伤）。
+        public const float DefaultAdrenalineBuildupGlobalMult = 1f;
     }
 }

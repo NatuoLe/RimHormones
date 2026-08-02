@@ -2,4 +2,8 @@
 <LanguageData>
   <Hormones.label>Hormones</Hormones.label>
   <Hormones.description>The current hormones level of the pawn. High hormones means the pawn stays calm in battle, while low hormones causes fear and panic.</Hormones.description>
+  <MuscleStrain.label>muscle strain</MuscleStrain.label>
+  <MuscleStrain.description>Muscle fatigue and strain level. Higher strain means more prone to muscle injuries. Recovers fastest during sleep; leisure activities (e.g. playing billiards, cloud watching, drinking) also recover at about half speed.</MuscleStrain.description>
+  <Cortisol.label>cortisol</Cortisol.label>
+  <Cortisol.description>Cortisol level reflects chronic stress state. High values suppress mood, increase disputes, and raise neurasthenia risk; stronger physique provides better buffering.</Cortisol.description>
 </LanguageData>

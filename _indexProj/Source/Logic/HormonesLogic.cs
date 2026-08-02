@@ -218,7 +218,7 @@ public static class Pawn_Tick_Patch
 public static class Verb_MeleeAttack_TryCastShot_Patch
 {
     [HarmonyPostfix]
-    public static void Postfix(Verb_MeleeAttack __instance)
+    public static void Postfix(Verb_MeleeAttack __instance, bool __result)
     {
         Pawn attacker = __instance.CasterPawn;
         if (attacker != null)
@@ -228,8 +228,21 @@ public static class Verb_MeleeAttack_TryCastShot_Patch
             AdrenalineEffects effects = AdrenalineLogic.CalculateAdrenalineEffects(attacker);
             if (effects.HasActiveEffects && effects.Level >= AdrenalineLevel.High)
             {
-                AdrenalineLogic.TryApplyOverexertDamage(attacker);
+                AdrenalineLogic.TryApplyOverexertDamage(attacker, 1f, StrainTriggerSource.Melee);
             }
+        }
+
+        // 【2026-08-02 新增】被近战真实命中的一方也可能透支受损。
+        // __result == true 表示本次攻击既未 miss 也未被闪避（即"真实命中"），
+        // 此时即便伤害被护甲完全格挡（deflected）也算命中——符合设计要求。
+        if (!__result) return;
+        Pawn victim = __instance.CurrentTarget.Pawn;
+        if (victim == null || victim == attacker || victim.Dead) return;
+
+        AdrenalineEffects victimEffects = AdrenalineLogic.CalculateAdrenalineEffects(victim);
+        if (victimEffects.HasActiveEffects && victimEffects.Level >= AdrenalineLevel.High)
+        {
+            AdrenalineLogic.TryApplyOverexertDamage(victim, 1f, StrainTriggerSource.MeleeHitTaken);
         }
     }
 }
@@ -246,9 +259,12 @@ public static class Verb_LaunchProjectile_TryCastShot_Patch
             AdrenalineProducer.OnAttack(attacker, false);
 
             AdrenalineEffects effects = AdrenalineLogic.CalculateAdrenalineEffects(attacker);
-            if (effects.HasActiveEffects && effects.Level >= AdrenalineLevel.High)
+            // 【2026-08-02 用户调整】射击触发门槛 High→Low（≥0.15 即可）。
+            // 原因：射击本身不产肾上腺素（AdrenalineRangedAttackBase=0），门槛定 High
+            // 时射手实战中几乎永远叠不到 0.75，射击路径形同虚设。
+            if (effects.HasActiveEffects && effects.Level >= AdrenalineLevel.Low)
             {
-                AdrenalineLogic.TryApplyOverexertDamage(attacker, Define.AdrenalineRangedOverexertChanceMultiplier);
+                AdrenalineLogic.TryApplyOverexertDamage(attacker, Define.AdrenalineRangedOverexertChanceMultiplier, StrainTriggerSource.Shoot);
             }
         }
     }

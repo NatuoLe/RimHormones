@@ -156,6 +156,14 @@ public class HormonesComponent : ThingComp, IExposable
     private int decayTickAccumulator = 0;
     private bool activeToday = false;
 
+    // 劳损封锁（每小人独立开关）：由「指派」面板的劳损封锁列控制，随存档持久化。
+    private bool blockWorkWhenStrainLow = false;
+    public bool BlockWorkWhenStrainLow
+    {
+        get => blockWorkWhenStrainLow;
+        set => blockWorkWhenStrainLow = value;
+    }
+
     /// <summary>
     /// 由劳作结算（PhysiqueWorkSettle.SettleWork）与锻炼（JobDriver_Exercise）调用，
     /// 标记该 pawn“今日已有体力活动”，本结算周期内免于体魄日常衰减。
@@ -180,7 +188,19 @@ public class HormonesComponent : ThingComp, IExposable
 
         // 体魄日常衰减：累计满一个游戏日结算一次（用进废退）
         PhysiqueDecayTick();
-        
+
+        // 劳损工作封锁：每 250 tick 检查一次储备是否触底
+        if (Pawn != null && Pawn.IsHashIntervalTick(250))
+        {
+            StrainWorkBlockTick();
+        }
+
+        // 肾上腺素长期堆积损伤：每 600 tick（10 游戏秒）检测一次
+        if (Pawn != null && Pawn.IsHashIntervalTick(Define.AdrenalineBuildupCheckIntervalTicks))
+        {
+            AdrenalineLogic.TryApplyAdrenalineBuildupDamage(Pawn);
+        }
+
         // 原有的激素间隔逻辑
         if (Pawn != null && Pawn.IsHashIntervalTick(200))
         {
@@ -229,6 +249,63 @@ public class HormonesComponent : ThingComp, IExposable
         // 用原版 Learn 传负经验来衰减：direct=true 表示不乘学习速率/研究等增益，
         // 净扣我们算好的 decayXP；内部会正确处理 xpSinceLastLevel 下溢与掉级。
         rec.Learn(-decayXP, direct: true);
+    }
+
+    // ============================================================
+    // 【劳损工作封锁 2026-08-01】设置开启时：
+    //   劳损储备(Need_MuscleStrain) ≤ 阈值 → 挂「体力不支」hediff
+    //   （其 stage 的 disabledWorkTags 经原版机制禁用 采矿/搬运/建造/种植/狩猎）；
+    //   恢复到 阈值+10% → 摘除（滞回防边界抖动）；设置关闭时确保摘除。
+    // ============================================================
+    private static HediffDef strainExhaustedDefCache;
+    private const float StrainBlockReleaseBuffer = 0.10f;
+
+    private void StrainWorkBlockTick()
+    {
+        Pawn pawn = Pawn;
+        if (pawn == null || pawn.Dead || pawn.Suspended) return;
+        if (!PhysiqueLgc.IsHormoneSubject(pawn)) return;
+
+        if (strainExhaustedDefCache == null)
+            strainExhaustedDefCache = DefDatabase<HediffDef>.GetNamed("PhysiqueStrainExhausted", false);
+        if (strainExhaustedDefCache == null) return;
+
+        Hediff exhausted = pawn.health?.hediffSet?.GetFirstHediffOfDef(strainExhaustedDefCache);
+
+        // 每小人独立开关（指派面板列）：关闭时确保摘除后什么都不做
+        if (!blockWorkWhenStrainLow)
+        {
+            if (exhausted != null) pawn.health.RemoveHediff(exhausted);
+            return;
+        }
+
+        Need_MuscleStrain need = pawn.needs?.TryGetNeed<Need_MuscleStrain>();
+        if (need == null) return;
+        float max = need.MaxLevel;
+        if (max <= 0f) return;
+        float pct = need.CurLevel / max;
+        float threshold = RimHormonesMod.Settings != null ? RimHormonesMod.Settings.StrainBlockThresholdPct : 0.25f;
+
+        if (exhausted == null && pct <= threshold)
+        {
+            pawn.health.AddHediff(strainExhaustedDefCache);
+        }
+        else if (exhausted != null && pct >= threshold + StrainBlockReleaseBuffer)
+        {
+            pawn.health.RemoveHediff(exhausted);
+        }
+    }
+
+    /// <summary>
+    /// 立即摘除「体力不支」（关闭指派面板开关时调用，不必等下一个检查周期）。
+    /// </summary>
+    public void RemoveStrainExhaustedNow()
+    {
+        if (strainExhaustedDefCache == null)
+            strainExhaustedDefCache = DefDatabase<HediffDef>.GetNamed("PhysiqueStrainExhausted", false);
+        if (strainExhaustedDefCache == null || Pawn == null) return;
+        Hediff h = Pawn.health?.hediffSet?.GetFirstHediffOfDef(strainExhaustedDefCache);
+        if (h != null) Pawn.health.RemoveHediff(h);
     }
 
     // ============================================================
@@ -383,6 +460,7 @@ public class HormonesComponent : ThingComp, IExposable
         Scribe_Values.Look(ref workTickAccumulator, "physiqueWorkTickAccumulator", 0f);
         Scribe_Values.Look(ref decayTickAccumulator, "physiqueDecayTickAccumulator", 0);
         Scribe_Values.Look(ref activeToday, "physiqueActiveToday", false);
+        Scribe_Values.Look(ref blockWorkWhenStrainLow, "blockWorkWhenStrainLow", false);
     }
 }
 

@@ -28,7 +28,7 @@
   <AdrenalinePenalty>肾上腺素惩罚</AdrenalinePenalty>
   <AdrenalineExempt>肾上腺素豁免</AdrenalineExempt>
   <CortisolGrowth>皮质醇增长</CortisolGrowth>
-  
+
   <!-- Trait 影响 -->
   <TraitEffects>特质影响</TraitEffects>
   <InitialLevelOffset>初始等级偏移</InitialLevelOffset>
@@ -36,10 +36,65 @@
   <DecayRate>衰减速度</DecayRate>
   <MaxLevelBonus>最大等级加成</MaxLevelBonus>
   <PhysiqueEffects>体魄效果</PhysiqueEffects>
-  
+
   <Yes>是</Yes>
   <No>否</No>
-  
+
   <!-- 击飞技能 -->
   <Hormones_KnockbackCooldown>击飞冷却中：{0}</Hormones_KnockbackCooldown>
+
+  <!-- 皮质醇 Need -->
+  <Cortisol>皮质醇</Cortisol>
+  <Cortisol_Desc>皮质醇水平反映长期压力状态。高值时心情受抑、争端易起，并提升神经衰弱风险；体魄越强缓冲越佳。</Cortisol_Desc>
+
+  <!-- 肌肉劳损 -->
+  <MuscleStrain>肌肉劳损</MuscleStrain>
+  <MuscleStrain_Desc>肌肉疲劳和劳损程度。劳损越高越容易受伤。睡觉时恢复最快；进行娱乐活动（如打桌球、看云、喝酒等）也能以约一半的速度恢复。</MuscleStrain_Desc>
+
+  <!-- 神经衰弱 -->
+  <Neurasthenia>神经衰弱</Neurasthenia>
+  <Neurasthenia_desc>长期高皮质醇导致的神经耗竭。睡眠效率下降、情绪低落，且可叠加。</Neurasthenia_desc>
+
+  <!-- 体魄阶段 -->
+  <PhysiqueStageFrail>虚弱</PhysiqueStageFrail>
+  <PhysiqueStageAverage>一般</PhysiqueStageAverage>
+  <PhysiqueStageFit>健康</PhysiqueStageFit>
+  <PhysiqueStageStrong>强壮</PhysiqueStageStrong>
+  <PhysiqueStagePeak>卓越</PhysiqueStagePeak>
+
+  <!-- 锻炼 -->
+  <Exercise>锻炼</Exercise>
+  <ExerciseDescription>前往锻炼点进行体育训练。长期练习可提高体魄等级，增强体力耐力和受伤恢复能力。</ExerciseDescription>
+  <ExerciseSpot>锻炼点</ExerciseSpot>
+  <ExerciseSpotDescription>用木材和石头搭建的简单健身架。殖民者可以在这里锻炼以提高体魄，增强体力耐力和受伤恢复能力。锻炼会导致轻度疲劳。</ExerciseSpotDescription>
+
+  <!-- 劳损限制 -->
+  <StrainBlock>禁止过劳</StrainBlock>
+  <StrainBlockTip>当劳损储备过低时，此殖民者不会承担重体力工作（采矿、搬运、建造、种植、狩猎）。不会锁定工作能力；手动分配仍然有效。休息后自动解除。</StrainBlockTip>
+
+  <!-- 失眠发作 -->
+  <InsomniaEpisode>失眠发作</InsomniaEpisode>
+  <InsomniaEpisodeEnded>{0}的失眠发作已结束。</InsomniaEpisodeEnded>
+
+  <!-- 情绪 -->
+  <Exhausted>疲惫不堪</Exhausted>
+  <ExhaustedDesc>太累了，想休息。</ExhaustedDesc>
+  <CompletelyExhausted>精疲力竭</CompletelyExhausted>
+  <CompletelyExhaustedDesc>我再也抬不起腿了。</CompletelyExhaustedDesc>
+  <BodyAches>全身酸痛</BodyAches>
+  <BodyAchesDesc>劳损伤口在隐隐作痛。</BodyAchesDesc>
+
+  <!-- 特质 -->
+  <Anorexic>厌食症</Anorexic>
+  <AnorexicDesc>{PAWN_nameDef} 患有厌食症。{PAWN_pronoun} 的食欲降低，需要的食物更少，但体格较差。</AnorexicDesc>
+  <Brawny>身强力壮</Brawny>
+  <BrawnyDesc>{PAWN_nameDef} 异常强壮且肌肉发达。{PAWN_pronoun} 拥有出色的体能，在需要力量的任务中表现出色。</BrawnyDesc>
+  <Obese>肥胖</Obese>
+  <ObeseDesc>{PAWN_nameDef} 体重超标。{PAWN_pronoun} 移动较慢，魅力较低，但并不缺乏耐力。</ObeseDesc>
+  <Slender>纤细</Slender>
+  <SlenderDesc>{PAWN_nameDef} 身材苗条优雅。{PAWN_pronoun} 很有魅力，但缺乏体力。</SlenderDesc>
+  <Agile>身手矫健</Agile>
+  <AgileDesc>{PAWN_nameDef} 异常敏捷快速。{PAWN_pronoun} 能轻松闪避攻击，动作优雅。</AgileDesc>
+  <ExplosivePower>爆发力</ExplosivePower>
+  <ExplosivePowerDesc>{PAWN_nameDef} 拥有爆炸性的身体力量，能用纯粹的力量将近战敌人击飞。</ExplosivePowerDesc>
 </LanguageData>

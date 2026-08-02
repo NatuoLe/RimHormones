@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <PhysiqueBodyCondition.label>body condition</PhysiqueBodyCondition.label>
+  <PhysiqueBodyCondition.description>Physical condition reflecting the colonist's physique level and its effects on the body. Higher physique means better physical performance but increased metabolic demands.</PhysiqueBodyCondition.description>
+  
+  <!-- Physique stages (by index) -->
+  <PhysiqueBodyCondition.stages.0.label>frail</PhysiqueBodyCondition.stages.0.label>
+  <PhysiqueBodyCondition.stages.1.label>average</PhysiqueBodyCondition.stages.1.label>
+  <PhysiqueBodyCondition.stages.2.label>fit</PhysiqueBodyCondition.stages.2.label>
+  <PhysiqueBodyCondition.stages.3.label>strong</PhysiqueBodyCondition.stages.3.label>
+  <PhysiqueBodyCondition.stages.4.label>peak</PhysiqueBodyCondition.stages.4.label>
+
+  <!-- Cortisol -->
+  <CortisolStatus.label>cortisol status</CortisolStatus.label>
+  <CortisolStatus.description>Current chronic stress level. Displayed in the health panel.</CortisolStatus.description>
+  
+  <CortisolNeurasthenia.label>neurasthenia</CortisolNeurasthenia.label>
+  <CortisolNeurasthenia.description>Neural exhaustion caused by prolonged high cortisol. Reduced sleep efficiency, low mood, and stackable.</CortisolNeurasthenia.description>
+  
+  <CortisolOverloadExhaustion.label>overload exhaustion</CortisolOverloadExhaustion.label>
+  <CortisolOverloadExhaustion.description>Severe exhaustion from sustained cortisol overload. All bodily functions are significantly impaired.</CortisolOverloadExhaustion.description>
+
+  <!-- Adrenaline -->
+  <Adrenaline.label>adrenaline</Adrenaline.label>
+  <Adrenaline.description>Stress hormone that enhances physical performance under pressure. Severity indicates hormone concentration level.</Adrenaline.description>
+  
+  <Adrenaline.stages.0.label>dormant</Adrenaline.stages.0.label>
+  <Adrenaline.stages.1.label>low</Adrenaline.stages.1.label>
+  <Adrenaline.stages.2.label>medium</Adrenaline.stages.2.label>
+  <Adrenaline.stages.3.label>high</Adrenaline.stages.3.label>
+</LanguageData>

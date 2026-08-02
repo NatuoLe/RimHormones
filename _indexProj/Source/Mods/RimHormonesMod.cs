@@ -39,10 +39,18 @@ namespace Hormones
             listing.Label($"拉伤概率倍率：{Settings.StrainChanceMultiplier:F2}x  （统一缩放所有工作的拉伤概率，1.0 为默认）");
             Settings.StrainChanceMultiplier = listing.Slider(Settings.StrainChanceMultiplier, 0f, 3f);
 
+            listing.Label($"劳损封锁触发阈值：{Settings.StrainBlockThresholdPct * 100f:F0}%  （在「指派」面板逐个小人勾选「劳损封锁」后生效：储备低于此比例即不再主动接重体力工作（不锁能力、可手动指派），恢复到 {Settings.StrainBlockThresholdPct * 100f + 10f:F0}% 时解除）");
+            Settings.StrainBlockThresholdPct = listing.Slider(Settings.StrainBlockThresholdPct, 0.05f, 0.6f);
+
             listing.GapLine();
             listing.Label("体魄日常衰减设置");
             listing.Label($"体魄衰减总倍率：{Settings.PhysiqueDecayGlobalMult:F2}x  （用进废退：当天无任何体力劳作/锻炼才按体魄阶段衰减；调 0 = 关闭衰减，调高更硬核）");
             Settings.PhysiqueDecayGlobalMult = listing.Slider(Settings.PhysiqueDecayGlobalMult, 0f, 3f);
+
+            listing.GapLine();
+            listing.Label("肾上腺素长期堆积损伤设置");
+            listing.Label($"长期堆积损伤总倍率：{Settings.AdrenalineBuildupGlobalMult:F2}x  （持续高肾上腺素时每 10 秒检测一次；体魄 0 约 1%/次、体魄 12 约 0.3%/次，体魄 13+ 豁免；调 0 = 关闭）");
+            Settings.AdrenalineBuildupGlobalMult = listing.Slider(Settings.AdrenalineBuildupGlobalMult, 0f, 3f);
 
             listing.End();
             Settings.Write();
@@ -69,6 +77,13 @@ namespace Hormones
         // 体魄日常衰减总倍率（0=关闭）
         public float PhysiqueDecayGlobalMult = Define.DefaultPhysiqueDecayGlobalMult;
 
+        // 劳损封锁阈值（储备比例，解除=阈值+10% 滞回）。
+        // 注意：开/关是每个小人独立的，存在 HormonesComponent（指派面板「劳损封锁」列控制），此处只有全局阈值。
+        public float StrainBlockThresholdPct = 0.25f;
+
+        // 肾上腺素长期堆积损伤总倍率（0=关闭）
+        public float AdrenalineBuildupGlobalMult = Define.DefaultAdrenalineBuildupGlobalMult;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref ShowAdrenalineMotes, "showAdrenalineMotes", false);
@@ -79,6 +94,8 @@ namespace Hormones
             Scribe_Values.Look(ref StrainTriggerThresholdPct, "strainTriggerThresholdPct", Define.DefaultStrainTriggerThresholdPct);
             Scribe_Values.Look(ref StrainChanceMultiplier, "strainChanceMultiplier", Define.DefaultStrainChanceMultiplier);
             Scribe_Values.Look(ref PhysiqueDecayGlobalMult, "physiqueDecayGlobalMult", Define.DefaultPhysiqueDecayGlobalMult);
+            Scribe_Values.Look(ref StrainBlockThresholdPct, "strainBlockThresholdPct", 0.25f);
+            Scribe_Values.Look(ref AdrenalineBuildupGlobalMult, "adrenalineBuildupGlobalMult", Define.DefaultAdrenalineBuildupGlobalMult);
         }
     }
 }

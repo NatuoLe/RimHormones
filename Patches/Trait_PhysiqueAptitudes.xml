@@ -27,7 +27,7 @@
     </value>
   </Operation>
 
-  <!-- Bodybuilder 特质不存在，已移除 -->
+  <!-- Bodybuilder trait does not exist, removed -->
 
   <Operation Class="PatchOperationAdd">
     <xpath>*/TraitDef[defName = "Nimble"]/degreeDatas/li</xpath>

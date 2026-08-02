@@ -22,10 +22,13 @@ namespace Hormones
         public const float AdrenalineRestMultiplierMedium = 1.25f;
         public const float AdrenalineRestMultiplierHigh = 1.5f;
 
+        // 【2026-08-02 统一削弱 ÷4】战斗透支触发概率整体除 4：
+        // 原公式 (0.2 + 0.04 × (13 − 体魄)) → 现 (0.05 + 0.01 × (13 − 体魄))。
+        // 基础值 0.2→0.05 已在 0.4.4 完成，本次把按体魄斜率 0.04→0.01 补齐。
         public const float AdrenalineOverexertBaseChance = 0.05f;
-        public const float AdrenalineOverexertChancePerPhysique = 0.04f;
+        public const float AdrenalineOverexertChancePerPhysique = 0.01f;
         // 射击透支概率倍率：射击（远程）触发透支损伤的概率 = 近战概率 x 此倍率（<1 表示比近战更低）。
-        public const float AdrenalineRangedOverexertChanceMultiplier = 0.1f;
+        public const float AdrenalineRangedOverexertChanceMultiplier = 0.25f;
 
         public const float AdrenalineMeleeAttackBase = 0.03f;
         public const float AdrenalineRangedAttackBase = 0f;
@@ -37,6 +40,12 @@ namespace Hormones
         public const float AdrenalineCombatInterpolationBase = 0.03f;
 
         public const float AdrenalineCombatDetectionRange = 15f;
+
+        // 【2026-08-02 新增】流血产肾上腺素（每秒生成量，再乘体魄生成系数）：
+        // 流血速率 <150% 用低档，>150% 用高档；阈值单位 = HediffSet.BleedRateTotal（1.5 = 150%）。
+        public const float AdrenalineBloodingLowBase = 0.035f;
+        public const float AdrenalineBloodingHighBase = 0.065f;
+        public const float AdrenalineBloodingThreshold = 1.5f;
 
         public static class AdrenalineLow
         {

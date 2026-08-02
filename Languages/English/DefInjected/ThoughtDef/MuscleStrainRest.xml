@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <MuscleStrainRest.label>exhausted</MuscleStrainRest.label>
+  <MuscleStrainRest.description>So tired, want to rest.</MuscleStrainRest.description>
+  <MuscleStrainRest.stages.0.label>completely exhausted</MuscleStrainRest.stages.0.label>
+  <MuscleStrainRest.stages.0.description>I can't even lift my legs anymore.</MuscleStrainRest.stages.0.description>
+
+  <StrainInjuryMood.label>body aches</StrainInjuryMood.label>
+  <StrainInjuryMood.description>Strain injuries are aching.</StrainInjuryMood.description>
+  <StrainInjuryMood.stages.0.label>body aches</StrainInjuryMood.stages.0.label>
+  <StrainInjuryMood.stages.0.description>I think I just hurt myself.</StrainInjuryMood.stages.0.description>
+</LanguageData>

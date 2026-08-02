@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <!-- 肌肉劳损触发后的休息欲望（可堆叠） -->
+  <!-- ============================================================
+       Exhaustion mood (reworked 2026-08-01: situational)
+       Old: memory thought on strain trigger (Thought_Memory, 6h duration, stackable 12 times).
+       New: situational (Thought_Situational) — activates when strain reserve <10%,
+            non-stackable, no duration, only checks reserve level; auto-disappears above 10%.
+       ============================================================ -->
   <ThoughtDef>
     <defName>MuscleStrainRest</defName>
-    <label>疲惫</label>
-    <description>好累,想休息</description>
-    <thoughtClass>Thought_Memory</thoughtClass>
-    <durationDays>0.25</durationDays>  <!-- 6小时 -->
-    <stackLimit>12</stackLimit>
+    <label>exhausted</label>
+    <description>So tired, want to rest.</description>
+    <thoughtClass>Thought_Situational</thoughtClass>
+    <workerClass>Hormones.ThoughtWorker_MuscleStrainRest</workerClass>
     <stages>
-      <li><label>疲惫</label><description>好累,想休息</description><baseMoodEffect>-3</baseMoodEffect></li>
-      <li><label>疲惫</label><description>好累,想休息</description><baseMoodEffect>-5</baseMoodEffect></li>
-      <li><label>筋疲力尽</label><description>我已经抬不动我的腿了</description><baseMoodEffect>-7</baseMoodEffect></li>
-      <li><label>筋疲力尽</label><description>我已经抬不动我的腿了</description><baseMoodEffect>-8</baseMoodEffect></li>
+      <li><label>completely exhausted</label><description>I can't even lift my legs anymore.</description><baseMoodEffect>-2</baseMoodEffect></li>
+    </stages>
+  </ThoughtDef>
+
+  <!-- ============================================================
+       Body aches (new 2026-08-01)
+       Activates when pawn has any strain/overexertion Hediff (Hediff_StrainPool.xml injury pool);
+       auto-disappears when injuries recover. Situational, non-stackable, no duration.
+       ============================================================ -->
+  <ThoughtDef>
+    <defName>StrainInjuryMood</defName>
+    <label>body aches</label>
+    <description>Strain injuries are aching.</description>
+    <thoughtClass>Thought_Situational</thoughtClass>
+    <workerClass>Hormones.ThoughtWorker_StrainInjuryMood</workerClass>
+    <stages>
+      <li><label>body aches</label><description>I think I just hurt myself.</description><baseMoodEffect>-3</baseMoodEffect></li>
     </stages>
   </ThoughtDef>
 </Defs>

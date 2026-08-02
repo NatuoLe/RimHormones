@@ -66,6 +66,23 @@ namespace Hormones
 
         public void AddStrain(float amount)
         {
+            // 检查是否有饮品Buff (劳损积累降低)
+            if (pawn.health != null)
+            {
+                Hediff electrolyteBuff = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkElectrolyte"));
+                Hediff energyBuff = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkEnergyDrink"));
+                Hediff fruitJuiceBuff = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkFruitJuice"));
+
+                if (fruitJuiceBuff != null)
+                {
+                    amount *= 0.7f; // 果蔬汁降低30%
+                }
+                else if (electrolyteBuff != null || energyBuff != null)
+                {
+                    amount *= 0.75f; // 电解质水/能量饮品降低25%
+                }
+            }
+
             CurLevel -= amount;
             if (CurLevel < 0f) CurLevel = 0f;
         }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Assign panel custom column: strain block (per-pawn toggle).
+       Column registration (inserted into Assign table) see Patches/AssignTable_StrainBlock.xml. -->
+  <PawnColumnDef>
+    <defName>Hormones_StrainBlock</defName>
+    <workerClass>Hormones.UI.PawnColumnWorker_StrainBlock</workerClass>
+    <label>no overwork</label>
+    <headerTip>When strain reserve is too low, this pawn will not take on heavy physical work (mining, hauling, construction, planting, hunting). Does not lock work ability; manual assignment still works. Automatically lifts after rest recovery. Threshold adjustable in mod settings.</headerTip>
+    <sortable>true</sortable>
+  </PawnColumnDef>
+
+</Defs>

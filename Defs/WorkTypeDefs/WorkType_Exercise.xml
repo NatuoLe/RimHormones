@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <!-- 锻炼 工作类型：殖民者前往锻炼点进行体能锻炼，提升「体魄」技能 -->
+  <!-- Exercise work type: colonists go to exercise spots for physical training, improving "Physique" skill -->
   <WorkTypeDef>
     <defName>Hormones_Exercise</defName>
-    <labelShort>锻炼</labelShort>
-    <pawnLabel>锻炼者</pawnLabel>
-    <gerundLabel>锻炼</gerundLabel>
-    <description>前往锻炼点进行体能锻炼，长期坚持可提升体魄等级，增强肉体耐受与损伤恢复能力。</description>
-    <verb>锻炼</verb>
-    <!-- 优先级较低：默认排在清洁附近，避免抢占生产工作 -->
+    <labelShort>Exercise</labelShort>
+    <pawnLabel>Exerciser</pawnLabel>
+    <gerundLabel>exercising</gerundLabel>
+    <description>Go to an exercise spot for physical training. Long-term practice improves physique level, enhancing physical endurance and injury recovery.</description>
+    <verb>exercise</verb>
+    <!-- Lower priority: placed near cleaning by default to avoid competing with production work -->
     <naturalPriority>90</naturalPriority>
     <alwaysStartActive>false</alwaysStartActive>
     <workTags>

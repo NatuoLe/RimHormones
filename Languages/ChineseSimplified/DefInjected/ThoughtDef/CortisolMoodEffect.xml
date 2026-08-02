@@ -2,4 +2,40 @@
 <LanguageData>
   <CortisolMoodEffect.label>皮质醇</CortisolMoodEffect.label>
   <CortisolMoodEffect.description>皮质醇水平对心情的影响，体魄越强壮越能缓冲承压与高压带来的负面情绪。</CortisolMoodEffect.description>
+
+  <!-- 正常状态 -->
+  <CortisolMoodEffect.stages.0.label>皮质醇（正常）</CortisolMoodEffect.stages.0.label>
+  <CortisolMoodEffect.stages.0.description>体魄虚弱的正常皮质醇波动</CortisolMoodEffect.stages.0.description>
+  <CortisolMoodEffect.stages.1.label>皮质醇（正常）</CortisolMoodEffect.stages.1.label>
+  <CortisolMoodEffect.stages.1.description>体魄一般的正常皮质醇波动</CortisolMoodEffect.stages.1.description>
+  <CortisolMoodEffect.stages.2.label>皮质醇（正常）</CortisolMoodEffect.stages.2.label>
+  <CortisolMoodEffect.stages.2.description>体魄健康的正常皮质醇波动</CortisolMoodEffect.stages.2.description>
+  <CortisolMoodEffect.stages.3.label>皮质醇（正常）</CortisolMoodEffect.stages.3.label>
+  <CortisolMoodEffect.stages.3.description>体魄强壮的正常皮质醇波动</CortisolMoodEffect.stages.3.description>
+  <CortisolMoodEffect.stages.4.label>皮质醇（正常）</CortisolMoodEffect.stages.4.label>
+  <CortisolMoodEffect.stages.4.description>体魄卓越的正常皮质醇波动</CortisolMoodEffect.stages.4.description>
+
+  <!-- 承压状态 -->
+  <CortisolMoodEffect.stages.5.label>皮质醇（承压）</CortisolMoodEffect.stages.5.label>
+  <CortisolMoodEffect.stages.5.description>体魄虚弱的承压状态</CortisolMoodEffect.stages.5.description>
+  <CortisolMoodEffect.stages.6.label>皮质醇（承压）</CortisolMoodEffect.stages.6.label>
+  <CortisolMoodEffect.stages.6.description>体魄一般的承压状态</CortisolMoodEffect.stages.6.description>
+  <CortisolMoodEffect.stages.7.label>皮质醇（承压）</CortisolMoodEffect.stages.7.label>
+  <CortisolMoodEffect.stages.7.description>体魄健康的承压状态</CortisolMoodEffect.stages.7.description>
+  <CortisolMoodEffect.stages.8.label>皮质醇（承压）</CortisolMoodEffect.stages.8.label>
+  <CortisolMoodEffect.stages.8.description>体魄强壮的承压状态</CortisolMoodEffect.stages.8.description>
+  <CortisolMoodEffect.stages.9.label>皮质醇（承压）</CortisolMoodEffect.stages.9.label>
+  <CortisolMoodEffect.stages.9.description>体魄卓越的承压状态</CortisolMoodEffect.stages.9.description>
+
+  <!-- 高压状态 -->
+  <CortisolMoodEffect.stages.10.label>皮质醇（高压）</CortisolMoodEffect.stages.10.label>
+  <CortisolMoodEffect.stages.10.description>体魄虚弱的高压状态</CortisolMoodEffect.stages.10.description>
+  <CortisolMoodEffect.stages.11.label>皮质醇（高压）</CortisolMoodEffect.stages.11.label>
+  <CortisolMoodEffect.stages.11.description>体魄一般的高压状态</CortisolMoodEffect.stages.11.description>
+  <CortisolMoodEffect.stages.12.label>皮质醇（高压）</CortisolMoodEffect.stages.12.label>
+  <CortisolMoodEffect.stages.12.description>体魄健康的高压状态</CortisolMoodEffect.stages.12.description>
+  <CortisolMoodEffect.stages.13.label>皮质醇（高压）</CortisolMoodEffect.stages.13.label>
+  <CortisolMoodEffect.stages.13.description>体魄强壮的高压状态</CortisolMoodEffect.stages.13.description>
+  <CortisolMoodEffect.stages.14.label>皮质醇（高压）</CortisolMoodEffect.stages.14.label>
+  <CortisolMoodEffect.stages.14.description>体魄卓越的高压状态</CortisolMoodEffect.stages.14.description>
 </LanguageData>

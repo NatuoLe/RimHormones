@@ -7,7 +7,7 @@
     <needClass>Hormones.Need_Cortisol</needClass>
     <minIntelligence>ToolUser</minIntelligence>
     <showOnNeedList>true</showOnNeedList>
-    <colonistsOnly>false</colonistsOnly>
+    <colonistsOnly>true</colonistsOnly>
     <baseLevel>0</baseLevel>
     <fallPerDay>0</fallPerDay>
     <major>false</major>

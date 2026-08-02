@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <!-- 锻炼 WorkGiver：扫描地图上的简易锻炼点，派殖民者前去锻炼 -->
+  <!-- Exercise WorkGiver: scans map for exercise spots and sends colonists to exercise -->
   <WorkGiverDef>
     <defName>Hormones_DoExercise</defName>
-    <label>锻炼</label>
+    <label>exercise</label>
     <giverClass>Hormones.Jobs.WorkGiver_Exercise</giverClass>
     <workType>Hormones_Exercise</workType>
-    <verb>锻炼</verb>
-    <gerund>锻炼于</gerund>
+    <verb>exercise</verb>
+    <gerund>exercising at</gerund>
     <priorityInType>50</priorityInType>
     <requiredCapacities>
       <li>Moving</li>

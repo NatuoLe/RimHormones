@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <MuscleStrainRest.label>疲惫不堪</MuscleStrainRest.label>
+  <MuscleStrainRest.description>太累了，想休息。</MuscleStrainRest.description>
+  <MuscleStrainRest.stages.0.label>精疲力竭</MuscleStrainRest.stages.0.label>
+  <MuscleStrainRest.stages.0.description>我再也抬不起腿了。</MuscleStrainRest.stages.0.description>
+
+  <StrainInjuryMood.label>全身酸痛</StrainInjuryMood.label>
+  <StrainInjuryMood.description>劳损伤口在隐隐作痛。</StrainInjuryMood.description>
+  <StrainInjuryMood.stages.0.label>全身酸痛</StrainInjuryMood.stages.0.label>
+  <StrainInjuryMood.stages.0.description>我觉得自己受伤了。</StrainInjuryMood.stages.0.description>
+</LanguageData>

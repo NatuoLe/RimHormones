@@ -156,6 +156,19 @@ namespace Hormones
                 growth *= 2f;
                 physiqueGrowth *= 2f;
 
+                // 检查是否有奶茶Buff (皮质醇额外衰减13%/日)
+                if (pawn.health != null)
+                {
+                    Hediff milkTeaBuff = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkMilkTea"));
+                    if (milkTeaBuff != null)
+                    {
+                        // 13%每日 = 13% * 150 / 60000 = 0.0325% per 150 tick
+                        // 对应CurLevel: 10000 * 0.13 * 150 / 60000 = 3.25
+                        float milkTeaDecay = 3.25f;
+                        decay += milkTeaDecay;
+                    }
+                }
+
                 CurLevel -= decay;
                 CurLevel += growth;
                 CurLevel += physiqueGrowth;

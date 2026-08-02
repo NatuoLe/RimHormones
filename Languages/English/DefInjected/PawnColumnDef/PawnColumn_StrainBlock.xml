@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <Hormones_StrainBlock.label>no overwork</Hormones_StrainBlock.label>
+  <Hormones_StrainBlock.headerTip>When strain reserve is too low, this pawn will not take on heavy physical work (mining, hauling, construction, planting, hunting). Does not lock work ability; manual assignment still works. Automatically lifts after rest recovery. Threshold adjustable in mod settings.</Hormones_StrainBlock.headerTip>
+</LanguageData>

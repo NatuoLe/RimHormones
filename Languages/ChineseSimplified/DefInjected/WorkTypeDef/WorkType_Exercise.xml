@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <Hormones_Exercise.labelShort>锻炼</Hormones_Exercise.labelShort>
+  <Hormones_Exercise.pawnLabel>锻炼者</Hormones_Exercise.pawnLabel>
+  <Hormones_Exercise.gerundLabel>锻炼中</Hormones_Exercise.gerundLabel>
+  <Hormones_Exercise.description>前往锻炼点进行体育训练。长期练习可提高体魄等级，增强体力耐力和受伤恢复能力。</Hormones_Exercise.description>
+  <Hormones_Exercise.verb>锻炼</Hormones_Exercise.verb>
+</LanguageData>

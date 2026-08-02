@@ -106,26 +106,9 @@ namespace Hormones.Logic.PhysiqueLogic
                 ShowMuscleStrainText(pawn, targetPart.Label);
             }
 
-            // 添加心情：想休息
-            AddMuscleStrainRestMood(pawn);
-        }
-
-        /// <summary>
-        /// 添加肌肉劳损后的休息欲望心情
-        /// </summary>
-        private static void AddMuscleStrainRestMood(Pawn pawn)
-        {
-            if (pawn == null || pawn.needs?.mood == null) return;
-
-            ThoughtDef restMoodDef = DefDatabase<ThoughtDef>.GetNamed("MuscleStrainRest", false);
-            if (restMoodDef == null)
-            {
-                Log.Warning("[Hormones] MuscleStrainRest thought def not found");
-                return;
-            }
-
-            pawn.needs.mood.thoughts.memories.TryGainMemory(restMoodDef, pawn);
-            Log.Message($"[Hormones] Added MuscleStrainRest mood to {pawn?.Name?.ToStringShort ?? "Unknown"}");
+            // 心情无需在此处理（2026-08-01 改版）：
+            //   · MuscleStrainRest 已改为情景型（劳损储备 <10% 自动激活）；
+            //   · 损伤心情由 StrainInjuryMood 情景型 thought 自动检测损伤 hediff 激活。
         }
 
         // 通过统一的 FlyTextMgr 显示劳损飘字：文本用池化 StringBuilder 拼接，颜色可替换。

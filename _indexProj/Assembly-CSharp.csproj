@@ -35,6 +35,11 @@
     <Compile Include="Source\Abilities\PawnFlyer_Knockback.cs" />
     <Compile Include="Source\Abilities\CompAbilityEffect_Knockback.cs" />
     <Compile Include="Source\UI\FlyTextMgr.cs" />
+    <Compile Include="Source\UI\PawnColumnWorker_StrainBlock.cs" />
+    <Compile Include="Source\Harmony_CortisolInteraction.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\StrainWorkBlockPatches.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\ThoughtWorker_StrainStates.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\StrainHediffTags.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony" HintPath="0Harmony.dll" />

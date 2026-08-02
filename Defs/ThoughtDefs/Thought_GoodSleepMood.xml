@@ -2,13 +2,13 @@
 <Defs>
   <ThoughtDef>
     <defName>GoodSleepMood</defName>
-    <label>优质睡眠</label>
-    <description>在美观的房间中获得优质睡眠，身心得到充分恢复。</description>
+    <label>good sleep</label>
+    <description>Had a good quality sleep in a beautiful room. Mind and body fully recovered.</description>
     <thoughtClass>Thought_Memory</thoughtClass>
     <stages>
       <li>
-        <label>优质睡眠</label>
-        <description>昨晚睡得很好，身心都得到了充分恢复。</description>
+        <label>good sleep</label>
+        <description>Slept very well last night, mind and body fully recovered.</description>
       </li>
     </stages>
   </ThoughtDef>

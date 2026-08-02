@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <!-- 神经衰弱引发的「失眠发作」：不可控精神状态，复用 WanderOwnRoom 的游荡行为，
-       固定持续 2 小时（5000 tick）后自动恢复。由 Need_Cortisol 以 forced:true 触发，
-       绕过卧室限制；并通过 ThinkTree patch 接入 Wander_OwnRoom 的游荡子树。
-       字段严格对齐本版本原版 Wander_OwnRoom（仅 Misc 等合法枚举/字段）。 -->
+  <!-- Insomnia episode triggered by neurasthenia: uncontrollable mental state, reuses WanderOwnRoom wandering behavior,
+       fixed 2-hour duration (5000 ticks) then auto-recovers. Triggered by Need_Cortisol with forced:true,
+       bypassing bedroom restriction; connected to Wander_OwnRoom subtree via ThinkTree patch.
+       Fields strictly aligned with vanilla Wander_OwnRoom (only legal enums/fields like Misc). -->
   <MentalStateDef ParentName="BaseMentalState">
     <defName>NeurastheniaInsomnia</defName>
     <stateClass>MentalState_WanderOwnRoom</stateClass>
     <workerClass>MentalStateWorker_WanderOwnRoom</workerClass>
-    <label>失眠发作</label>
+    <label>insomnia episode</label>
     <category>Misc</category>
     <colonistsOnly>true</colonistsOnly>
-    <!-- 固定 2 小时恢复：min=max=5000，recoveryMtbDays=-1 禁用随机恢复，纯按年龄恢复 -->
+    <!-- Fixed 2-hour recovery: min=max=5000, recoveryMtbDays=-1 disables random recovery, age-based only -->
     <minTicksBeforeRecovery>5000</minTicksBeforeRecovery>
     <maxTicksBeforeRecovery>5000</maxTicksBeforeRecovery>
     <recoveryMtbDays>-1</recoveryMtbDays>
-    <!-- 失眠：睡眠不会提前结束发作 -->
+    <!-- Insomnia: sleep does not end the episode early -->
     <recoverFromSleep>false</recoverFromSleep>
     <blockNormalThoughts>true</blockNormalThoughts>
     <nameColor>(0.85, 0.55, 0.25)</nameColor>
-    <recoveryMessage>{0} 的失眠发作结束了。</recoveryMessage>
-    <beginLetterLabel>失眠发作</beginLetterLabel>
-    <beginLetter>{0} 因长期神经衰弱陷入失眠发作，无法自控地在四处游荡，持续约 2 小时。</beginLetter>
+    <recoveryMessage>{0}'s insomnia episode has ended.</recoveryMessage>
+    <beginLetterLabel>insomnia episode</beginLetterLabel>
+    <beginLetter>{0} has fallen into an insomnia episode due to prolonged neurasthenia, wandering uncontrollably for about 2 hours.</beginLetter>
     <beginLetterDef>NegativeEvent</beginLetterDef>
-    <baseInspectLine>精神状态：失眠发作</baseInspectLine>
+    <baseInspectLine>Mental state: insomnia episode</baseInspectLine>
     <allowBeatfire>true</allowBeatfire>
     <escapingPrisonersIgnore>true</escapingPrisonersIgnore>
   </MentalStateDef>

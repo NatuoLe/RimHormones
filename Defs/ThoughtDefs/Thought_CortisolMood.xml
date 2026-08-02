@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <!-- 皮质醇心情（含体魄修正）。stage 索引 = tier*5 + physiqueIdx（Frail=0 Average=1 Fit=2 Strong=3 Peak=4）
-       档位\体魄      frail average fit   strong peak
-       正常波动(+2)   +1    +2     +3   +3     +3
-       承压(-2)      -2    -1     -1   0     0
-       高压(-5)      -5    -3     -2   -1    0 -->
+  <!-- Cortisol mood (with physique modifier). Stage index = tier*5 + physiqueIdx (Frail=0 Average=1 Fit=2 Strong=3 Peak=4)
+       Tier\Physique  frail average fit   strong peak
+       Normal(+2)     +1    +2     +3   +3     +3
+       Stressed(-2)   -2    -1     -1   0      0
+       High(-5)       -5    -3     -2   -1     0 -->
   <ThoughtDef>
     <defName>CortisolMoodEffect</defName>
-    <label>皮质醇</label>
-    <description>皮质醇水平对心情的影响，体魄越强壮越能缓冲承压与高压带来的负面情绪。</description>
+    <label>cortisol</label>
+    <description>The effect of cortisol level on mood. Stronger physique better buffers the negative emotions from stress and high pressure.</description>
     <workerClass>Hormones.ThoughtWorker_CortisolMood</workerClass>
     <stages>
-      <!-- tier 0：正常波动（+2） -->
-      <li><label>皮质醇(正常)</label><description>体魄虚弱的皮质醇正常波动</description><baseMoodEffect>1</baseMoodEffect></li>
-      <li><label>皮质醇(正常)</label><description>体魄一般的皮质醇正常波动</description><baseMoodEffect>2</baseMoodEffect></li>
-      <li><label>皮质醇(正常)</label><description>体魄强健的皮质醇正常波动</description><baseMoodEffect>3</baseMoodEffect></li>
-      <li><label>皮质醇(正常)</label><description>体魄强壮的皮质醇正常波动</description><baseMoodEffect>3</baseMoodEffect></li>
-      <li><label>皮质醇(正常)</label><description>体魄巅峰的皮质醇正常波动</description><baseMoodEffect>3</baseMoodEffect></li>
-      <!-- tier 1：承压（-2） -->
-      <li><label>皮质醇(承压)</label><description>体魄虚弱的承压状态</description><baseMoodEffect>-2</baseMoodEffect></li>
-      <li><label>皮质醇(承压)</label><description>体魄一般的承压状态</description><baseMoodEffect>-1</baseMoodEffect></li>
-      <li><label>皮质醇(承压)</label><description>体魄强健的承压状态</description><baseMoodEffect>-1</baseMoodEffect></li>
-      <li><label>皮质醇(承压)</label><description>体魄强壮的承压状态</description><baseMoodEffect>0</baseMoodEffect></li>
-      <li><label>皮质醇(承压)</label><description>体魄巅峰的承压状态</description><baseMoodEffect>0</baseMoodEffect></li>
-      <!-- tier 2：高压（-5） -->
-      <li><label>皮质醇(高压)</label><description>体魄虚弱的高压状态</description><baseMoodEffect>-5</baseMoodEffect></li>
-      <li><label>皮质醇(高压)</label><description>体魄一般的高压状态</description><baseMoodEffect>-3</baseMoodEffect></li>
-      <li><label>皮质醇(高压)</label><description>体魄强健的高压状态</description><baseMoodEffect>-2</baseMoodEffect></li>
-      <li><label>皮质醇(高压)</label><description>体魄强壮的高压状态</description><baseMoodEffect>-1</baseMoodEffect></li>
-      <li><label>皮质醇(高压)</label><description>体魄巅峰的高压状态</description><baseMoodEffect>0</baseMoodEffect></li>
+      <!-- tier 0: normal fluctuation (+2) -->
+      <li><label>cortisol (normal)</label><description>Normal cortisol fluctuation with frail physique</description><baseMoodEffect>1</baseMoodEffect></li>
+      <li><label>cortisol (normal)</label><description>Normal cortisol fluctuation with average physique</description><baseMoodEffect>2</baseMoodEffect></li>
+      <li><label>cortisol (normal)</label><description>Normal cortisol fluctuation with fit physique</description><baseMoodEffect>3</baseMoodEffect></li>
+      <li><label>cortisol (normal)</label><description>Normal cortisol fluctuation with strong physique</description><baseMoodEffect>3</baseMoodEffect></li>
+      <li><label>cortisol (normal)</label><description>Normal cortisol fluctuation with peak physique</description><baseMoodEffect>3</baseMoodEffect></li>
+      <!-- tier 1: stressed (-2) -->
+      <li><label>cortisol (stressed)</label><description>Stressed state with frail physique</description><baseMoodEffect>-2</baseMoodEffect></li>
+      <li><label>cortisol (stressed)</label><description>Stressed state with average physique</description><baseMoodEffect>-1</baseMoodEffect></li>
+      <li><label>cortisol (stressed)</label><description>Stressed state with fit physique</description><baseMoodEffect>-1</baseMoodEffect></li>
+      <li><label>cortisol (stressed)</label><description>Stressed state with strong physique</description><baseMoodEffect>0</baseMoodEffect></li>
+      <li><label>cortisol (stressed)</label><description>Stressed state with peak physique</description><baseMoodEffect>0</baseMoodEffect></li>
+      <!-- tier 2: high pressure (-5) -->
+      <li><label>cortisol (high)</label><description>High pressure state with frail physique</description><baseMoodEffect>-5</baseMoodEffect></li>
+      <li><label>cortisol (high)</label><description>High pressure state with average physique</description><baseMoodEffect>-3</baseMoodEffect></li>
+      <li><label>cortisol (high)</label><description>High pressure state with fit physique</description><baseMoodEffect>-2</baseMoodEffect></li>
+      <li><label>cortisol (high)</label><description>High pressure state with strong physique</description><baseMoodEffect>-1</baseMoodEffect></li>
+      <li><label>cortisol (high)</label><description>High pressure state with peak physique</description><baseMoodEffect>0</baseMoodEffect></li>
     </stages>
   </ThoughtDef>
 </Defs>

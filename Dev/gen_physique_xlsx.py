@@ -344,7 +344,7 @@ for c, h in enumerate(hdr, 1):
     ws.cell(row=4, column=c, value=h)
 style_header(ws, 4, 4)
 passion = [
-    ["无 (None)", "×0.333", "×1.00", "无热情也按满速学习，不再打3折"],
+    ["无 (None)", "×0.35", "×1.00", "无热情也按满速学习，不再打折"],
     ["好奇 (Minor)", "×1.00", "×1.10", "略高于原版"],
     ["狂热 (Major)", "×1.50", "×1.20", "压缩狂热优势，避免体魄暴涨"],
 ]
@@ -355,8 +355,96 @@ for i, row in enumerate(passion):
 apply_borders(ws, 5, 4 + len(passion), 4)
 set_widths(ws, [14, 12, 14, 40])
 ws.cell(row=5 + len(passion) + 1, column=1,
-        value="注：原版倍率取自 RimWorld 1.6 SkillDef.json 的 PassionsData.LearningFactor（无 0.333 / 好奇 1.0 / 狂热 1.5）。"
+        value="注：原版倍率硬编码为 无 0.35 / 好奇 1.0 / 狂热 1.5（2026-07-30 用户定稿）。"
               "实现于 HormonesLogic.cs 的 SkillRecord_Learn_Physique_Patch。").font = SUB_FONT
+
+# ============================================================
+# Sheet 9: 器官扩展设计（设计稿 · 未实现，2026-08-01）
+#   体魄对 器官HP/器官层 影响的扩展思路。机制均已在原版 1.6 源码核实。
+# ============================================================
+ws = wb.create_sheet("器官扩展设计")
+title_block(ws, "体魄 → 器官影响 · 扩展设计稿（未实现）",
+            "现状：体魄只有 激素伤害减免(1.0→0.5线性) 与 激素恢复(1.0→1.5)，尚无器官层效果。数值顺序 = 虚弱/一般/健康/强壮/卓越", 7)
+hdr = ["#", "设计方向", "联动原版机制（源码已核实）", "建议数值（虚/一/健/强/卓）", "实现方式", "平衡性风险与对策", "优先级"]
+for c, h in enumerate(hdr, 1):
+    ws.cell(row=4, column=c, value=h)
+style_header(ws, 4, 7)
+
+ideas = [
+    ["A", "器官HP加成\n（器官强韧）",
+     "BodyPartDef.GetMaxHealth(pawn) 决定部件血量：心15/肺15/肾15/肝20/胃20/脑10。HP归零→MissingBodyPart→功能永久归零",
+     "-10% / 0 / +5% / +10% / +20%",
+     "C#：Harmony postfix 补丁 BodyPartDef.GetMaxHealth，仅缩放 depth==Inside 部件",
+     "心脏15→18后狙心秒杀变难，压缩战斗张力；对策：加成≤+20%，或排除心/脑只强韧内脏",
+     "★★★ 主推"],
+    ["B", "器官效率加成\n（机能强化）",
+     "PawnCapacityUtility.CalculateTagEfficiency：器官效率=partEfficiency×健康度→驱动五项能力；意识耦合对泵血/呼吸/过滤均有 min(x,1) 限幅",
+     "-10% / 0 / +2% / +5% / +10%",
+     "C#：postfix CalculateTagEfficiency，按 pawn 体魄缩放",
+     "超100%部分主要是损耗缓冲（min(x,1)限幅造不出超人）；与 PhysiqueDisplay 已有 capMods(呼吸等)是两层杠杆，注意别重复给太多",
+     "★★☆"],
+    ["C", "致死伤害阈值提升\n（命硬）",
+     "Pawn_HealthTracker.LethalDamageThreshold=150×HealthScale；总伤severity超阈值即死（ShouldBeDead判定链第⑤条）",
+     "×0.9 / ×1.0 / ×1.05 / ×1.1 / ×1.2",
+     "C#：patch LethalDamageThreshold getter",
+     "高体魄「怎么打都不死」；对策：上限+20%，加 Settings 开关",
+     "★★☆"],
+    ["D", "出血控制\n（凝血强）",
+     "BleedRate stat=全局出血率；失血hediff lethalSeverity=1.0 即死；心脏被毁bleedRate=5爆发出血",
+     "×1.15 / ×1.0 / ×0.95 / ×0.9 / ×0.8",
+     "纯XML：PhysiqueDisplay hediff stages 加 statFactors→BleedRate",
+     "低。心脏摧毁的爆发出血仍保留威慑",
+     "★★★ 零代码"],
+    ["E", "痛觉耐受\n（忍痛）",
+     "疼痛对意识的绝对扣减最多-0.4；PainShockThreshold stat=痛晕倒地阈值（倒地=保护机制）",
+     "阈值 ×0.9 / ×1.0 / ×1.05 / ×1.1 / ×1.15",
+     "纯XML：statFactors→PainShockThreshold",
+     "痛晕是保护性倒地，阈值过高会战到死都不倒；建议≤+15%",
+     "★★☆ 零代码"],
+    ["F", "愈合加速\n（恢复快）",
+     "InjuryHealingFactor stat=伤口自然愈合速度",
+     "×0.9 / ×1.0 / ×1.1 / ×1.25 / ×1.5",
+     "纯XML：statFactors→InjuryHealingFactor",
+     "与现有 GetRecoveryBonus(激素恢复1.0→1.5)是不同系统不冲突；与优质睡眠等恢复手段有叠加",
+     "★★★ 零代码"],
+    ["G", "免疫增强\n（抗病）",
+     "ImmunityGainSpeed stat=免疫积累速度；感染 lethalSeverity=1.0 即死",
+     "×0.9 / ×1.0 / ×1.05 / ×1.1 / ×1.2",
+     "纯XML：statFactors→ImmunityGainSpeed",
+     "疾病压迫感下降；虚弱档减益可强化「体弱者易病」叙事",
+     "★★☆ 零代码"],
+    ["H", "永伤抵抗\n（不易留疤）",
+     "delicate部件(脑)受伤几乎必转永久疤(permanentInjuryChanceFactor=9999999)；永伤永久降器官健康度→能力",
+     "永伤概率 ×1.2 / ×1.0 / ×0.85 / ×0.7 / ×0.5",
+     "C#：patch 永伤转换点（scar生成处）",
+     "脑永伤是经典长期惩罚，全免失张力；建议卓越仍保留50%概率，或排除脑部",
+     "★☆☆"],
+    ["I", "内脏命中规避\n（护要害）",
+     "器官coverage=被击相对权重(心0.02/肺0.025/肾0.017)；BodyPartDef.hitChanceFactors可按伤害类型修正",
+     "内脏被击权重 ×1.1 / ×1.0 / ×0.95 / ×0.9 / ×0.8",
+     "C#：patch 命中部位选择链（DamageWorker选part处）",
+     "与闪避/减伤叠加后高体魄过肉；命中选择链较深，工作量中等",
+     "★☆☆"],
+    ["J", "器官再生\n（卓越终极）",
+     "MissingBodyPart ShouldRemove=false永不自愈，只能移植/再生舱；RestorePart可恢复部件",
+     "卓越限定：每30天随机修复一个缺失/永伤器官",
+     "C#：HediffComp 定期检测 MissingPart→RestorePart",
+     "冲击移植经济与仿生体系统；建议超长周期或做成特质/默认关",
+     "★☆☆ 远期"],
+]
+r0 = 5
+for i, row in enumerate(ideas):
+    for c, v in enumerate(row, 1):
+        cell = ws.cell(row=r0 + i, column=c, value=v)
+        if c == 1:
+            cell.font = Font(bold=True, size=12, color="1F3864")
+apply_borders(ws, r0, r0 + len(ideas) - 1, 7, center=False)
+set_widths(ws, [5, 15, 40, 26, 32, 36, 11])
+
+note_row = r0 + len(ideas) + 1
+ws.cell(row=note_row, column=1,
+        value="落地建议：D/F/G/E 四项纯 XML 可零代码先做（只改 Hediff_PhysiqueDisplay.xml 的 statFactors），快速验证手感；A/B/C/H/I/J 需 C# patch，按优先级 A→C→B 推进。").font = SUB_FONT
+ws.merge_cells(start_row=note_row, start_column=1, end_row=note_row, end_column=7)
 
 # 冻结首行标题
 for sheet in wb.worksheets:
