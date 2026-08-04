@@ -319,7 +319,49 @@ public static class SkillRecord_Learn_Physique_Patch
 
         float originalMultiplier = GetOriginalPassionMultiplier(__instance.passion);
         float customMultiplier = GetCustomPassionMultiplier(__instance.passion);
+        float inputXp = xp;
         xp = xp / originalMultiplier * customMultiplier;
+
+        // 【2026-08-04 饮品 Buff】果蔬汁生效中：体魄经验获取 +25%（对所有来源统一生效，
+        // 取代原 ExerciseWork 里仅锻炼 ×1.3 的特判）。
+        Pawn pawnForJuice = __instance.Pawn;
+        if (pawnForJuice?.health != null
+            && pawnForJuice.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkFruitJuice"), false) != null)
+        {
+            xp *= 1.25f;
+        }
+
+        DebugPrintPassionXp(__instance, inputXp, xp, originalMultiplier, customMultiplier);
+    }
+
+    // ============================================================
+    // 【调试打印 2026-08-04】打印热情 patch 的「传入经验 → 真实经验」。
+    //   同时输出 Log（开发者控制台可过滤 [Hormones]）和头顶飘字。
+    //   注意：锻炼 JobDriver_Exercise 每 tick 都调 Learn（60 次/秒），
+    //   不做节流会疯狂刷屏，故每个 pawn 每 PrintIntervalTicks 最多打一次。
+    //   上线前建议删除本打印或加开关。
+    // ============================================================
+    private static readonly System.Collections.Generic.Dictionary<int, int> lastXpPrintTickByPawn
+        = new System.Collections.Generic.Dictionary<int, int>();
+    private const int XpPrintIntervalTicks = 120; // 每个 pawn 每 2 秒最多打印一次
+
+    private static void DebugPrintPassionXp(SkillRecord rec, float inputXp, float realXp, float orig, float custom)
+    {
+        Pawn pawn = rec?.Pawn;
+        if (pawn == null) return;
+
+        int now = Find.TickManager.TicksGame;
+        if (lastXpPrintTickByPawn.TryGetValue(pawn.thingIDNumber, out int last) && now - last < XpPrintIntervalTicks)
+            return;
+        lastXpPrintTickByPawn[pawn.thingIDNumber] = now;
+
+        string msg = $"[Hormones] 体魄经验 {pawn.LabelShort} 热情={rec.passion} 传入={inputXp:F3} → 真实={realXp:F3}（原×{orig} 覆盖×{custom}）";
+        Log.Message(msg);
+
+        if (pawn.Spawned && pawn.Map != null)
+        {
+            MoteMaker.ThrowText(pawn.DrawPos, pawn.Map, $"体魄XP 传入{inputXp:F2}→真实{realXp:F2}", 2.5f);
+        }
     }
 
     // 原版 RimWorld 对 xp 实际施加的 passion 学习倍率（按用户指定值）：

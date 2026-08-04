@@ -2,4 +2,14 @@
 <LanguageData>
   <NeurastheniaMood.label>neurasthenia</NeurastheniaMood.label>
   <NeurastheniaMood.description>Persistent low mood from neurasthenia. People with better physical condition are less affected.</NeurastheniaMood.description>
+  <NeurastheniaMood.stages.0.label>severe neurasthenia</NeurastheniaMood.stages.0.label>
+  <NeurastheniaMood.stages.0.description>Neurasthenia symptoms with frail physique</NeurastheniaMood.stages.0.description>
+  <NeurastheniaMood.stages.1.label>neurasthenia</NeurastheniaMood.stages.1.label>
+  <NeurastheniaMood.stages.1.description>Neurasthenia symptoms with average physique</NeurastheniaMood.stages.1.description>
+  <NeurastheniaMood.stages.2.label>neurasthenia</NeurastheniaMood.stages.2.label>
+  <NeurastheniaMood.stages.2.description>Neurasthenia symptoms with fit physique</NeurastheniaMood.stages.2.description>
+  <NeurastheniaMood.stages.3.label>mild neurasthenia</NeurastheniaMood.stages.3.label>
+  <NeurastheniaMood.stages.3.description>Neurasthenia symptoms with strong physique</NeurastheniaMood.stages.3.description>
+  <NeurastheniaMood.stages.4.label>faint neurasthenia</NeurastheniaMood.stages.4.label>
+  <NeurastheniaMood.stages.4.description>Neurasthenia symptoms with peak physique</NeurastheniaMood.stages.4.description>
 </LanguageData>

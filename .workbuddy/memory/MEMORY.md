@@ -12,6 +12,12 @@
 - **`_indexProj/Assembly-CSharp.csproj` 是显式编译列表**（`EnableDefaultCompileItems=false`）：**新建 .cs 必须手动加 `<Compile Include>`**，否则静默不进 DLL（编译照样 0 错！XML workerClass 引用该类型时游戏报 ArgumentNullException(type)）。新类验证：`grep -c "类型名" RimHormones.dll`。交叉核对脚本：`C:\Users\zhou\AppData\Local\Temp\check_csproj.py`（2026-08-01 曾因此漏编 PawnColumnWorker_StrainBlock 和皮质醇冒犯/侮辱权重两个功能）。
 - `Assemblies/RimHormones.dll` 历史遗留：项目 `Assemblies/` 里有 6/22 旧文件，游戏不读，可清理。
 
+## 姊妹 mod：Function Drinks Expanded（饮品）
+- 源码 **`D:\RimMods\Rim-Hormones\Function-Drinks-Expanded\`**（2026-08-04 从 DrinkingwaterIsGood/ 搬来，独立 git 仓库，已发工坊）；packageId `Lenatuo.functiondrinksexpanded`，程序集名仍 `DrinkingwaterIsGood`。
+- 部署：根目录 `copyToRimWorld.bat`（build + xcopy 到 `Steam\...\Mods\DrinkingwaterIsGood\`，Steam 侧目录名不变）；xcopy 不清理目标多余文件，删残留要手动。
+- 依赖：DBH Lite（水瓶/口渴）+ VCE（盐/糖/巧克力糖浆）+ Rim-Hormones。
+- **配方铁律（2026-08-04 int.MinValue 报错换来）**：`ingredientValueGetterClass=Nutrition` 的配方里**不允许出现 0 营养配料**（需求数=count÷营养，÷0=∞→(int)∞=int.MinValue→ThingCount 报错）。DBH_WaterBottle/VCE_Salt/VCE_RawSugar 营养均为 0；此类固定件配料配方不要写 getter（默认 Volume 对非 stuff 按 1/件计）。
+
 ## CE 兼容 = 独立补丁包（双包架构，2026-07-26 定）
 - **主 mod（thgold.hormones）已移除内置 CE 软兼容层**（删了 `Source/Compat/CombatExtendedCompat.cs`）。本体只跑原版战斗逻辑。
 - **CE 适配拆到独立包**：源码 `D:\RimMods\RimHormonesCE\`，packageId `thgold.hormones.ce`。硬引用 `RimHormones.dll` + `CombatExtended.dll` + Harmony，用强类型 `[HarmonyPatch]` 特性 patch CE 动词，复用本体 public 方法。
@@ -45,3 +51,4 @@
 - 神经衰弱 Hediff：`RestRateMultiplier 0.5`（砍 50% 休息效率），含体魄心情加成。
 - 优质睡眠 Hediff：`WorkSpeedGlobal 1.1`（全局效率+10%）+3心情，1天消失。
 - 失眠发作：`NeurastheniaInsomnia`(category=Misc, stateClass=MentalState_WanderOwnRoom)，神经衰弱期间每6000tick 5%触发，2小时(5000tick)强制，recoveryMtbDays=-1。
+- 技能热情学习倍率（1.6 DLL 实测 `SkillRecord.LearnFactorPassion*`）：无=**0.35**（非 wiki 的 0.333！wiki 已过时）、好奇=1.0、狂热=1.5。`SkillRecord.pawn` 是 private，取 pawn 用 public 属性 **`Pawn`**。

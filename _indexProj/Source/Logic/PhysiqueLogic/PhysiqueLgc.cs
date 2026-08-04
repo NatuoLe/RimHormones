@@ -414,21 +414,34 @@ namespace Hormones
         {
             PhysiqueStage stage = GetPhysiqueStage(pawn);
 
+            float stageMult;
             switch (stage)
             {
                 case PhysiqueStage.Frail:
-                    return Define.PhysiqueStageFrailStrainConsumeMultiplier;
+                    stageMult = Define.PhysiqueStageFrailStrainConsumeMultiplier; break;
                 case PhysiqueStage.Average:
-                    return Define.PhysiqueStageAverageStrainConsumeMultiplier;
+                    stageMult = Define.PhysiqueStageAverageStrainConsumeMultiplier; break;
                 case PhysiqueStage.Fit:
-                    return Define.PhysiqueStageFitStrainConsumeMultiplier;
+                    stageMult = Define.PhysiqueStageFitStrainConsumeMultiplier; break;
                 case PhysiqueStage.Strong:
-                    return Define.PhysiqueStageStrongStrainConsumeMultiplier;
+                    stageMult = Define.PhysiqueStageStrongStrainConsumeMultiplier; break;
                 case PhysiqueStage.Peak:
-                    return Define.PhysiqueStagePeakStrainConsumeMultiplier;
+                    stageMult = Define.PhysiqueStagePeakStrainConsumeMultiplier; break;
                 default:
-                    return Define.PhysiqueStageAverageStrainConsumeMultiplier;
+                    stageMult = Define.PhysiqueStageAverageStrainConsumeMultiplier; break;
             }
+
+            // 【2026-08-04 饮品 Buff】电解质水/功能饮品生效中：劳损扣减效率 -25%。
+            // 与 Need_Cortisol 的 DrinkMilkTea 检测同一惯例（按 defName 查饮品 hediff）。
+            if (pawn?.health != null)
+            {
+                if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkElectrolyte"), false) != null
+                    || pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkEnergyDrink"), false) != null)
+                {
+                    stageMult *= 0.75f;
+                }
+            }
+            return stageMult;
         }
 
         /// <summary>

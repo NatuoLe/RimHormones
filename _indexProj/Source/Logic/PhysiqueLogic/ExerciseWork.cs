@@ -109,21 +109,13 @@ namespace Hormones.Jobs
                 }
 
                 // 给体魄技能加经验
+                // 注：果蔬汁 Buff 的 +25% 已上移到 SkillRecord_Learn_Physique_Patch 统一处理
+                // （对所有经验来源生效），此处不再特判（2026-08-04）。
                 SkillDef physique = PhysiqueSkillDef;
                 if (physique != null)
                 {
                     SkillRecord rec = pawn.skills?.GetSkill(physique);
-                    // 检查是否有果蔬汁Buff (经验+30%)
-                    float xpMultiplier = 1.0f;
-                    if (pawn.health != null)
-                    {
-                        Hediff fruitJuiceBuff = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkFruitJuice"));
-                        if (fruitJuiceBuff != null)
-                        {
-                            xpMultiplier = 1.3f;
-                        }
-                    }
-                    rec?.Learn(XpPerTick * xpMultiplier, false);
+                    rec?.Learn(XpPerTick, false);
                 }
 
                 // 体魄日常衰减：标记“今日已有体力活动（锻炼）”，本周期免于衰减

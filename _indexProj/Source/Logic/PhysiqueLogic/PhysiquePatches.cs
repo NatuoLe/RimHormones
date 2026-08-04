@@ -157,11 +157,14 @@ namespace Hormones.Logic.PhysiqueLogic
             // 体魄日常衰减：标记“今日已有体力劳作”，本周期免于衰减（用进废退）
             pawn.GetComp<HormonesComponent>()?.MarkActivityToday();
 
-            // 1) 体魄经验
+            // 1) 体魄经验：基础经验 × 结算比例 × 额外乘区（2026-08-04 实现）
+            //    额外乘区存于 HediffComp_PhysiqueDisplay，由外部（如饮品 Buff）经
+            //    PhysiqueXpMultUtility 修改；默认 1.0 不影响原经验。
             SkillDef physiqueDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
             if (physiqueDef != null && pawn.skills != null)
             {
-                pawn.skills.Learn(physiqueDef, xp * factor);
+                float finalXp = xp * factor * PhysiqueXpMultUtility.GetExtraXpMult(pawn);
+                pawn.skills.Learn(physiqueDef, finalXp);
             }
 
             // 2) 劳损值扣减 + 拉伤 roll

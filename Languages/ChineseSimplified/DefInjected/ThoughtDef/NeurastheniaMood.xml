@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
   <NeurastheniaMood.label>神经衰弱</NeurastheniaMood.label>
-  <NeurastheniaMood.description>神经衰弱带来的持续低落情绪。</NeurastheniaMood.description>
+  <NeurastheniaMood.description>神经衰弱带来的持续低落情绪。体魄越好，受到的影响越小。</NeurastheniaMood.description>
+  <NeurastheniaMood.stages.0.label>重度神经衰弱</NeurastheniaMood.stages.0.label>
+  <NeurastheniaMood.stages.0.description>神经衰弱症状伴随虚弱体魄</NeurastheniaMood.stages.0.description>
+  <NeurastheniaMood.stages.1.label>神经衰弱</NeurastheniaMood.stages.1.label>
+  <NeurastheniaMood.stages.1.description>神经衰弱症状伴随普通体魄</NeurastheniaMood.stages.1.description>
+  <NeurastheniaMood.stages.2.label>神经衰弱</NeurastheniaMood.stages.2.label>
+  <NeurastheniaMood.stages.2.description>神经衰弱症状伴随健康体魄</NeurastheniaMood.stages.2.description>
+  <NeurastheniaMood.stages.3.label>轻度神经衰弱</NeurastheniaMood.stages.3.label>
+  <NeurastheniaMood.stages.3.description>神经衰弱症状伴随强壮体魄</NeurastheniaMood.stages.3.description>
+  <NeurastheniaMood.stages.4.label>轻微神经衰弱</NeurastheniaMood.stages.4.label>
+  <NeurastheniaMood.stages.4.description>神经衰弱症状伴随巅峰体魄</NeurastheniaMood.stages.4.description>
 </LanguageData>

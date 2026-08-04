@@ -233,6 +233,12 @@ public class HormonesComponent : ThingComp, IExposable
         // 本周期有过体力劳作/锻炼 → 用进，不衰减
         if (activeToday) return;
 
+        // 【2026-08-04 饮品 Buff】功能饮品生效中：视为「当成一次锻炼」，
+        // Buff 持续期间（12h）体魄不因缺乏活动而衰减。
+        if (Pawn.health != null
+            && Pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkEnergyDrink"), false) != null)
+            return;
+
         // 总倍率（玩家可调，0=关闭）
         float globalMult = RimHormonesMod.Settings != null
             ? RimHormonesMod.Settings.PhysiqueDecayGlobalMult
