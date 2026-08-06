@@ -80,6 +80,8 @@ namespace Hormones.UI
         public override void StartedNewGame()
         {
             Instance = this;
+            // 开局一次性把背景故事体魄偏移烤进开局殖民民的 Physique 技能（仅基础<阈值者）
+            PhysiqueLgc.BakeBackstoryBonusForStartingPawns();
         }
 
         private void Prewarm()

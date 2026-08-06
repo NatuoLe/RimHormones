@@ -10,6 +10,8 @@ namespace Hormones
         public RimHormonesMod(ModContentPack content) : base(content)
         {
             Settings = GetSettings<Settings>();
+            // 启动时加载「背景故事 → 体魄偏移」配置（Config/BackstoryPhysique.xml）
+            BackstoryPhysiqueConfig.Init(content.RootDir);
         }
 
         public override void DoSettingsWindowContents(Rect inRect)

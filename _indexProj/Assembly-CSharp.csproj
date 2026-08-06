@@ -16,6 +16,7 @@
     <Compile Include="Source\Logic\AdrenalineLogic.cs" />
     <Compile Include="Source\Logic\AdrenalineProducer.cs" />
     <Compile Include="Source\Logic\PhysiqueTraitUtility.cs" />
+    <Compile Include="Source\Logic\PhysiqueLogic\BackstoryPhysiqueConfig.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\PhysiqueLgc.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\PhysiqueDefine.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\PhysiquePatches.cs" />

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  背景故事 → 体魄偏移配置
+  ============================================================
+  匹配方式：对 pawn 的 Childhood / Adulthood 背景故事的 defName 做【子串匹配】（不区分大小写）。
+  例：keyword="Soldier" 会命中 defName 含 Soldier 的任何背景故事（如 Soldier、SoldierExplorer 等）。
+  多个关键词命中时偏移【累加】；童年与成年背景故事分别判定后也累加。
+
+  维护说明：
+  - 新增/调整只需改本文件，无需动任何代码、无需给单个背景故事写 XML 补丁。
+  - offset 为整数，正数加体魄、负数减体魄；最终会被体魄上限 clamp。
+  - 想按中文显示名匹配可把 keyword 改成 title 关键字，但那样仅在中文档生效（defName 跨语言稳定）。
+  - RimWorld 常见军事/战斗类背景故事 defName 片段：Soldier / Warrior / Mercenary / Brawler /
+    Gladiator / Legionary / Raider / Fighter / TribalWarrior / CannibalWarrior 等。
+-->
+<BackstoryPhysiqueModifiers>
+  <!-- 正规军士兵：根基扎实，体魄 +3 -->
+  <Modifier keyword="Soldier" offset="3" />
+  <!-- 各路战士：格斗素养高，体魄 +3 -->
+  <Modifier keyword="Warrior" offset="3" />
+  <!-- 佣兵：实战经验，体魄 +2 -->
+  <Modifier keyword="Mercenary" offset="2" />
+  <!-- 暴徒/角斗士：天生好斗，体魄 +2 -->
+  <Modifier keyword="Brawler" offset="2" />
+  <Modifier keyword="Gladiator" offset="2" />
+  <!-- 突击/掠夺者：体魄 +2 -->
+  <Modifier keyword="Raider" offset="2" />
+  <Modifier keyword="Fighter" offset="2" />
+</BackstoryPhysiqueModifiers>

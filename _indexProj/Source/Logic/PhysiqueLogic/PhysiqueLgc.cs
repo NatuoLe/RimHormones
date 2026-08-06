@@ -113,18 +113,49 @@ namespace Hormones
         }
 
         /// <summary>
-        /// 获取角色的背景故事体魄修正值
-        /// 注意：现在通过 XML 补丁实现，此方法仅用于调试
+        /// 开局一次性把背景故事体魄偏移烤进 Physique 技能等级。
+        /// 仅作用于【开局自选殖民民】（Find.GameInitData.startingAndOptionalPawns），
+        /// 且仅当角色的【基础体魄(技能+特质)】低于阈值时才叠加；已强健者不享受。
+        /// 由 GameComponent.StartedNewGame 调用，只在开新局时触发一次，
+        /// 之后偏移就是角色真实的体魄，会随训练/自然衰减正常变化。
+        /// 查询期（GetPhysiqueLevel）不再处理背景故事偏移，避免重复叠加。
+        /// </summary>
+        public static void BakeBackstoryBonusForStartingPawns()
+        {
+            if (Find.GameInitData == null) return;
+
+            SkillDef physiqueSkillDef = DefDatabase<SkillDef>.GetNamed("Physique", false);
+            if (physiqueSkillDef == null) return;
+
+            foreach (Pawn pawn in Find.GameInitData.startingAndOptionalPawns)
+            {
+                if (!IsHormoneSubject(pawn)) continue;
+
+                SkillRecord skill = pawn.skills?.GetSkill(physiqueSkillDef);
+                if (skill == null) continue;
+
+                int baseLevel = skill.levelInt + PhysiqueTraitUtility.GetTotalPhysiqueOffset(pawn);
+                if (baseLevel >= Define.PhysiqueBackstoryApplyThreshold) continue;
+
+                int backstoryOffset = BackstoryPhysiqueConfig.GetBackstoryPhysiqueOffset(pawn);
+                if (backstoryOffset == 0) continue;
+
+                int newLevel = Helpers.Clamp(skill.levelInt + backstoryOffset, Define.PhysiqueMinLevel, Define.PhysiqueMaxLevel);
+                if (newLevel != skill.levelInt)
+                {
+                    skill.levelInt = newLevel;
+                    Log.Message($"[Hormones] 开局背景故事体魄加成：{pawn.LabelShort} 体魄 {skill.levelInt} → {newLevel}（{(backstoryOffset >= 0 ? "+" : "")}{backstoryOffset}，仅开局殖民民且基础<{Define.PhysiqueBackstoryApplyThreshold}）");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取角色的背景故事体魄修正值（委托给 BackstoryPhysiqueConfig 的配置驱动实现）。
+        /// 保留此方法仅为兼容既有调用约定；实际计算已转到 BackstoryPhysiqueConfig。
         /// </summary>
         public static int GetBackstoryPhysiqueOffset(Pawn pawn)
         {
-            if (pawn == null || pawn.story == null || pawn.story.Childhood == null) return 0;
-
-            string backstoryDefName = pawn.story.Childhood.defName;
-            Log.Message($"[Hormones] Backstory defName: {backstoryDefName}");
-
-            // XML 补丁会自动添加 skillGains.Physique
-            return 0;
+            return BackstoryPhysiqueConfig.GetBackstoryPhysiqueOffset(pawn);
         }
 
         /// <summary>
