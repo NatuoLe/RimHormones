@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<LanguageData>
-  <NeurastheniaInsomnia.label>失眠发作</NeurastheniaInsomnia.label>
-  <NeurastheniaInsomnia.recoveryMessage>{0}的失眠发作已结束。</NeurastheniaInsomnia.recoveryMessage>
-  <NeurastheniaInsomnia.beginLetterLabel>失眠发作</NeurastheniaInsomnia.beginLetterLabel>
-  <NeurastheniaInsomnia.beginLetter>{0}因长期神经衰弱而陷入失眠发作，无法控制地漫游约2小时。</NeurastheniaInsomnia.beginLetter>
-  <NeurastheniaInsomnia.baseInspectLine>精神状态：失眠发作</NeurastheniaInsomnia.baseInspectLine>
-</LanguageData>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- Insomnia mood: fixed -1 while pawn has CortisolInsomnia (evaluated by ThoughtWorker_InsomniaMood). -->
+  <ThoughtDef>
+    <defName>InsomniaMood</defName>
+    <label>insomnia</label>
+    <description>Persistent low mood from being unable to fall asleep.</description>
+    <workerClass>Hormones.ThoughtWorker_InsomniaMood</workerClass>
+    <stages>
+      <li><label>insomnia</label><description>Unable to fall asleep, feeling irritable and low.</description><baseMoodEffect>-1</baseMoodEffect></li>
+    </stages>
+  </ThoughtDef>
+</Defs>

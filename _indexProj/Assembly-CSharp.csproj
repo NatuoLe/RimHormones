@@ -26,8 +26,15 @@
     <Compile Include="Source\Needs\Need_Hormones.cs" />
     <Compile Include="Source\Needs\Need_MuscleStrain.cs" />
     <Compile Include="Source\Needs\Need_Cortisol.cs" />
+    <Compile Include="Source\Needs\Need_MEE_Base.cs" />
+    <Compile Include="Source\Needs\Need_MEE_Water.cs" />
+    <Compile Include="Source\Needs\Need_MEE_Sugar.cs" />
+    <Compile Include="Source\Needs\Need_MEE_Electrolytes.cs" />
+    <Compile Include="Source\Needs\Need_MEE_Protein.cs" />
     <Compile Include="Source\Logic\CortisolLogic\ThoughtWorker_CortisolMood.cs" />
     <Compile Include="Source\Logic\CortisolLogic\ThoughtWorker_NeurastheniaMood.cs" />
+    <Compile Include="Source\Logic\CortisolLogic\ThoughtWorker_InsomniaMood.cs" />
+    <Compile Include="Source\Logic\CortisolLogic\AnhedoniaLogic.cs" />
     <Compile Include="Source\Harmony_CortisolNeedInit.cs" />
     <Compile Include="Source\Comps\HediffComp_PhysiqueDisplay.cs" />
     <Compile Include="Source\Comps\HediffComp_CortisolStatus.cs" />
@@ -38,9 +45,16 @@
     <Compile Include="Source\UI\FlyTextMgr.cs" />
     <Compile Include="Source\UI\PawnColumnWorker_StrainBlock.cs" />
     <Compile Include="Source\Harmony_CortisolInteraction.cs" />
+    <Compile Include="Source\Harmony_Anhedonia.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\StrainWorkBlockPatches.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\ThoughtWorker_StrainStates.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\StrainHediffTags.cs" />
+    <Compile Include="Source\Metabolic\IMetabolicModule.cs" />
+    <Compile Include="Source\Metabolic\MetabolicLoader.cs" />
+    <Compile Include="Source\Metabolic\MetabolicBootstrap.cs" />
+    <Compile Include="Source\Metabolic\MetabolicState.cs" />
+    <Compile Include="Source\Metabolic\MEERecipeMarker.cs" />
+    <Compile Include="Source\Metabolic\RecipeDef_AvailableNow_MEE_Patch.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony" HintPath="0Harmony.dll" />

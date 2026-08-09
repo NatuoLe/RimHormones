@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cortisol Effects</title>
+<style>
+  :root{
+    --gold:#F2C76E; --gold-dim:#C9A24B;
+    --edge-l:#4d4d4d;
+    --txt:#cdcdcd; --dim:#949494;
+    --green:#7CC576; --orange:#E8A33D; --red:#D9534F;
+    --purple:#b07cc6; --blue:#6fa8e0; --amber:#e0a64a;
+    --ui:'Segoe UI','Microsoft YaHei',sans-serif;
+    --tt:Georgia,'Times New Roman',serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; min-height:100vh; color:var(--txt); font-family:var(--ui);
+    background:radial-gradient(circle at 50% 30%, #272727 0%, #1b1b1b 62%, #131313 100%);
+    display:flex; align-items:flex-start; justify-content:center; padding:22px;}
+  .stage{position:relative; width:760px; max-width:100%; overflow:hidden; padding:0 4px 8px;}
+
+  /* decorative RimWorld creatures (watermark) */
+  .deco{position:absolute; z-index:0; pointer-events:none; opacity:.09;
+    filter:drop-shadow(0 3px 6px rgba(0,0,0,.4));}
+  .d-muffalo{top:54px; left:-26px; width:150px; transform:rotate(-10deg);}
+  .d-thrumbo{bottom:8px; right:-30px; width:150px; transform:rotate(8deg); opacity:.08;}
+
+  /* title bar (RimWorld window header) */
+  .titlebar{position:relative; z-index:2; display:flex; align-items:center; gap:12px; padding:9px 20px;
+    background:linear-gradient(180deg,#3a3424,#241f12);
+    border:1px solid #4a3d20; border-radius:4px;
+    box-shadow:inset 0 1px 0 #5a4a26, 0 4px 12px rgba(0,0,0,.5);}
+  .titlebar img{width:34px; height:34px;}
+  .titlebar b{font-family:var(--tt); font-size:22px; letter-spacing:2px; color:var(--gold);
+    text-shadow:0 1px 0 #000;}
+  .titlebar span{font-family:var(--tt); font-size:11px; letter-spacing:5px; color:var(--gold-dim);}
+
+  /* panels — RimWorld widget */
+  .panel{position:relative; z-index:2; border:1px solid var(--edge-l); border-radius:3px; overflow:hidden;
+    background:linear-gradient(180deg,#2f2f2f,#262626);
+    box-shadow:inset 1px 1px 0 #505050, inset -1px -1px 0 #161616, 0 5px 14px rgba(0,0,0,.55);}
+  .panel h3{margin:0; padding:8px 12px; font-family:var(--tt); font-size:16px; letter-spacing:1px;
+    color:var(--gold); text-shadow:0 1px 0 #000;
+    background:linear-gradient(180deg,#3a3424,#2a2417);
+    border-bottom:1px solid #4a3d20;
+    display:flex; align-items:center; gap:9px;}
+  .panel h3 img{width:24px; height:24px;}
+  .panel h3 small{font-family:var(--ui); font-size:12px; letter-spacing:0; color:var(--dim); font-weight:600;}
+
+  .flow{position:relative; z-index:2; display:flex; gap:13px; margin-top:13px;}
+  .col{flex:1;}
+  .col.up .wrap{background:linear-gradient(180deg, rgba(216,99,79,.10), rgba(216,99,79,.03));}
+  .col.down .wrap{background:linear-gradient(180deg, rgba(127,184,106,.10), rgba(127,184,106,.03));}
+  .wrap{padding:11px 12px 13px;}
+  .col ul{margin:0; padding:0; list-style:none;}
+  .col.up ul{display:grid; grid-template-columns:repeat(3,1fr); gap:6px 5px;}
+  .col.down ul{display:grid; grid-template-columns:repeat(3,1fr); gap:6px 5px;}
+  .col.up li{font-size:13px; color:#f0c3ba; text-align:center;
+    background:rgba(216,99,79,.14); border:1px solid #4a2f2a; border-radius:4px; padding:5px 2px;}
+  .col.down li{font-size:13px; color:#c2e6b4; text-align:center;
+    background:rgba(127,184,106,.14); border:1px solid #2c4a2a; border-radius:4px; padding:5px 2px;}
+
+  /* core node */
+  .core{position:relative; z-index:2; text-align:center; margin:16px 0 4px;}
+  .node{display:inline-block; padding:6px 20px; border:1px solid var(--gold); border-radius:16px;
+    color:var(--gold); font-family:var(--tt); font-weight:bold; letter-spacing:2px; font-size:14px;
+    background:rgba(242,199,110,.10); text-shadow:0 1px 0 #000;}
+  .arrow{position:relative; z-index:2; text-align:center; color:var(--gold-dim); font-size:15px; margin:3px 0 1px;}
+
+  /* bad hediff cards */
+  .heds{position:relative; z-index:2; display:flex; gap:10px; margin-top:8px;}
+  .hed{flex:1; border:1px solid var(--edge-l); border-radius:3px; overflow:hidden;
+    background:linear-gradient(180deg,#2d2d2d,#212121);
+    box-shadow:inset 1px 1px 0 #4a4a4a, inset -1px -1px 0 #161616, 0 4px 11px rgba(0,0,0,.5);
+    border-top:3px solid var(--accent);}
+  .hed h4{margin:0; padding:6px 11px; font-family:var(--tt); font-size:14px; letter-spacing:.5px;
+    color:var(--gold); background:linear-gradient(180deg,#3a3424,#2a2417);
+    text-align:center; border-bottom:1px solid #4a3d20; text-shadow:0 1px 0 #000;}
+  .hed .hb{padding:8px 11px; font-size:12px; color:var(--txt); line-height:1.55; text-align:center;}
+  .hed.n{--accent:var(--purple);}
+  .hed.a{--accent:var(--blue);}
+  .hed.i{--accent:var(--amber);}
+
+  .foot{position:relative; z-index:2; margin-top:12px; text-align:center;
+    font-family:var(--tt); font-size:12px; letter-spacing:3px; color:var(--gold-dim);}
+</style>
+</head>
+<body>
+  <div class="stage">
+    <img class="deco d-muffalo" src="rw_assets/muffalo.png" alt="">
+    <img class="deco d-thrumbo" src="rw_assets/thrumbo.png" alt="">
+
+    <div class="titlebar">
+      <img src="rw_assets/logo.png" alt="RimWorld">
+      <div><b>Cortisol</b> <span>CORTISOL MECHANICS</span></div>
+    </div>
+
+    <div class="flow">
+      <div class="panel col up">
+        <h3><img src="rw_assets/mood.png" alt="">Cortisol ↑<small>Stress raise</small></h3>
+        <div class="wrap">
+          <ul>
+            <li>Low mood</li><li>Hunger</li><li>Pain</li>
+            <li>Illness</li><li>Insulted</li><li>Discomfort</li>
+            <li>No recreation</li><li>Ugly environment</li><li>Ate raw food</li>
+            <li>Soaking wet</li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel col down">
+        <h3>Cortisol ↓<small>Recovery lower</small></h3>
+        <div class="wrap">
+          <ul>
+            <li>Recreation</li><li>Good sleep</li><li>Good mood</li><li>Fine meal</li><li>Natural decay</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="core"><div class="node">High cortisol</div></div>
+    <div class="arrow">▼</div>
+
+    <div class="heds">
+      <div class="hed n"><h4>Neurasthenia</h4><div class="hb">Rest efficiency↓<br>Mood↓</div></div>
+      <div class="hed a"><h4>Anhedonia</h4><div class="hb">Positive mood nullified<br>Negative kept</div></div>
+      <div class="hed i"><h4>Insomnia</h4><div class="hb">Cannot fall asleep<br>(blocks sleeping)</div></div>
+    </div>
+
+    <div class="foot">RIMPHYSIQUE · BETA 0.4.7</div>
+  </div>
+</body>
+</html>

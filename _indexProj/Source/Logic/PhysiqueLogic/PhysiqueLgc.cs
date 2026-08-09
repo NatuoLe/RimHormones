@@ -462,16 +462,8 @@ namespace Hormones
                     stageMult = Define.PhysiqueStageAverageStrainConsumeMultiplier; break;
             }
 
-            // 【2026-08-04 饮品 Buff】电解质水/功能饮品生效中：劳损扣减效率 -25%。
-            // 与 Need_Cortisol 的 DrinkMilkTea 检测同一惯例（按 defName 查饮品 hediff）。
-            if (pawn?.health != null)
-            {
-                if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkElectrolyte"), false) != null
-                    || pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkEnergyDrink"), false) != null)
-                {
-                    stageMult *= 0.75f;
-                }
-            }
+            // 注：饮品对「劳损积累速率」的修正已外置到 Need_MuscleStrain（由外置 Mod 通过 SetExtraStrainRateMultiplier 设置）
+            // （在 AddStrain 的积累汇点统一应用），此处仅保留体魄阶段倍率，不再硬编码任何饮品 defName。
             return stageMult;
         }
 
@@ -536,6 +528,27 @@ namespace Hormones
             }
             
             return Define.MuscleStrainBaseRecoveryPerHour * multiplier;
+        }
+
+        /// <summary>
+        /// 神经衰弱覆盖效应（strainCoverEffect）。
+        /// 当 pawn 患有神经衰弱 Hediff(<see cref="CortisolNeurasthenia"/>) 时返回
+        /// <see cref="Define.StrainCoverEffectMultiplier"/>(0.67)，使劳损与皮质醇的
+        /// 【恢复速率】与【变化(下降/积累)速率】均降低 33%；否则返回 1.0（无影响）。
+        /// 该 Hediff 可治愈/消失，故每次查询实时判定，不缓存。
+        /// </summary>
+        /// <param name="pawn">目标角色</param>
+        /// <returns>覆盖效应倍率（1.0 或 0.67）</returns>
+        public static float GetStrainCoverEffect(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null)
+                return 1f;
+
+            HediffDef neurastheniaDef = DefDatabase<HediffDef>.GetNamed("CortisolNeurasthenia", false);
+            if (neurastheniaDef != null && pawn.health.hediffSet.HasHediff(neurastheniaDef))
+                return Define.StrainCoverEffectMultiplier;
+
+            return 1f;
         }
 
         /// <summary>

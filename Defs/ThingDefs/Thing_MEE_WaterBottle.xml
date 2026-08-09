@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 水瓶：代谢扩展模块的水需求基础资源（占位贴图，后续可换专用贴图） -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>MEE_WaterBottle</defName>
+    <label>water bottle</label>
+    <description>A bottle of water. A basic metabolic resource used by the Metabolic Essential module to satisfy the water need.</description>
+    <graphicData>
+      <texPath>Things/Item/Health/MedicineHerbal</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+      <drawSize>(0.6,0.6)</drawSize>
+    </graphicData>
+    <stackLimit>50</stackLimit>
+    <statBases>
+      <MaxHitPoints>40</MaxHitPoints>
+      <MarketValue>0.6</MarketValue>
+      <Mass>0.3</Mass>
+      <Flammability>1</Flammability>
+    </statBases>
+  </ThingDef>
+</Defs>

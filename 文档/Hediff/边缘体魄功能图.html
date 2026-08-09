@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RimPhysique · 功能关联图</title>
+<style>
+  :root{
+    --gold:#F2C76E; --gold-dim:#C9A24B; --gold-deep:#9c7320;
+    --bg:#1b1b1b; --panel:#2b2b2b;
+    --edge-l:#4d4d4d;
+    --txt:#cdcdcd; --txt-dim:#949494;
+    --green:#7CC576; --orange:#E8A33D; --red:#D9534F;
+    --ui:'Segoe UI','Microsoft YaHei',sans-serif;
+    --tt:Georgia,'Times New Roman','Songti SC',serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; min-height:100vh; color:var(--txt); font-family:var(--ui);
+    background:radial-gradient(circle at 50% 36%, #272727 0%, #1b1b1b 62%, #131313 100%);
+    display:flex; align-items:center; justify-content:center; padding:22px;}
+  body::before{content:""; position:fixed; inset:0; pointer-events:none; opacity:.045;
+    background-image:repeating-linear-gradient(45deg,#000 0 2px,transparent 2px 5px);}
+
+  .stage{position:relative; width:1140px; height:850px; max-width:100%; overflow:hidden;}
+
+  /* decorative RimWorld creatures (watermark) */
+  .deco{position:absolute; z-index:0; pointer-events:none; opacity:.13;
+    filter:drop-shadow(0 3px 6px rgba(0,0,0,.45));}
+  .d-muffalo {left:322px; top:246px; width:158px; transform:rotate(-9deg);}
+  .d-eleph   {left:660px; top:250px; width:158px; transform:rotate(9deg);}
+  .d-thrumbo {left:632px; top:556px; width:150px; opacity:.11;}
+  .d-scarab  {left:548px; top:300px; width:66px;  opacity:.2;}
+  .d-hat     {left:470px; top:694px; width:120px; opacity:.1; transform:rotate(-6deg);}
+
+  /* title bar */
+  .titlebar{position:absolute; top:0; left:50%; transform:translateX(-50%); z-index:6;
+    display:flex; align-items:center; gap:12px; padding:7px 22px;
+    background:linear-gradient(180deg,#3a3424,#241f12);
+    border:1px solid #4a3d20; border-radius:4px;
+    box-shadow:inset 0 1px 0 #5a4a26, 0 4px 12px rgba(0,0,0,.5);}
+  .titlebar img{width:34px; height:34px;}
+  .titlebar b{font-family:var(--tt); font-size:22px; letter-spacing:2px; color:var(--gold);
+    text-shadow:0 1px 0 #000;}
+  .titlebar span{font-family:var(--tt); font-size:11px; letter-spacing:5px; color:var(--gold-dim);}
+
+  svg.links{position:absolute; inset:0; width:100%; height:100%; z-index:2;}
+
+  /* center hub = RimWorld logo */
+  .core{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:340px; text-align:center; z-index:5;}
+  .core .logo{display:block; width:300px; margin:0 auto;
+    filter:drop-shadow(0 4px 10px rgba(0,0,0,.6));}
+  .core .ribbon{display:inline-block; margin-top:10px; padding:5px 22px;
+    font-family:var(--tt); font-size:20px; font-weight:700; letter-spacing:4px; color:#2c1f07;
+    background:linear-gradient(180deg,#f8dc92,#d9a944 60%,#a87c25);
+    border:1px solid #4a3d20; border-radius:3px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 3px 8px rgba(0,0,0,.5);}
+  .core .ribbon small{font-family:var(--tt); font-size:10px; letter-spacing:5px; color:#4a3410;
+    display:block; margin-top:1px;}
+
+  /* panels — RimWorld widget */
+  .panel{position:absolute; width:340px; padding:0; z-index:4;
+    background:linear-gradient(180deg,#2f2f2f,#262626);
+    border:1px solid var(--edge-l); border-radius:3px;
+    box-shadow:inset 1px 1px 0 #505050, inset -1px -1px 0 #161616, 0 5px 14px rgba(0,0,0,.55);}
+  .panel h3{margin:0; padding:7px 12px; font-family:var(--tt); font-size:15px; letter-spacing:1px;
+    color:var(--gold); text-shadow:0 1px 0 #000;
+    background:linear-gradient(180deg,#3a3424,#2a2417);
+    border-bottom:1px solid #4a3d20; border-radius:2px 2px 0 0;
+    display:flex; align-items:center; gap:9px;}
+  .panel h3 img{width:26px; height:26px;}
+  .panel h3 small{font-family:var(--ui); font-size:12px; letter-spacing:0; color:var(--txt-dim); font-weight:600;}
+  .panel .body{padding:9px 13px 13px;}
+  .panel ul{margin:0; padding:0; list-style:none; font-size:13px; line-height:1.5;}
+  .panel li{position:relative; padding:2px 0 2px 14px; color:var(--txt);}
+  .panel li::before{content:""; position:absolute; left:1px; top:9px; width:6px; height:6px;
+    background:var(--c); border:1px solid rgba(0,0,0,.4); transform:rotate(45deg);}
+
+  .char-img{margin:8px auto 6px; display:flex; justify-content:center;}
+  .char-img img{width:92px; height:auto; border-radius:4px;
+    border:1px solid var(--edge-l); background:#1a1a1a; padding:4px;
+    box-shadow:inset 0 1px 0 #3a3424;}
+
+  /* outward child leaf — improved typography */
+  .leaf{position:absolute; z-index:4; border:1px solid #4a3d20; border-left:3px solid var(--c); border-radius:4px; overflow:hidden;
+    background:linear-gradient(180deg,#2d2d2d,#212121);
+    box-shadow:inset 1px 1px 0 #4a4a4a, inset -1px -1px 0 #161616, 0 4px 11px rgba(0,0,0,.5);}
+  .leaf .ltag{display:flex; align-items:center; justify-content:center; gap:7px;
+    padding:5px 12px; font-family:var(--tt); font-size:13px;
+    letter-spacing:1.5px; font-weight:700; color:var(--gold);
+    background:linear-gradient(180deg,#3a3424,#2a2417);
+    text-shadow:0 1px 0 #000; border-bottom:1px solid #4a3d20;}
+  .leaf .ltag::before{content:""; width:7px; height:7px; border-radius:50%;
+    background:var(--c); box-shadow:0 0 0 1px rgba(255,255,255,.2);}
+  .leaf .lbody{padding:8px 12px 9px; font-size:12.5px; color:var(--txt); line-height:1.6;
+    text-align:center; letter-spacing:.5px;}
+
+  .p-phys{left:410px; top:92px; --c:var(--green);}
+  .p-cort{left:18px;  top:520px; --c:var(--orange);}
+  .p-adr{left:782px; top:520px; --c:var(--red);}
+
+  .leaf-phys1{left:30px;  top:112px; width:250px; --c:var(--green);}
+  .leaf-phys2{left:860px; top:112px; width:250px; --c:var(--green);}
+  .leaf-cort1{left:372px; top:520px; width:212px; --c:var(--orange);}
+  .leaf-cort2{left:372px; top:596px; width:212px; --c:var(--orange);}
+  .leaf-cort3{left:372px; top:672px; width:212px; --c:var(--orange);}
+  .leaf-adr1 {left:782px; top:742px; width:340px; --c:var(--red);}
+
+  .foot{position:absolute; bottom:4px; left:0; width:100%; text-align:center;
+    font-family:var(--tt); font-size:12px; letter-spacing:3px; color:var(--gold-dim); z-index:6;}
+  .src{position:absolute; bottom:4px; right:8px; font-family:var(--ui); font-size:10px;
+    color:#5e5e5e; letter-spacing:0; z-index:6;}
+</style>
+</head>
+<body>
+  <div class="stage">
+    <!-- decorative RimWorld creatures filling the empty background -->
+    <img class="deco d-muffalo"  src="rw_assets/muffalo.png"      alt="">
+    <img class="deco d-eleph"    src="rw_assets/elephant.png"     alt="">
+    <img class="deco d-thrumbo"  src="rw_assets/thrumbo.png"      alt="">
+    <img class="deco d-scarab"   src="rw_assets/megascarab.png"   alt="">
+    <img class="deco d-hat"      src="rw_assets/cowboyhat.png"    alt="">
+
+    <div class="titlebar">
+      <img src="rw_assets/logo.png" alt="RimWorld">
+      <div><b>边缘体魄</b> <span>RIMPHYSIQUE</span></div>
+    </div>
+
+    <svg class="links" viewBox="0 0 1140 850" preserveAspectRatio="none">
+      <!-- center -> 3 panels -->
+      <line x1="570" y1="412" x2="570" y2="244" stroke="#5a4a22" stroke-width="2.5"/>
+      <line x1="520" y1="438" x2="200" y2="520" stroke="#5a4a22" stroke-width="2.5"/>
+      <line x1="620" y1="438" x2="940" y2="520" stroke="#5a4a22" stroke-width="2.5"/>
+      <!-- physique -> leaves -->
+      <line x1="410" y1="172" x2="280" y2="151" stroke="#7CC576" stroke-width="2.2"/>
+      <line x1="750" y1="172" x2="860" y2="151" stroke="#7CC576" stroke-width="2.2"/>
+      <!-- cortisol -> leaves (vertical list on the right) -->
+      <line x1="358" y1="555" x2="372" y2="555" stroke="#E8A33D" stroke-width="2.2"/>
+      <line x1="358" y1="631" x2="372" y2="631" stroke="#E8A33D" stroke-width="2.2"/>
+      <line x1="358" y1="707" x2="372" y2="707" stroke="#E8A33D" stroke-width="2.2"/>
+      <!-- adrenaline -> leaf -->
+      <line x1="952" y1="720" x2="952" y2="742" stroke="#D9534F" stroke-width="2.2"/>
+      <circle cx="570" cy="412" r="4" fill="#F2C76E"/>
+      <circle cx="570" cy="244" r="3.5" fill="#7CC576"/>
+      <circle cx="200" cy="520" r="3.5" fill="#E8A33D"/>
+      <circle cx="940" cy="520" r="3.5" fill="#D9534F"/>
+    </svg>
+
+    <div class="core">
+      <img class="logo" src="rw_assets/logo_big.png" alt="RimWorld">
+      <div class="ribbon">边缘体魄<small>RIMPHYSIQUE</small></div>
+    </div>
+
+    <!-- 体魄 -->
+    <div class="panel p-phys">
+      <h3><img src="rw_assets/colonist.png" alt="">PHYSIGUE<small>体魄系统</small></h3>
+      <div class="body">
+        <ul>
+          <li>五阶段：虚弱 / 一般 / 健康 / 强壮 / 卓越</li>
+          <li>身体属性修正：移动 · 操作 · 负重 · 闪避</li>
+          <li>用进废退（日常衰减）</li>
+          <li>特质 / 背景偏移</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 皮质醇 -->
+    <div class="panel p-cort">
+      <h3><img src="rw_assets/mood.png" alt="">CORTISOL<small>皮质醇</small></h3>
+      <div class="body">
+        <div class="char-img"><img src="rw_assets/colonist.png" alt="殖民者"></div>
+        <ul>
+          <li>三档位：正常 / 承压 / 高压</li>
+          <li>抬升：低心情 · 饥饿 · 疼痛 · 得病 · 被侮辱 · 不舒适 · 缺娱乐 · 环境差 · 吃生食 · 湿透</li>
+          <li>降低：娱乐 · 优质睡眠 · 高心情 · 美食 · 自然衰减</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 肾上腺素 -->
+    <div class="panel p-adr">
+      <h3><img src="rw_assets/assault_rifle.png" alt="">ADRENALINE<small>肾上腺素</small></h3>
+      <div class="body">
+        <ul>
+          <li>四档位：休眠 / 低 / 中 / 高</li>
+          <li>生成：近战 · 受击 · 流血 · 战斗区域</li>
+          <li>增益：移速 · 意识 · 伤害 · 闪避 · 呼吸 · 代谢↑</li>
+          <li>体魄修正 &amp; 豁免</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 体魄子标签（向外扩散） -->
+    <div class="leaf leaf-phys1">
+      <span class="ltag">肌肉劳损</span>
+      <div class="lbody">劳作 / 锻炼积累劳损</div>
+    </div>
+    <div class="leaf leaf-phys2">
+      <span class="ltag">损伤</span>
+      <div class="lbody">拉伤 · 肌肉酸痛</div>
+    </div>
+
+    <!-- 皮质醇子标签（向外扩散） -->
+    <div class="leaf leaf-cort1">
+      <span class="ltag">神经衰弱</span>
+      <div class="lbody">休息↓ · 心情↓</div>
+    </div>
+    <div class="leaf leaf-cort2">
+      <span class="ltag">快感缺失</span>
+      <div class="lbody">正面心情归零</div>
+    </div>
+    <div class="leaf leaf-cort3">
+      <span class="ltag">失眠</span>
+      <div class="lbody">无法入睡</div>
+    </div>
+
+    <!-- 肾上腺素子标签（向外扩散） -->
+    <div class="leaf leaf-adr1">
+      <span class="ltag">子标签 · 透支损伤</span>
+      <div class="lbody">肾上腺素过高导致的器官 / 系统透支损伤</div>
+    </div>
+
+    <div class="foot">RIMPHYSIQUE · 版本 BETA 0.4.7</div>
+    <div class="src">图片来源：rimworldwiki.com</div>
+  </div>
+</body>
+</html>

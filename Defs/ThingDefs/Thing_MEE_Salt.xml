@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 盐：代谢扩展模块的电解质需求基础资源（占位贴图，后续可换专用贴图） -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>MEE_Salt</defName>
+    <label>salt</label>
+    <description>Table salt. A basic metabolic resource used by the Metabolic Essential module to satisfy the electrolytes need.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/Steel</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+      <drawSize>(0.6,0.6)</drawSize>
+    </graphicData>
+    <stackLimit>75</stackLimit>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <MarketValue>0.4</MarketValue>
+      <Mass>0.05</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+  </ThingDef>
+</Defs>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Hormones;
 using Hormones.Logic.PhysiqueLogic;
+using UnityEngine;
 
 namespace Hormones
 {
@@ -45,11 +46,37 @@ namespace Hormones
     /// </summary>
     public class Need_Cortisol : Need
     {
-        // 神经衰弱检测节流计数器（每 6000 tick 检测一次）
+        // 坏症状组检测节流计数器（每 6000 tick 检测一次）
         private int ticksSinceLastNeuroCheck = 0;
+
+        // ===== 外置 Mod 接口：额外皮质醇衰减（每 150 tick 间隔） =====
+        // 由饮品拓展等 Mod 通过下方方法设置（如奶茶额外衰减13%/日 ≈ -3.25/interval），
+        // 主 Mod 不硬编码任何饮品 defName。运行时瞬态值，不随存档持久化。
+        private float extraCortisolDecayPerInterval = 0f;
+        /// <summary>外部 Mod 设置每 150 tick 额外皮质醇衰减量（默认 0 = 无）。</summary>
+        public void SetExtraCortisolDecay(float perInterval) => extraCortisolDecayPerInterval = perInterval;
+        /// <summary>外部 Mod 重置额外皮质醇衰减为默认 0。</summary>
+        public void ResetExtraCortisolDecay() => extraCortisolDecayPerInterval = 0f;
+
+        // 坏症状组触发门控：皮质醇持续高于阈值达 1 游戏天后，canBadCortisolHediff 置 true，检测(roll)才允许运行
+        private int badHediffSustainTimer = 0;
+        private bool canBadCortisolHediff = false;
+
+        // 失眠触发【现实时间】检查节流（秒），使用 Time.realtimeSinceStartup 计时（不随游戏暂停/倍速）
+        private float lastInsomniaRealCheck = -999f;
 
         // 流程日志节流计数器
         private int logFlowCounter = 0;
+
+        /// <summary>
+        /// 持久化：门控状态会随存档保存，读档后不会重置（避免重新累计一天）。
+        /// </summary>
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref canBadCortisolHediff, "canBadCortisolHediff", false);
+            Scribe_Values.Look(ref badHediffSustainTimer, "badHediffSustainTimer", 0);
+        }
 
         // 当前档位
         private CortisolLevel lastLevel = CortisolLevel.Normal;
@@ -156,18 +183,19 @@ namespace Hormones
                 growth *= 2f;
                 physiqueGrowth *= 2f;
 
-                // 检查是否有奶茶Buff (皮质醇额外衰减13%/日)
-                if (pawn.health != null)
-                {
-                    Hediff milkTeaBuff = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkMilkTea"));
-                    if (milkTeaBuff != null)
-                    {
-                        // 13%每日 = 13% * 150 / 60000 = 0.0325% per 150 tick
-                        // 对应CurLevel: 10000 * 0.13 * 150 / 60000 = 3.25
-                        float milkTeaDecay = 3.25f;
-                        decay += milkTeaDecay;
-                    }
-                }
+                // 神经衰弱覆盖效应：仅作用于【数值下降(恢复/衰减)方向】
+                // - decay（衰减）：下降方向 → 降速 33%
+                // - physiqueGrowth<0（体魄强使皮质醇下降）：下降方向 → 降速 33%
+                // - growth（应激积累/上升方向）与 physiqueGrowth>0（体魄弱使皮质醇上升）：不降速
+                float cover = PhysiqueLgc.GetStrainCoverEffect(pawn);
+                decay *= cover;
+                if (physiqueGrowth < 0f) physiqueGrowth *= cover;
+
+                // 外置 Mod 接口：额外皮质醇衰减（每 150 tick 间隔）。
+                // 由饮品拓展等 Mod 通过 SetExtraCortisolDecay 设置（如奶茶 -3.25/interval ≈ 额外衰减13%/日），
+                // 主 Mod 不硬编码任何饮品 defName。
+                if (extraCortisolDecayPerInterval != 0f)
+                    decay += extraCortisolDecayPerInterval;
 
                 CurLevel -= decay;
                 CurLevel += growth;
@@ -179,8 +207,14 @@ namespace Hormones
                 // 流程日志：每 5 次调用（约 750 tick）打印一次，确认引擎工作
                 LogCortisolFlow(severity, decay, growth, physiqueGrowth);
 
-                // 神经衰弱检测（内部按 6000 tick 节流）
-                TryTriggerNeurastheniaCheck();
+                // 坏症状组触发门控：累计"持续高压"计时，满 1 游戏天解锁 canBadCortisolHediff
+                UpdateBadCortisolHediffGate(severity);
+
+                // 坏症状组检测（受 canBadCortisolHediff 门控，内部按 6000 tick 节流）
+                TryTriggerBadCortisolHediffCheck();
+
+                // 失眠独立检测：已患神经衰弱 + 睡眠状态 + 5% 概率（内部按现实时间节流）
+                TryTriggerInsomnia();
 
                 // 更新档位并通知变化
                 UpdateLevel();
@@ -277,8 +311,11 @@ namespace Hormones
                 return;
 
             MoteText moteText = (MoteText)ThingMaker.MakeThing(ThingDefOf.Mote_Text);
+            float sx = Rand.Range(-Define.MoteScatterSpread, Define.MoteScatterSpread);
+            float sy = Rand.Range(-Define.MoteScatterSpread, Define.MoteScatterSpread);
+            float sz = Rand.Range(-Define.MoteScatterSpread, Define.MoteScatterSpread);
             object vector3 = PhysiqueDatas.GetVector3(
-                pawn.Position.x + 0.5f, 0.5f, pawn.Position.z + 0.5f);
+                pawn.Position.x + 0.5f + sx, 0.5f + sy, pawn.Position.z + 0.5f + sz);
             FieldInfo field = typeof(MoteText).GetField("exactPosition");
             if (field != null)
             {
@@ -531,6 +568,30 @@ namespace Hormones
                 growthPerDay += Define.CortisolGrowthInsulted;
             }
 
+            // 吃了生的食物（AteRawFood 记忆 Thought）
+            if (HasAteRawFoodThought())
+            {
+                growthPerDay += Define.CortisolGrowthAteRawFood;
+            }
+
+            // 湿透了（SoakingWet 情景 Thought）
+            if (HasSoakingWetThought())
+            {
+                growthPerDay += Define.CortisolGrowthSoakingWet;
+            }
+
+            // 不够舒适（comfort need < 0.5）
+            if (pawn.needs?.comfort != null && pawn.needs.comfort.CurLevel < 0.5f)
+            {
+                growthPerDay += Define.CortisolGrowthUncomfortable;
+            }
+
+            // 没有娱乐活动（joy need < 0.3）
+            if (pawn.needs?.joy != null && pawn.needs.joy.CurLevel < 0.3f)
+            {
+                growthPerDay += Define.CortisolGrowthNoRecreation;
+            }
+
             // 转换为每 150 tick 区间的量（60000 ticks = 1天；NeedInterval 每 150 tick 一次）
             return growthPerDay * 150f / 60000f;
         }
@@ -641,6 +702,27 @@ namespace Hormones
         }
 
         /// <summary>
+        /// 检测是否吃了生的食物（AteRawFood 记忆 Thought）
+        /// </summary>
+        private bool HasAteRawFoodThought()
+        {
+            if (pawn.needs?.mood?.thoughts?.memories == null)
+                return false;
+            return pawn.needs.mood.thoughts.memories.GetFirstMemoryOfDef(ThoughtDef.Named("AteRawFood")) != null;
+        }
+
+        /// <summary>
+        /// 检测是否湿透了（SoakingWet 情景 Thought，通过 ThoughtWorker 实时判定）
+        /// </summary>
+        private bool HasSoakingWetThought()
+        {
+            ThoughtDef def = ThoughtDef.Named("SoakingWet");
+            if (def == null || def.Worker == null)
+                return false;
+            return def.Worker.CurrentState(pawn).Active; // 情景类：实时计算是否生效
+        }
+
+        /// <summary>
         /// 获取肾上腺素浓度
         /// </summary>
         private float GetAdrenalineSeverity()
@@ -685,10 +767,36 @@ namespace Hormones
         }
 
         /// <summary>
-        /// 尝试触发神经衰弱检测
+        /// 坏症状组触发门控更新：皮质醇 severity 持续 ≥ BadCortisolHediffThreshold 时累计计时，
+        /// 满 BadCortisolHediffSustainTicks(=1 游戏天) 后 canBadCortisolHediff=true（解锁，且一旦解锁即锁定）。
+        /// 低于阈值则计时清零，要求"持续"一天而非断断续续凑数。
         /// </summary>
-        private void TryTriggerNeurastheniaCheck()
+        private void UpdateBadCortisolHediffGate(float severity)
         {
+            if (canBadCortisolHediff)
+                return; // 已解锁则保持
+
+            if (severity >= Define.BadCortisolHediffThreshold)
+            {
+                badHediffSustainTimer += 150; // 每次 NeedInterval ≈ 150 tick
+                if (badHediffSustainTimer >= Define.BadCortisolHediffSustainTicks)
+                    canBadCortisolHediff = true;
+            }
+            else
+            {
+                badHediffSustainTimer = 0; // 中断即清零
+            }
+        }
+
+        /// <summary>
+        /// 坏症状组检测（受 canBadCortisolHediff 门控）。门控解锁后，每 6000 tick 按概率加权抽取组内一个症状施加。
+        /// </summary>
+        private void TryTriggerBadCortisolHediffCheck()
+        {
+            // 门控：必须 canBadCortisolHediff==true（皮质醇持续高压满 1 天）才允许检测/roll
+            if (!canBadCortisolHediff)
+                return;
+
             // 按 6000 tick 节流：每次 NeedInterval ≈ 150 tick
             ticksSinceLastNeuroCheck += 150;
             if (ticksSinceLastNeuroCheck < 6000)
@@ -696,86 +804,20 @@ namespace Hormones
             ticksSinceLastNeuroCheck = 0;
 
             float severity = CurLevel / MaxLevel;
-            float probability = GetNeurastheniaProbability(severity);
+            float probability = GetBadCortisolHediffProbability(severity);
 
             // 飘字：每次 roll 都显示当前概率（每 6000 tick 一次），便于确认检测在跑
-            ShowMote($"神经衰弱检测 {probability:P0}");
+            ShowMote($"坏症状检测 {probability:P0}");
 
             // 注：检测日志已按用户要求暂时关闭，飘字仍保留。
 
             if (Rand.Value < probability)
             {
-                ApplyNeurasthenia();
+                ApplyBadCortisolHediff();
             }
 
-            // 神经衰弱存在时，按概率触发「失眠发作」不可控精神状态（2小时）
-            // TODO: 失眠功能暂时禁用，待调试
-            // TryTriggerInsomniaBreak();
         }
 
-        /// <summary>
-        /// 神经衰弱存在时，按概率触发「失眠发作」不可控精神状态（复用 WanderOwnRoom 游荡行为，强制 2 小时）。
-        /// 通过 ThinkTree patch 把本 def 加入 Wander_OwnRoom 的 ConditionalMentalStates 节点，
-        /// 使 pawn 在发作期间无法被玩家控制地游荡。forced:true 绕过卧室限制，forceWake:true 即使
-        /// 睡着也发作（失眠本义）。每 6000 tick 检测一次。
-        /// </summary>
-        private void TryTriggerInsomniaBreak()
-        {
-            // 仅当存在神经衰弱 Hediff 时才可能发作
-            HediffDef neurastheniaDef = DefDatabase<HediffDef>.GetNamed("CortisolNeurasthenia", false);
-            if (neurastheniaDef == null || !pawn.health.hediffSet.HasHediff(neurastheniaDef))
-                return;
-
-            // 保护逻辑：失眠发作只能在睡眠状态下触发（白天/清醒状态绝不触发）
-            if (!(pawn.jobs?.curDriver?.asleep == true))
-            {
-                Log.Warning($"[失眠诊断] {pawn?.Name?.ToStringShort ?? "null"} 未在睡眠，asleep={pawn?.jobs?.curDriver?.asleep}");
-                return;
-            }
-
-            // 已处于任何精神状态时不叠加
-            if (pawn.mindState.mentalStateHandler.InMentalState)
-            {
-                Log.Warning($"[失眠诊断] {pawn?.Name?.ToStringShort ?? "null"} 已在精神状态中");
-                return;
-            }
-
-            // 每次检测都显示飘字，确认系统在跑（检测日志按用户要求关闭）
-            ShowMote("失眠检测");
-
-            MentalStateDef insomniaDef = DefDatabase<MentalStateDef>.GetNamed("NeurastheniaInsomnia", false);
-            if (insomniaDef == null)
-            {
-                Log.Warning("[失眠诊断] NeurastheniaInsomnia def 未找到");
-                return;
-            }
-
-            // 检查 StateCanOccur
-            if (!insomniaDef.Worker.StateCanOccur(pawn))
-            {
-                Log.Warning($"[失眠诊断] {pawn?.Name?.ToStringShort ?? "null"} StateCanOccur=false");
-                return;
-            }
-
-            Log.Warning($"[失眠诊断] {pawn?.Name?.ToStringShort ?? "null"} 准备触发失眠，forceWake=true");
-
-            if (Rand.Value < Define.CortisolInsomniaTriggerChancePerCheck)
-            {
-                // forced:true 绕过卧室/StateCanOccur 限制；forceWake:true 即使睡着也发作（失眠本义）
-                bool started = pawn.mindState.mentalStateHandler.TryStartMentalState(
-                    insomniaDef, "神经衰弱引发的失眠发作", forced: true, forceWake: true);
-
-                if (started)
-                {
-                    ShowMote("失眠发作!");
-                    Log.Warning($"[失眠发作] {pawn.Name?.ToStringFull ?? "Unknown"} 触发成功！forceWake={true}");
-                }
-                else
-                {
-                    Log.Warning($"[失眠发作] {pawn.Name?.ToStringFull ?? "Unknown"} 触发失败！");
-                }
-            }
-        }
 
         /// <summary>
         /// 获取神经衰弱触发概率
@@ -784,6 +826,19 @@ namespace Hormones
         /// 0.66-1.0: 8%
         /// </summary>
         public float GetNeurastheniaProbability(float severity)
+        {
+            if (severity < 0.33f)
+                return 0f;
+            if (severity < 0.66f)
+                return 0.03f;
+            return 0.08f;
+        }
+
+        /// <summary>
+        /// 坏症状组整体抽取概率（与神经衰弱同档位）：0-0.33=0%，0.33-0.66=3%，0.66-1.0=8%。
+        /// 仅在 canBadCortisolHediff 门控解锁后参与 roll；门控本身已要求持续高压满 1 天。
+        /// </summary>
+        private float GetBadCortisolHediffProbability(float severity)
         {
             if (severity < 0.33f)
                 return 0f;
@@ -836,37 +891,157 @@ namespace Hormones
         }
 
         /// <summary>
-        /// 应用神经衰弱
+        /// 应用高皮质醇「坏症状」：从 Define.badCortisolhediffGroup【加权随机】抽取【其中一个】Hediff 施加。
+        /// 失眠(CortisolInsomnia)不再在此施加，改为独立检测（已患神经衰弱 + 睡眠状态 + 5% 概率，见 TryTriggerInsomnia）。
+        /// 所有施加均为守卫式，已存在则跳过，避免重复叠加。
         /// </summary>
-        private void ApplyNeurasthenia()
+        private void ApplyBadCortisolHediff()
         {
-            HediffDef neurastheniaDef = DefDatabase<HediffDef>.GetNamed("CortisolNeurasthenia", false);
-            if (neurastheniaDef == null)
+            // 加权随机抽取组内一个成员
+            string chosenDefName = PickWeightedBadCortisolHediff();
+            if (chosenDefName == null)
                 return;
 
-            Hediff neurasthenia = HediffMaker.MakeHediff(neurastheniaDef, pawn);
-            neurasthenia.Severity = 1.0f;
-            pawn.health.AddHediff(neurasthenia);
+            // 守卫式施加抽中的症状（已存在则跳过，避免多次 roll 成功导致叠加）
+            HediffDef def = DefDatabase<HediffDef>.GetNamed(chosenDefName, false);
+            if (def != null && !pawn.health.hediffSet.HasHediff(def))
+            {
+                Hediff h = HediffMaker.MakeHediff(def, pawn);
+                h.Severity = 1.0f;
+                pawn.health.AddHediff(h);
+            }
 
-            ShowMote("神经衰弱 触发!");
+            // 飘字：显示抽中的症状名（受「症状触发飘字」子开关控制）
+            if (RimHormonesMod.Settings.ShowCortisolMotes && RimHormonesMod.Settings.ShowCortisolInsomniaMotes)
+            {
+                string label = def != null ? def.label : chosenDefName;
+                ShowMote($"{label} 触发!");
+            }
 
-            Log.Warning($"[皮质醇-神经衰弱触发] 🔴 {pawn.Name?.ToStringFull ?? "Unknown"} 患上了神经衰弱！");
+            Log.Warning($"[皮质醇-症状触发] 🔴 {pawn.Name?.ToStringFull ?? "Unknown"} 触发了 {chosenDefName}（加权抽取）！");
         }
 
         /// <summary>
-        /// 获取冒犯权重修正
-        /// 0-0.33: ×0.5 (-50%)
-        /// 0.33-0.66: ×2.0 (+100%)
-        /// 0.66-1.0: ×4.0 (+300%)
+        /// 失眠独立检测：仅当 pawn【已患神经衰弱】且【处于睡眠状态(asleep)】时，
+        /// 按【现实时间】每 InsomniaRealCheckInterval 秒检查一次，InsomniaTriggerChance(5%) 概率施加 CortisolInsomnia。
+        /// 与坏症状组无关：不因抽到快感缺失而触发，也不依赖 canBadCortisolHediff 门控（只看"是否真有神经衰弱 + 是否真在睡"）。
         /// </summary>
-        public float GetSocialFightChanceFactor()
+        private void TryTriggerInsomnia()
+        {
+            // 现实世界每 10 秒检查一次（不随游戏暂停/倍速变化）
+            if (Time.realtimeSinceStartup - lastInsomniaRealCheck < Define.InsomniaRealCheckInterval)
+                return;
+            lastInsomniaRealCheck = Time.realtimeSinceStartup;
+
+            // 前置：必须已患神经衰弱，才谈得上"神经衰弱引发的失眠"
+            HediffDef neurastheniaDef = DefDatabase<HediffDef>.GetNamed("CortisolNeurasthenia", false);
+            if (neurastheniaDef == null || !pawn.health.hediffSet.HasHediff(neurastheniaDef))
+                return;
+
+            // 仅睡眠状态（白天/清醒绝不触发）
+            if (!(pawn.jobs?.curDriver?.asleep == true))
+                return;
+
+            // 守卫：已失眠则不重复施加
+            HediffDef insomniaDef = DefDatabase<HediffDef>.GetNamed("CortisolInsomnia", false);
+            if (insomniaDef == null || pawn.health.hediffSet.HasHediff(insomniaDef))
+                return;
+
+            // 飘字：受「症状触发飘字」子开关控制
+            if (RimHormonesMod.Settings.ShowCortisolMotes && RimHormonesMod.Settings.ShowCortisolInsomniaMotes)
+                ShowMote("失眠检测");
+
+            if (Rand.Value < Define.InsomniaTriggerChance)
+            {
+                Hediff insomnia = HediffMaker.MakeHediff(insomniaDef, pawn);
+                insomnia.Severity = 1.0f;
+                pawn.health.AddHediff(insomnia);
+
+                if (RimHormonesMod.Settings.ShowCortisolMotes && RimHormonesMod.Settings.ShowCortisolInsomniaMotes)
+                    ShowMote("失眠 触发!");
+                Log.Warning($"[失眠] {pawn.Name?.ToStringFull ?? "Unknown"} 触发失眠（神经衰弱 + 睡眠状态）！");
+            }
+        }
+
+        /// <summary>
+        /// 按权重从 Define.badCortisolhediffGroup 中随机抽一个 defName；组为空或总权重≤0 时返回 null。
+        /// </summary>
+        private string PickWeightedBadCortisolHediff()
+        {
+            var group = Define.badCortisolhediffGroup;
+            if (group == null || group.Count == 0)
+                return null;
+
+            float totalWeight = 0f;
+            foreach (var entry in group)
+                totalWeight += entry.weight;
+            if (totalWeight <= 0f)
+                return null;
+
+            float roll = Rand.Value * totalWeight;
+            foreach (var entry in group)
+            {
+                roll -= entry.weight;
+                if (roll <= 0f)
+                    return entry.defName;
+            }
+            // 浮点兜底：返回最后一个
+            return group[group.Count - 1].defName;
+        }
+
+        /// <summary>
+        /// 获取冒犯/负面社交权重修正的档位信息与倍率。
+        /// 0-0.33: 正常波动 ×0.5 (-50%)
+        /// 0.33-0.66: 承压 ×2.0 (+100%)
+        /// 0.66-1.0: 高压 ×4.0 (+300%)
+        /// </summary>
+        public (string tierLabel, float factor) GetSocialFightChanceInfo()
         {
             float severity = CurLevel / MaxLevel;
             if (severity < 0.33f)
-                return 0.5f;  // -50%
+                return ("正常波动", 0.5f);  // -50%
             if (severity < 0.66f)
-                return 2.0f;  // +100%
-            return 4.0f;      // +300%
+                return ("承压", 2.0f);  // +100%
+            return ("高压", 4.0f);      // +300%
+        }
+
+        /// <summary>
+        /// 获取冒犯权重修正（倍率，供原 Harmony 调用）
+        /// </summary>
+        public float GetSocialFightChanceFactor()
+        {
+            return GetSocialFightChanceInfo().factor;
+        }
+
+        /// <summary>
+        /// 公共静态飘字：在 pawn 头顶显示「皮质醇社交影响」飘字。
+        /// 受「显示皮质醇飘字」(父) 与「皮质醇社交影响飘字」(子) 双重开关控制。
+        /// 供 Harmony_CortisolInteraction / HormonesLogic 的社交 patch 调用（它们不在 Need_Cortisol 实例内）。
+        /// </summary>
+        public static void ShowCortisolSocialMote(Pawn pawn, string text)
+        {
+            if (!RimHormonesMod.Settings.ShowCortisolMotes)
+                return;
+            if (!RimHormonesMod.Settings.ShowCortisolSocialMotes)
+                return;
+            if (pawn == null || pawn.Map == null)
+                return;
+
+            MoteText moteText = (MoteText)ThingMaker.MakeThing(ThingDefOf.Mote_Text);
+            float sx = Rand.Range(-Define.MoteScatterSpread, Define.MoteScatterSpread);
+            float sy = Rand.Range(-Define.MoteScatterSpread, Define.MoteScatterSpread);
+            float sz = Rand.Range(-Define.MoteScatterSpread, Define.MoteScatterSpread);
+            object vector3 = PhysiqueDatas.GetVector3(
+                pawn.Position.x + 0.5f + sx, 0.5f + sy, pawn.Position.z + 0.5f + sz);
+            FieldInfo field = typeof(MoteText).GetField("exactPosition");
+            if (field != null)
+            {
+                field.SetValue(moteText, vector3);
+                moteText.SetVelocity(Rand.Range(5, 35), Rand.Range(0.42f, 0.45f));
+                moteText.text = text;
+                GenSpawn.Spawn(moteText, pawn.Position, pawn.Map);
+                PhysiqueDatas.ReturnVector3(vector3);
+            }
         }
 
         public override int GUIChangeArrow

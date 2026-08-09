@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <NeedDef>
+    <defName>MEEProtein</defName>
+    <label>protein</label>
+    <description>Protein reserve. Depletes very slowly; represents the raw material for long-term tissue repair and synthesis. Part of the Metabolic Essential module.</description>
+    <needClass>Hormones.Need_MEE_Protein</needClass>
+    <minIntelligence>ToolUser</minIntelligence>
+    <showOnNeedList>true</showOnNeedList>
+    <colonistsOnly>true</colonistsOnly>
+    <baseLevel>1</baseLevel>
+    <fallPerDay>0</fallPerDay>
+    <major>false</major>
+  </NeedDef>
+</Defs>

@@ -225,6 +225,15 @@ public class HormonesComponent : ThingComp, IExposable
         activeToday = false; // 进入下一个周期，重置活动标记
     }
 
+    // ===== 外置 Mod 接口：抑制每日体魄衰减 =====
+    // 由饮品拓展等 Mod 通过下方方法设置「当成一次锻炼」效果，主 Mod 不硬编码任何饮品 defName。
+    // 运行时瞬态值，不随存档持久化。
+    private bool suppressDailyDecay = false;
+    /// <summary>外部 Mod 设置是否抑制每日体魄衰减（默认 false）。饮品生效时设 true 表示「当成一次锻炼」。</summary>
+    public void SetDailyDecaySuppressed(bool suppressed) => suppressDailyDecay = suppressed;
+    /// <summary>外部 Mod 重置每日体魄衰减抑制为默认 false。</summary>
+    public void ResetDailyDecaySuppressed() => suppressDailyDecay = false;
+
     private void DailyPhysiqueDecay()
     {
         // 仅对类人生效（与整套激素/体魄系统一致）
@@ -233,11 +242,9 @@ public class HormonesComponent : ThingComp, IExposable
         // 本周期有过体力劳作/锻炼 → 用进，不衰减
         if (activeToday) return;
 
-        // 【2026-08-04 饮品 Buff】功能饮品生效中：视为「当成一次锻炼」，
-        // Buff 持续期间（12h）体魄不因缺乏活动而衰减。
-        if (Pawn.health != null
-            && Pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkEnergyDrink"), false) != null)
-            return;
+        // 外置 Mod 接口：抑制每日体魄衰减（如饮品拓展「当成锻炼」效果）。
+        // 由饮品拓展通过 SetDailyDecaySuppressed(true)/Reset 设置，主 Mod 不硬编码任何饮品 defName。
+        if (suppressDailyDecay) return;
 
         // 总倍率（玩家可调，0=关闭）
         float globalMult = RimHormonesMod.Settings != null

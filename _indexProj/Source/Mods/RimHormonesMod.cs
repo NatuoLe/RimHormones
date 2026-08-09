@@ -18,12 +18,29 @@ namespace Hormones
         {
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(inRect);
+            listing.CheckboxLabeled("启用 Metabolic Essential（代谢扩展模块）", ref Settings.EnableMetabolicEssential,
+                "实验性：启用 MetabolicEssential.dll 提供的额外代谢机制。勾选/取消后需重启游戏客户端才能生效。");
+            if (!MetabolicLoader.IsModulePresent)
+            {
+                listing.Label("⚠ 未检测到 MetabolicEssential.dll（应位于本 mod 的 Assemblies 目录）。");
+            }
+            else if (Settings.EnableMetabolicEssential != MetabolicLoader.IsLoaded)
+            {
+                listing.Label("⚠ 该选项的更改需重启游戏客户端后才能生效。");
+            }
             listing.CheckboxLabeled("显示肾上腺素飘字", ref Settings.ShowAdrenalineMotes,
                 "肾上腺素浓度变化时，在角色上方显示飘字通知（格式：肾上腺[原因]：±数值 [当前/100]）");
             listing.CheckboxLabeled("显示体魄飘字", ref Settings.ShowPhysiqueMotes,
                 "体魄经验获取、肌肉劳损等事件时，在角色上方显示飘字通知");
             listing.CheckboxLabeled("显示皮质醇飘字", ref Settings.ShowCortisolMotes,
-                "皮质醇浓度变化、神经衰弱检测/触发、失眠发作、优质睡眠等事件时，在角色上方显示飘字通知");
+                "皮质醇浓度变化、神经衰弱检测/触发、症状触发、优质睡眠等事件时，在角色上方显示飘字通知");
+            if (Settings.ShowCortisolMotes)
+            {
+                listing.CheckboxLabeled("    └ 皮质醇社交影响飘字", ref Settings.ShowCortisolSocialMotes,
+                    "社交互动时（冒犯/侮辱倾向、负面社交冲突概率）在角色头顶显示皮质醇带来的权重倍率飘字（含档位与新增倍率）");
+                listing.CheckboxLabeled("    └ 症状触发飘字", ref Settings.ShowCortisolInsomniaMotes,
+                    "高皮质醇症状组（神经衰弱/快感缺失）加权触发时，在角色头顶显示抽中的症状名飘字");
+            }
             listing.CheckboxLabeled("显示身体损伤飘字", ref Settings.ShowBodyDamageMotes,
                 "肌肉拉伤、以及肾上腺素透支导致的身体损伤触发时，在角色上方显示飘字通知（部位 + 损伤名，按轻/中/重分色）");
             if (Settings.ShowBodyDamageMotes)
@@ -69,6 +86,8 @@ namespace Hormones
         public bool ShowAdrenalineMotes = false;
         public bool ShowPhysiqueMotes = false;
         public bool ShowCortisolMotes = false;
+        public bool ShowCortisolSocialMotes = false;  // 皮质醇社交影响飘字（"显示皮质醇飘字"的子级）
+        public bool ShowCortisolInsomniaMotes = false;  // 失眠检测/发作飘字（"显示皮质醇飘字"的子级）
         public bool ShowBodyDamageMotes = true;  // 身体损伤飘字（肌肉拉伤 + 透支损伤），默认开启
         public bool ShowEnemyBodyDamageMotes = false;  // 是否显示非玩家阵营的身体损伤飘字，默认关闭（只显示自己殖民者）
 
@@ -86,11 +105,16 @@ namespace Hormones
         // 肾上腺素长期堆积损伤总倍率（0=关闭）
         public float AdrenalineBuildupGlobalMult = Define.DefaultAdrenalineBuildupGlobalMult;
 
+        // 代谢扩展模块（MetabolicEssential.dll）开关；仅在游戏启动期生效，运行期更改需重启
+        public bool EnableMetabolicEssential = false;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref ShowAdrenalineMotes, "showAdrenalineMotes", false);
             Scribe_Values.Look(ref ShowPhysiqueMotes, "showPhysiqueMotes", false);
             Scribe_Values.Look(ref ShowCortisolMotes, "showCortisolMotes", false);
+            Scribe_Values.Look(ref ShowCortisolSocialMotes, "showCortisolSocialMotes", false);
+            Scribe_Values.Look(ref ShowCortisolInsomniaMotes, "showCortisolInsomniaMotes", false);
             Scribe_Values.Look(ref ShowBodyDamageMotes, "showBodyDamageMotes", true);
             Scribe_Values.Look(ref ShowEnemyBodyDamageMotes, "showEnemyBodyDamageMotes", false);
             Scribe_Values.Look(ref StrainTriggerThresholdPct, "strainTriggerThresholdPct", Define.DefaultStrainTriggerThresholdPct);
@@ -98,6 +122,7 @@ namespace Hormones
             Scribe_Values.Look(ref PhysiqueDecayGlobalMult, "physiqueDecayGlobalMult", Define.DefaultPhysiqueDecayGlobalMult);
             Scribe_Values.Look(ref StrainBlockThresholdPct, "strainBlockThresholdPct", 0.25f);
             Scribe_Values.Look(ref AdrenalineBuildupGlobalMult, "adrenalineBuildupGlobalMult", Define.DefaultAdrenalineBuildupGlobalMult);
+            Scribe_Values.Look(ref EnableMetabolicEssential, "enableMetabolicEssential", false);
         }
     }
 }

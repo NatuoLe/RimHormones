@@ -286,7 +286,10 @@ public static class NegativeInteractionUtility_ChanceFactor_Patch
             Need_Cortisol cortisol = initiator.needs?.TryGetNeed<Need_Cortisol>();
             if (cortisol != null)
             {
-                __result *= cortisol.GetSocialFightChanceFactor();
+                var info = cortisol.GetSocialFightChanceInfo();
+                __result *= info.factor;
+                Need_Cortisol.ShowCortisolSocialMote(initiator,
+                    $"社交·冲突: {info.tierLabel} ×{info.factor:F1}");
             }
         }
     }
@@ -322,13 +325,14 @@ public static class SkillRecord_Learn_Physique_Patch
         float inputXp = xp;
         xp = xp / originalMultiplier * customMultiplier;
 
-        // 【2026-08-04 饮品 Buff】果蔬汁生效中：体魄经验获取 +25%（对所有来源统一生效，
-        // 取代原 ExerciseWork 里仅锻炼 ×1.3 的特判）。
-        Pawn pawnForJuice = __instance.Pawn;
-        if (pawnForJuice?.health != null
-            && pawnForJuice.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("DrinkFruitJuice"), false) != null)
+        // 外置 Mod 接口：体魄经验额外乘区（如饮品拓展设 1.25f = +25%）。
+        // 通过 Need_MuscleStrain 上的调制器生效，主 Mod 不硬编码任何饮品 defName。
+        if (__instance.Pawn?.needs != null
+            && __instance.Pawn.needs.TryGetNeed<Need_MuscleStrain>(out var strainNeed)
+            && strainNeed != null)
         {
-            xp *= 1.25f;
+            float xpMult = strainNeed.GetExtraPhysiqueXpMultiplier();
+            if (xpMult != 1f) xp *= xpMult;
         }
 
         DebugPrintPassionXp(__instance, inputXp, xp, originalMultiplier, customMultiplier);
@@ -358,7 +362,9 @@ public static class SkillRecord_Learn_Physique_Patch
         string msg = $"[Hormones] 体魄经验 {pawn.LabelShort} 热情={rec.passion} 传入={inputXp:F3} → 真实={realXp:F3}（原×{orig} 覆盖×{custom}）";
         Log.Message(msg);
 
-        if (pawn.Spawned && pawn.Map != null)
+        // 受玩家设置控制：只有开启"显示体魄飘字"时才显示调试飘字
+        if (RimHormonesMod.Settings != null && RimHormonesMod.Settings.ShowPhysiqueMotes
+            && pawn.Spawned && pawn.Map != null)
         {
             MoteMaker.ThrowText(pawn.DrawPos, pawn.Map, $"体魄XP 传入{inputXp:F2}→真实{realXp:F2}", 2.5f);
         }

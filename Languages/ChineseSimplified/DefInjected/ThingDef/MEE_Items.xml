@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <MEE_RawSugar.label>生砂糖</MEE_RawSugar.label>
+  <MEE_RawSugar.description>未精炼的砂糖。代谢扩展模块的基础资源，用于满足「糖」需求。</MEE_RawSugar.description>
+  <MEE_Salt.label>盐</MEE_Salt.label>
+  <MEE_Salt.description>食盐。代谢扩展模块的基础资源，用于满足「电解质」需求。</MEE_Salt.description>
+  <MEE_ProteinExtract.label>蛋白质提取物</MEE_ProteinExtract.label>
+  <MEE_ProteinExtract.description>提纯的蛋白质。代谢扩展模块的基础资源，用于满足「蛋白质」需求。</MEE_ProteinExtract.description>
+  <MEE_WaterBottle.label>水瓶</MEE_WaterBottle.label>
+  <MEE_WaterBottle.description>装满水的瓶子。代谢扩展模块的基础资源，用于满足「水」需求。</MEE_WaterBottle.description>
+</LanguageData>

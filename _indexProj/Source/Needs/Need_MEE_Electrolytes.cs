@@ -1,0 +1,13 @@
+using RimWorld;
+using Verse;
+
+namespace Hormones
+{
+    /// <summary>电解质需求。消耗较慢，长期失衡影响生理稳态。</summary>
+    public class Need_MEE_Electrolytes : Need_MEE_Base
+    {
+        public Need_MEE_Electrolytes(Pawn pawn) : base(pawn) { }
+
+        protected override float FallPerDay => 0.3f; // 每日约消耗 30%
+    }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <MEE_RawSugar.label>raw sugar</MEE_RawSugar.label>
+  <MEE_RawSugar.description>Unrefined sugar. A basic metabolic resource used by the Metabolic Essential module to satisfy the sugar need.</MEE_RawSugar.description>
+  <MEE_Salt.label>salt</MEE_Salt.label>
+  <MEE_Salt.description>Table salt. A basic metabolic resource used by the Metabolic Essential module to satisfy the electrolytes need.</MEE_Salt.description>
+  <MEE_ProteinExtract.label>protein extract</MEE_ProteinExtract.label>
+  <MEE_ProteinExtract.description>Refined protein. A basic metabolic resource used by the Metabolic Essential module to satisfy the protein need.</MEE_ProteinExtract.description>
+  <MEE_WaterBottle.label>water bottle</MEE_WaterBottle.label>
+  <MEE_WaterBottle.description>A bottle of water. A basic metabolic resource used by the Metabolic Essential module to satisfy the water need.</MEE_WaterBottle.description>
+</LanguageData>

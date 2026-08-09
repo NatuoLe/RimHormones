@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="1080" viewBox="0 0 940 1080" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif">
+<rect x="0" y="0" width="940" height="1080" fill="#F4F7FB"/>
+<defs><linearGradient id="hdr" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#14507A"/><stop offset="100%" stop-color="#2D9CDB"/></linearGradient></defs>
+<rect x="0.0" y="0.0" width="940.0" height="110.0" rx="0" ry="0" fill="url(#hdr)"/>
+<text x="40.0" y="52.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="28" fill="#FFFFFF" text-anchor="start" font-weight="bold">皮质醇 Cortisol 影响机制（简明版）</text>
+<text x="40.0" y="84.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#DCEEFB" text-anchor="start">哪些事件抬升 / 降低皮质醇  ·  高皮质醇触发哪些坏 Hediff</text>
+<rect x="40.0" y="150.0" width="410.0" height="380.0" rx="12" ry="12" fill="#FFFFFF" stroke="#D5DEE8" stroke-width="1"/>
+<rect x="40.0" y="150.0" width="410.0" height="40.0" rx="12" ry="12" fill="#E74C3C"/>
+<rect x="40.0" y="180.0" width="410.0" height="10.0" rx="0" ry="0" fill="#E74C3C"/>
+<text x="58.0" y="177.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="17" fill="#FFFFFF" text-anchor="start" font-weight="bold">① 抬升皮质醇的事件  ↑</text>
+<text x="62.0" y="220.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 低心情</text>
+<text x="255.0" y="220.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 饥饿</text>
+<text x="62.0" y="250.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 疼痛</text>
+<text x="255.0" y="250.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 得病</text>
+<text x="62.0" y="280.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 被侮辱</text>
+<text x="255.0" y="280.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 不舒适</text>
+<text x="62.0" y="310.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 缺少娱乐</text>
+<text x="255.0" y="310.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 环境差</text>
+<text x="62.0" y="340.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 吃生食</text>
+<text x="255.0" y="340.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 湿透</text>
+<text x="62.0" y="514.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="11" fill="#7F8C8D" text-anchor="start">（应激源，满足条件即叠加抬升）</text>
+<rect x="490.0" y="150.0" width="410.0" height="380.0" rx="12" ry="12" fill="#FFFFFF" stroke="#D5DEE8" stroke-width="1"/>
+<rect x="490.0" y="150.0" width="410.0" height="40.0" rx="12" ry="12" fill="#2D9CDB"/>
+<rect x="490.0" y="180.0" width="410.0" height="10.0" rx="0" ry="0" fill="#2D9CDB"/>
+<text x="508.0" y="177.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="17" fill="#FFFFFF" text-anchor="start" font-weight="bold">② 降低皮质醇的事件  ↓</text>
+<text x="512.0" y="220.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 娱乐活动</text>
+<text x="705.0" y="220.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 优质睡眠</text>
+<text x="512.0" y="250.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 高心情</text>
+<text x="705.0" y="250.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 美食</text>
+<text x="512.0" y="280.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">• 自然衰减</text>
+<text x="512.0" y="514.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="11" fill="#7F8C8D" text-anchor="start">（恢复来源，叠加降低浓度）</text>
+<rect x="320.0" y="560.0" width="300.0" height="54.0" rx="27" ry="27" fill="#14507A"/>
+<text x="470.0" y="594.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="18" fill="#FFFFFF" text-anchor="middle" font-weight="bold">皮质醇浓度过高</text>
+<path d="M 245.0 530 C 245.0 550, 320.0 550, 320.0 560" stroke="#E74C3C" stroke-width="3" fill="none"/>
+<path d="M 695.0 530 C 695.0 550, 620.0 550, 620.0 560" stroke="#2D9CDB" stroke-width="3" fill="none"/>
+<text x="40.0" y="630.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="15" fill="#2C3E50" text-anchor="start" font-weight="bold">③ 高皮质醇触发的坏 Hediff（每 6000 tick 检测，加权随机抽其一）</text>
+<rect x="40.0" y="644.0" width="260.0" height="210.0" rx="12" ry="12" fill="#FFFFFF" stroke="#D5DEE8" stroke-width="1"/>
+<rect x="40.0" y="644.0" width="260.0" height="42.0" rx="12" ry="12" fill="#8E44AD"/>
+<rect x="40.0" y="676.0" width="260.0" height="10.0" rx="0" ry="0" fill="#8E44AD"/>
+<text x="56.0" y="672.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="16" fill="#FFFFFF" text-anchor="start" font-weight="bold">神经衰弱</text>
+<text x="286.0" y="671.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="9" fill="#FFFFFF" text-anchor="end">CortisolNeurasthenia</text>
+<text x="58.0" y="716.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">休息效率下降</text>
+<text x="58.0" y="742.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">心情下降</text>
+<rect x="52.0" y="772.0" width="236.0" height="40.0" rx="8" ry="8" fill="#F5EEF8"/>
+<text x="58.0" y="790.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="12" fill="#8E44AD" text-anchor="start" font-weight="bold">加权互斥施加</text>
+<rect x="340.0" y="644.0" width="260.0" height="210.0" rx="12" ry="12" fill="#FFFFFF" stroke="#D5DEE8" stroke-width="1"/>
+<rect x="340.0" y="644.0" width="260.0" height="42.0" rx="12" ry="12" fill="#2F80ED"/>
+<rect x="340.0" y="676.0" width="260.0" height="10.0" rx="0" ry="0" fill="#2F80ED"/>
+<text x="356.0" y="672.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="16" fill="#FFFFFF" text-anchor="start" font-weight="bold">快感缺失</text>
+<text x="586.0" y="671.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="9" fill="#FFFFFF" text-anchor="end">CortisolAnhedonia</text>
+<text x="358.0" y="716.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">正面心情归零</text>
+<text x="358.0" y="742.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">负面心情保留</text>
+<rect x="352.0" y="772.0" width="236.0" height="40.0" rx="8" ry="8" fill="#EAF2FE"/>
+<text x="358.0" y="790.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="12" fill="#2F80ED" text-anchor="start" font-weight="bold">加权互斥施加</text>
+<rect x="640.0" y="644.0" width="260.0" height="210.0" rx="12" ry="12" fill="#FFFFFF" stroke="#D5DEE8" stroke-width="1"/>
+<rect x="640.0" y="644.0" width="260.0" height="42.0" rx="12" ry="12" fill="#E67E22"/>
+<rect x="640.0" y="676.0" width="260.0" height="10.0" rx="0" ry="0" fill="#E67E22"/>
+<text x="656.0" y="672.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="16" fill="#FFFFFF" text-anchor="start" font-weight="bold">失眠</text>
+<text x="886.0" y="671.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="9" fill="#FFFFFF" text-anchor="end">CortisolInsomnia</text>
+<text x="658.0" y="716.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">无法躺下入睡</text>
+<text x="658.0" y="742.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="14" fill="#2C3E50" text-anchor="start">（blocks sleeping）</text>
+<rect x="652.0" y="772.0" width="236.0" height="40.0" rx="8" ry="8" fill="#FDF3E7"/>
+<text x="658.0" y="790.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="12" fill="#E67E22" text-anchor="start" font-weight="bold">加权互斥施加</text>
+<text x="40.0" y="1054.0" font-family="'Microsoft YaHei','PingFang SC','SimHei',sans-serif" font-size="11" fill="#7F8C8D" text-anchor="start">设计源：皮质醇数值.xlsx ｜ 红=抬升应激  蓝=恢复  紫/蓝/橙=坏 Hediff</text>
+</svg>

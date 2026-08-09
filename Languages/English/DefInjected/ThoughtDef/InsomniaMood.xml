@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <InsomniaMood.label>insomnia</InsomniaMood.label>
+  <InsomniaMood.description>Persistent low mood from being unable to fall asleep.</InsomniaMood.description>
+  <InsomniaMood.stages.0.label>insomnia</InsomniaMood.stages.0.label>
+  <InsomniaMood.stages.0.description>Unable to fall asleep, feeling irritable and low.</InsomniaMood.stages.0.description>
+</LanguageData>

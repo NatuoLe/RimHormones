@@ -40,6 +40,31 @@
     </comps>
   </HediffDef>
 
+  <!-- Insomnia: dedicated sleep-blocking Hediff (separate from the bad-symptom group itself).
+       Applied on every high-cortisol symptom episode in Need_Cortisol.ApplyBadCortisolHediff()
+       (independent of which bad symptom was weighted-picked).
+       blocksSleeping makes JobGiver_GetRest return 0 priority -> pawn never gets the LayDown (sleep) job. -->
+  <HediffDef>
+    <defName>CortisolInsomnia</defName>
+    <label>失眠</label>
+    <description>严重入睡障碍，由长期高皮质醇与神经衰弱引发，期间无法躺下入睡。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <makesAlert>true</makesAlert>
+    <defaultLabelColor>(0.85, 0.55, 0.25)</defaultLabelColor>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <blocksSleeping>true</blocksSleeping>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>12501</disappearsAfterTicks>  <!-- 持续 5 游戏小时 -->
+      </li>
+    </comps>
+  </HediffDef>
+
   <HediffDef>
     <defName>CortisolOverloadExhaustion</defName>
     <label>overload exhaustion</label>
@@ -74,5 +99,26 @@
         </capMods>
       </li>
     </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>CortisolAnhedonia</defName>
+    <label>快感缺失</label>
+    <description>情绪麻木：所有正面心情不再生效，仅负面与中性心情保留。</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <makesAlert>true</makesAlert>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <!-- 纯标记：不修改任何属性，仅作为「正面心情归零」的状态开关 -->
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>60000</disappearsAfterTicks>  <!-- 持续 1 游戏天 -->
+      </li>
+    </comps>
+    <!-- 进入 badCortisolhediffGroup：抽中时施加，持续 1 天后自动消失；存续不再由手动控制 -->
   </HediffDef>
 </Defs>

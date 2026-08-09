@@ -16,12 +16,23 @@ namespace Hormones
     /// </summary>
     public static class CortisolInteractionUtility
     {
-        public static float GetSlightInsultWeightMultiplier(Pawn initiator)
+        /// <summary>
+        /// 返回 (档位名, 权重倍率)。
+        /// 0 ≤ S &lt; 0.33    正常波动  ×0.5
+        /// 0.33 ≤ S &lt; 0.66 承压     ×2.0
+        /// 0.66 ≤ S ≤ 1.0  高压     ×4.0
+        /// </summary>
+        public static (string tierLabel, float mult) GetSlightInsultWeightInfo(Pawn initiator)
         {
             float severity = Need_Cortisol.GetCortisolSeverity(initiator);
-            if (severity < 0.33f) return 0.5f;   // 正常波动
-            if (severity < 0.66f) return 2.0f;   // 承压
-            return 4.0f;                          // 高压
+            if (severity < 0.33f) return ("正常波动", 0.5f);   // 正常波动
+            if (severity < 0.66f) return ("承压", 2.0f);   // 承压
+            return ("高压", 4.0f);                          // 高压
+        }
+
+        public static float GetSlightInsultWeightMultiplier(Pawn initiator)
+        {
+            return GetSlightInsultWeightInfo(initiator).mult;
         }
     }
 
@@ -32,7 +43,10 @@ namespace Hormones
         public static void Postfix(Pawn initiator, Pawn recipient, ref float __result)
         {
             if (initiator == null) return;
-            __result *= CortisolInteractionUtility.GetSlightInsultWeightMultiplier(initiator);
+            var info = CortisolInteractionUtility.GetSlightInsultWeightInfo(initiator);
+            __result *= info.mult;
+            Need_Cortisol.ShowCortisolSocialMote(initiator,
+                $"社交·冒犯: {info.tierLabel} ×{info.mult:F1}");
         }
     }
 
@@ -43,7 +57,10 @@ namespace Hormones
         public static void Postfix(Pawn initiator, Pawn recipient, ref float __result)
         {
             if (initiator == null) return;
-            __result *= CortisolInteractionUtility.GetSlightInsultWeightMultiplier(initiator);
+            var info = CortisolInteractionUtility.GetSlightInsultWeightInfo(initiator);
+            __result *= info.mult;
+            Need_Cortisol.ShowCortisolSocialMote(initiator,
+                $"社交·侮辱: {info.tierLabel} ×{info.mult:F1}");
         }
     }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <InsomniaMood.label>失眠</InsomniaMood.label>
+  <InsomniaMood.description>因无法入睡而产生的持续低落情绪。</InsomniaMood.description>
+  <InsomniaMood.stages.0.label>失眠</InsomniaMood.stages.0.label>
+  <InsomniaMood.stages.0.description>无法入睡，烦躁而低落。</InsomniaMood.stages.0.description>
+</LanguageData>

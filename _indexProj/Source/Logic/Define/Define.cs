@@ -4,12 +4,24 @@ namespace Hormones
     {
         public const string ModName = "RimHormones";
 
+        // 飘字随机散开幅度（地图坐标单位，约半个格子）。每次显示飘字时在水平 x/z 与高度 y 三方向叠加 ±此值的随机偏移，
+        // 避免同一次事件（如社交）触发的多条飘字堆叠在同一位置。
+        public const float MoteScatterSpread = 0.4f;
+
         public const float HormonesMaxLevel = 100f;
         public const float HormonesDecayRate = 0.5f;
         public const float HormonesBaseDamageReduction = 15f;
         public const float HormonesBleedingReductionFactor = 0.1f;
 
         public const float SevereBleedingThreshold = 2.5f;
+
+        // ============================================================
+        // 神经衰弱覆盖效应（strainCoverEffect）
+        // pawn 患有神经衰弱 Hediff(CortisolNeurasthenia) 时，
+        // 劳损与皮质醇的【恢复速率】和【变化(下降/积累)速率】均降低 33%（即 ×0.67）。
+        // 该 Hediff 可治愈/消失，因此每次查询实时判定（见 PhysiqueLgc.GetStrainCoverEffect）。
+        // ============================================================
+        public const float StrainCoverEffectMultiplier = 0.67f; // 1 - 0.33
 
         #region Adrenaline Constants
 
@@ -126,11 +138,15 @@ namespace Hormones
         // 增长（每日，占最大值百分比，可叠加）
         // ========================================
         public const float CortisolGrowthLowMood = 1200f;    // 心情<0.3：+10%/日
-        public const float CortisolGrowthUglyEnv = 600f;     // 环境差：+5%/日
+        public const float CortisolGrowthUglyEnv = 500f;     // 环境差：+5%/日
         public const float CortisolGrowthHunger = 1000f;     // 饥饿Hediff：+12%/日
         public const float CortisolGrowthPain = 800f;        // 疼痛Hediff：+5%/日
         public const float CortisolGrowthIllness = 800f;     // 得病：+3%/日
-        public const float CortisolGrowthInsulted = 300f;    // 被侮辱Hediff：+3%/日
+        public const float CortisolGrowthInsulted = 800f;    // 被侮辱Hediff：+8%/日
+        public const float CortisolGrowthAteRawFood = 500f;   // 吃了生的食物：+5%/日
+        public const float CortisolGrowthSoakingWet = 300f;    // 湿透了：+3%/日
+        public const float CortisolGrowthUncomfortable = 800f; // 不够舒适：+8%/日
+        public const float CortisolGrowthNoRecreation = 800f;   // 没有娱乐活动：+8%/日
 
         // ========================================
         // 状态判定阈值
@@ -148,10 +164,38 @@ namespace Hormones
         // ========================================
         // 失眠发作（神经衰弱引发的不可控精神状态）
         // ========================================
-        // 神经衰弱 Hediff 存在期间，每 6000 tick 检测一次，按此概率触发「失眠发作」
+        // 神经衰弱 Hediff 存在且处于睡眠状态时，现实世界每 10 秒检测一次，按此概率触发「失眠发作」
         // （复用 WanderOwnRoom 游荡行为，强制持续 2 小时 = 5000 tick，forced 绕过卧室限制）
-        // 0.05f ~ 游戏内约每 2.4 小时一次判定，调高则更易发作
-        public const float CortisolInsomniaTriggerChancePerCheck = 0.10f;
+        // 0.05f ~ 每次检查 5% 概率发作，调高则更易发作
+        // ========================================
+        // 高皮质醇「坏症状」组（加权随机抽取其一）
+        // ========================================
+        // 触发高皮质醇症状时，从本组【加权随机】抽取【其中一个】Hediff 施加（而非全部一起施加）。
+        // 每个成员带权重(weight)，权重越大越容易被抽中。新增症状只需在此追加 (defName, weight) 即可。
+        // 注：失眠(CortisolInsomnia)【不在此组内】，为独立检测逻辑（见下方 InsomniaTrigger* 常量）。
+        public static readonly System.Collections.Generic.List<(string defName, float weight)> badCortisolhediffGroup = new System.Collections.Generic.List<(string defName, float weight)>
+        {
+            ("CortisolNeurasthenia", 1f),   // 神经衰弱（休息效率-13% + 心情惩罚）
+            ("CortisolAnhedonia", 1f),      // 快感缺失：所有正面心情失效（负面/中性保留）
+        };
+
+        // ========================================
+        // 坏症状组触发前置门控（canBadCortisolHediff）
+        // ========================================
+        // 触发逻辑：皮质醇 severity 持续 ≥ BadCortisolHediffThreshold 时开始累计计时，
+        // 累计达 BadCortisolHediffSustainTicks(=1 游戏天) 后，canBadCortisolHediff 置 true（门控解锁）。
+        // 仅当 canBadCortisolHediff==true 时，TryTriggerBadCortisolHediffCheck 才允许 roll 抽取坏症状组。
+        // 低于阈值时计时清零（要求"持续"一天，不能断断续续凑数）；canBadCortisolHediff 一旦置 true 即锁定。
+        public const float BadCortisolHediffThreshold = 0.33f;   // 计时起点：severity 达到此值开始累计"持续高压"计时（= 坏症状概率非零档位）
+        public const int BadCortisolHediffSustainTicks = 60000;  // 持续达 1 游戏天(60000 tick)后解锁检测
+
+        // ========================================
+        // 失眠独立触发（与坏症状组无关）
+        // ========================================
+        // 失眠(CortisolInsomnia, blocksSleeping) 独立于坏症状组：仅当 pawn【已患神经衰弱】且【处于睡眠状态】时，
+        // 按【现实时间】每 InsomniaRealCheckInterval 秒检查一次，InsomniaTriggerChance 概率施加。
+        public const float InsomniaTriggerChance = 0.05f;        // 每次检测 5% 概率触发失眠
+        public const float InsomniaRealCheckInterval = 10f;      // 检测节奏（现实秒）：不随游戏暂停/倍速变化
 
         // ========================================
         // 肾上腺素联动参数（保留）

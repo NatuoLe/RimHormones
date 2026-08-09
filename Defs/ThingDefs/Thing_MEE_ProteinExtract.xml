@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 蛋白质提取物：代谢扩展模块的蛋白质需求基础资源（占位贴图，后续可换专用贴图） -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>MEE_ProteinExtract</defName>
+    <label>protein extract</label>
+    <description>Refined protein. A basic metabolic resource used by the Metabolic Essential module to satisfy the protein need.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/Gold</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+      <drawSize>(0.6,0.6)</drawSize>
+    </graphicData>
+    <stackLimit>75</stackLimit>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <MarketValue>1.2</MarketValue>
+      <Mass>0.05</Mass>
+      <Flammability>1</Flammability>
+    </statBases>
+  </ThingDef>
+</Defs>

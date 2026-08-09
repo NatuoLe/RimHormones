@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <AssemblyName>MetabolicEssential</AssemblyName>
+    <RootNamespace>MetabolicEssential</RootNamespace>
+    <!-- 产出到 mod 根的 MetabolicEssential\ 子目录（不在 Assemblies\ 下），由主 mod 的 MetabolicLoader 在开关开启时 Assembly.LoadFrom 加载 -->
+    <OutputPath>..\MetabolicEssential\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <!-- 不生成 deps.json / 引用程序集，保持 Assemblies\ 目录干净 -->
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- 注意：代谢需求（Need_MEE_*）已迁回主 mod（_indexProj/Source/Needs/），本模块只保留 Harmony 逻辑。 -->
+    <Compile Include="Source\MetabolicEssentialModule.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- 复用主工程(_indexProj)旁的 RimWorld / Harmony 程序集；Private=false 避免把这些 DLL 拷进产物 -->
+    <Reference Include="0Harmony" HintPath="..\_indexProj\0Harmony.dll">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp" HintPath="..\_indexProj\Assembly-CSharp.dll">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Verse" HintPath="..\_indexProj\Assembly-CSharp.dll">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine" HintPath="..\_indexProj\UnityEngine.dll">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule" HintPath="..\_indexProj\UnityEngine.CoreModule.dll">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule" HintPath="..\_indexProj\UnityEngine.IMGUIModule.dll">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule" HintPath="..\_indexProj\UnityEngine.TextRenderingModule.dll">
+      <Private>false</Private>
+    </Reference>
+    <!-- 只认主 mod 的 IMetabolicModule 接口；方向为 本模块→主mod（允许），主mod 不反向引用本模块（保持可选） -->
+    <Reference Include="RimHormones" HintPath="..\_indexProj\bin\Release\net48\RimHormones.dll">
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

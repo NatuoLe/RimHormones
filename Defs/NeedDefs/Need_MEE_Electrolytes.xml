@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <NeedDef>
+    <defName>MEEElectrolytes</defName>
+    <label>electrolytes</label>
+    <description>Electrolyte balance. Depletes slowly; long-term imbalance disrupts physiological homeostasis. Part of the Metabolic Essential module.</description>
+    <needClass>Hormones.Need_MEE_Electrolytes</needClass>
+    <minIntelligence>ToolUser</minIntelligence>
+    <showOnNeedList>true</showOnNeedList>
+    <colonistsOnly>true</colonistsOnly>
+    <baseLevel>1</baseLevel>
+    <fallPerDay>0</fallPerDay>
+    <major>false</major>
+  </NeedDef>
+</Defs>
