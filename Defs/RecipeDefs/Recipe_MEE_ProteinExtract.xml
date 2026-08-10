@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 蛋白质提取物：由牛奶/鸡蛋/任意生肉分别在烹饪台加工而成。 -->
+  <!-- 设计备注：把食物转化为蛋白质提取物时约有 50% 饱食损耗（机会成本），具体数值待接线消费逻辑时再平衡。 -->
+
+  <!-- 牛奶 → 蛋白质提取物 -->
+  <RecipeDef>
+    <defName>MEE_MakeProteinExtractFromMilk</defName>
+    <label>make protein extract (milk)</label>
+    <description>Process milk into protein extract at the stove.</description>
+    <jobString>Processing protein extract from milk.</jobString>
+    <workAmount>1500</workAmount>
+    <effectOnly>false</effectOnly>
+    <recipeUsers>
+      <li>Stove</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Milk</li>
+          </thingDefs>
+        </filter>
+        <count>10</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_ProteinExtract>1</MEE_ProteinExtract>
+    </products>
+    <skillRequirements>
+      <li>
+        <skill>Cooking</skill>
+        <minLevel>2</minLevel>
+      </li>
+    </skillRequirements>
+    <workSkill>Cooking</workSkill>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+
+  <!-- 鸡蛋 → 蛋白质提取物 -->
+  <RecipeDef>
+    <defName>MEE_MakeProteinExtractFromEggs</defName>
+    <label>make protein extract (eggs)</label>
+    <description>Process eggs into protein extract at the stove.</description>
+    <jobString>Processing protein extract from eggs.</jobString>
+    <workAmount>1500</workAmount>
+    <effectOnly>false</effectOnly>
+    <recipeUsers>
+      <li>Stove</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>EggChicken</li>
+          </thingDefs>
+        </filter>
+        <count>10</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_ProteinExtract>1</MEE_ProteinExtract>
+    </products>
+    <skillRequirements>
+      <li>
+        <skill>Cooking</skill>
+        <minLevel>2</minLevel>
+      </li>
+    </skillRequirements>
+    <workSkill>Cooking</workSkill>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+
+  <!-- 任意生肉 → 蛋白质提取物 -->
+  <RecipeDef>
+    <defName>MEE_MakeProteinExtractFromMeat</defName>
+    <label>make protein extract (meat)</label>
+    <description>Process raw meat into protein extract at the stove.</description>
+    <jobString>Processing protein extract from meat.</jobString>
+    <workAmount>1500</workAmount>
+    <effectOnly>false</effectOnly>
+    <recipeUsers>
+      <li>Stove</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <categories>
+            <li>MeatRaw</li>
+          </categories>
+        </filter>
+        <count>5</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_ProteinExtract>1</MEE_ProteinExtract>
+    </products>
+    <skillRequirements>
+      <li>
+        <skill>Cooking</skill>
+        <minLevel>2</minLevel>
+      </li>
+    </skillRequirements>
+    <workSkill>Cooking</workSkill>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+</Defs>

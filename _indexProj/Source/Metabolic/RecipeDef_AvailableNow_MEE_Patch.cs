@@ -15,7 +15,7 @@ namespace Hormones
     {
         public static void Postfix(RecipeDef __instance, ref bool __result)
         {
-            if (__result && !MetabolicState.IsLoadedMME && __instance.HasModExtension<MEERecipeMarker>())
+            if (__result && !MetaBolicLoadCtrl.IsLoadedMME && __instance.HasModExtension<MEERecipeMarker>())
             {
                 __result = false;
             }

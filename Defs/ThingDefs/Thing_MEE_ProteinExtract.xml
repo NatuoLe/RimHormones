@@ -6,7 +6,7 @@
     <label>protein extract</label>
     <description>Refined protein. A basic metabolic resource used by the Metabolic Essential module to satisfy the protein need.</description>
     <graphicData>
-      <texPath>Things/Item/Resource/Gold</texPath>
+      <texPath>Things/Item/MEE/MEE_ProteinExtract</texPath>
       <graphicClass>Graphic_StackCount</graphicClass>
       <drawSize>(0.6,0.6)</drawSize>
     </graphicData>

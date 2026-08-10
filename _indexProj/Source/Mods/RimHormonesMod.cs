@@ -20,11 +20,11 @@ namespace Hormones
             listing.Begin(inRect);
             listing.CheckboxLabeled("启用 Metabolic Essential（代谢扩展模块）", ref Settings.EnableMetabolicEssential,
                 "实验性：启用 MetabolicEssential.dll 提供的额外代谢机制。勾选/取消后需重启游戏客户端才能生效。");
-            if (!MetabolicLoader.IsModulePresent)
+            if (!MetaBolicLoadCtrl.IsModulePresent)
             {
-                listing.Label("⚠ 未检测到 MetabolicEssential.dll（应位于本 mod 的 Assemblies 目录）。");
+                listing.Label("⚠ 未检测到 MetabolicEssential.dll（应位于本 mod 的 MetabolicEssential\\ 子目录）。");
             }
-            else if (Settings.EnableMetabolicEssential != MetabolicLoader.IsLoaded)
+            else if (Settings.EnableMetabolicEssential != MetaBolicLoadCtrl.IsLoaded)
             {
                 listing.Label("⚠ 该选项的更改需重启游戏客户端后才能生效。");
             }

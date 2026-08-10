@@ -6,7 +6,7 @@
     <label>salt</label>
     <description>Table salt. A basic metabolic resource used by the Metabolic Essential module to satisfy the electrolytes need.</description>
     <graphicData>
-      <texPath>Things/Item/Resource/Steel</texPath>
+      <texPath>Things/Item/MEE/MEE_Salt</texPath>
       <graphicClass>Graphic_StackCount</graphicClass>
       <drawSize>(0.6,0.6)</drawSize>
     </graphicData>

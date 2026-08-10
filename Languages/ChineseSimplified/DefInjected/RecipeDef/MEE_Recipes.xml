@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <MEE_MakeGlucoseMashFromPotato.label>酿造葡萄糖原浆（土豆）</MEE_MakeGlucoseMashFromPotato.label>
+  <MEE_MakeGlucoseMashFromPotato.description>在酿造台用土豆发酵制作葡萄糖原浆。</MEE_MakeGlucoseMashFromPotato.description>
+  <MEE_MakeGlucoseMashFromCorn.label>酿造葡萄糖原浆（玉米）</MEE_MakeGlucoseMashFromCorn.label>
+  <MEE_MakeGlucoseMashFromCorn.description>在酿造台用玉米发酵制作葡萄糖原浆。</MEE_MakeGlucoseMashFromCorn.description>
+  <MEE_MakeSaltFromStone.label>研磨盐（石块）</MEE_MakeSaltFromStone.label>
+  <MEE_MakeSaltFromStone.description>在切石机用石块研磨出代谢用盐。</MEE_MakeSaltFromStone.description>
+  <MEE_MakeProteinExtractFromMilk.label>制作蛋白质提取物（牛奶）</MEE_MakeProteinExtractFromMilk.label>
+  <MEE_MakeProteinExtractFromMilk.description>在烹饪台用牛奶加工出蛋白质提取物。</MEE_MakeProteinExtractFromMilk.description>
+  <MEE_MakeProteinExtractFromEggs.label>制作蛋白质提取物（鸡蛋）</MEE_MakeProteinExtractFromEggs.label>
+  <MEE_MakeProteinExtractFromEggs.description>在烹饪台用鸡蛋加工出蛋白质提取物。</MEE_MakeProteinExtractFromEggs.description>
+  <MEE_MakeProteinExtractFromMeat.label>制作蛋白质提取物（生肉）</MEE_MakeProteinExtractFromMeat.label>
+  <MEE_MakeProteinExtractFromMeat.description>在烹饪台用任意生肉加工出蛋白质提取物。</MEE_MakeProteinExtractFromMeat.description>
+</LanguageData>

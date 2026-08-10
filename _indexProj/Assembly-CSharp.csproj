@@ -49,12 +49,9 @@
     <Compile Include="Source\Logic\PhysiqueLogic\StrainWorkBlockPatches.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\ThoughtWorker_StrainStates.cs" />
     <Compile Include="Source\Logic\PhysiqueLogic\StrainHediffTags.cs" />
-    <Compile Include="Source\Metabolic\IMetabolicModule.cs" />
-    <Compile Include="Source\Metabolic\MetabolicLoader.cs" />
-    <Compile Include="Source\Metabolic\MetabolicBootstrap.cs" />
-    <Compile Include="Source\Metabolic\MetabolicState.cs" />
-    <Compile Include="Source\Metabolic\MEERecipeMarker.cs" />
+    <Compile Include="Source\Metabolic\MetaBolicLoadCtrl.cs" />
     <Compile Include="Source\Metabolic\RecipeDef_AvailableNow_MEE_Patch.cs" />
+    <Compile Include="Source\NeedChangeEvents.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony" HintPath="0Harmony.dll" />

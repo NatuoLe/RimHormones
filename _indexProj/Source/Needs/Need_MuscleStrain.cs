@@ -69,6 +69,8 @@ namespace Hormones
         {
             if (!IsFrozen)
             {
+                float before = CurLevel; // 变化事件基准值
+
                 // 神经衰弱覆盖效应：仅作用于损耗【恢复】(数值下降)方向，积累方向不受影响
                 float cover = PhysiqueLgc.GetStrainCoverEffect(pawn);
 
@@ -89,6 +91,9 @@ namespace Hormones
                     CurLevel += recoveryRate / 25f;
                     if (CurLevel > MaxLevel) CurLevel = MaxLevel;
                 }
+
+                if (before != CurLevel)
+                    NeedChangeEvents.FireStrainChanged(pawn, before, CurLevel);
             }
         }
 
@@ -100,8 +105,12 @@ namespace Hormones
             // 由饮品拓展等 Mod 通过 SetExtraStrainRateMultiplier/Reset 设置，主 Mod 不硬编码任何饮品 defName。
             amount *= extraStrainRateMult;
 
+            float before = CurLevel; // 变化事件基准值
             CurLevel -= amount;
             if (CurLevel < 0f) CurLevel = 0f;
+
+            if (before != CurLevel)
+                NeedChangeEvents.FireStrainChanged(pawn, before, CurLevel);
         }
     }
 }

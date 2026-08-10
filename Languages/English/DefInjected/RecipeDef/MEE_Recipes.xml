@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <MEE_MakeGlucoseMashFromPotato.label>make glucose mash (potato)</MEE_MakeGlucoseMashFromPotato.label>
+  <MEE_MakeGlucoseMashFromPotato.description>Brew glucose mash from potatoes at the brewery.</MEE_MakeGlucoseMashFromPotato.description>
+  <MEE_MakeGlucoseMashFromCorn.label>make glucose mash (corn)</MEE_MakeGlucoseMashFromCorn.label>
+  <MEE_MakeGlucoseMashFromCorn.description>Brew glucose mash from corn at the brewery.</MEE_MakeGlucoseMashFromCorn.description>
+  <MEE_MakeSaltFromStone.label>grind salt from stone</MEE_MakeSaltFromStone.label>
+  <MEE_MakeSaltFromStone.description>Grind metabolic salt from stone blocks at the stonecutter.</MEE_MakeSaltFromStone.description>
+  <MEE_MakeProteinExtractFromMilk.label>make protein extract (milk)</MEE_MakeProteinExtractFromMilk.label>
+  <MEE_MakeProteinExtractFromMilk.description>Process milk into protein extract at the stove.</MEE_MakeProteinExtractFromMilk.description>
+  <MEE_MakeProteinExtractFromEggs.label>make protein extract (eggs)</MEE_MakeProteinExtractFromEggs.label>
+  <MEE_MakeProteinExtractFromEggs.description>Process eggs into protein extract at the stove.</MEE_MakeProteinExtractFromEggs.description>
+  <MEE_MakeProteinExtractFromMeat.label>make protein extract (meat)</MEE_MakeProteinExtractFromMeat.label>
+  <MEE_MakeProteinExtractFromMeat.description>Process raw meat into protein extract at the stove.</MEE_MakeProteinExtractFromMeat.description>
+</LanguageData>

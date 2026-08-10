@@ -6,7 +6,7 @@
     <label>water bottle</label>
     <description>A bottle of water. A basic metabolic resource used by the Metabolic Essential module to satisfy the water need.</description>
     <graphicData>
-      <texPath>Things/Item/Health/MedicineHerbal</texPath>
+      <texPath>Things/Item/MEE/MEE_WaterBottle</texPath>
       <graphicClass>Graphic_StackCount</graphicClass>
       <drawSize>(0.6,0.6)</drawSize>
     </graphicData>

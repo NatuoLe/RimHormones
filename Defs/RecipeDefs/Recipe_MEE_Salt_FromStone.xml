@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 石块（任意石料）→ 盐 ×5（切石机）。仅当 Metabolic Essential 模块启用时可见 -->
+  <RecipeDef>
+    <defName>MEE_MakeSaltFromStone</defName>
+    <label>grind salt from stone</label>
+    <description>Grind metabolic salt from stone blocks at the stonecutter.</description>
+    <jobString>Grinding salt from stone.</jobString>
+    <workAmount>1500</workAmount>
+    <effectOnly>false</effectOnly>
+    <recipeUsers>
+      <li>Stonecutter</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <categories>
+            <li>StoneBlocks</li>
+          </categories>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_Salt>5</MEE_Salt>
+    </products>
+    <skillRequirements>
+      <li>
+        <skill>Stonecutting</skill>
+        <minLevel>2</minLevel>
+      </li>
+    </skillRequirements>
+    <workSkill>Stonecutting</workSkill>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+</Defs>

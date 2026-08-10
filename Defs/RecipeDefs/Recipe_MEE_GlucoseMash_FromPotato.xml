@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 土豆 → 葡萄糖原浆（酿造台）。仅当 Metabolic Essential 模块启用时可见 -->
+  <RecipeDef>
+    <defName>MEE_MakeGlucoseMashFromPotato</defName>
+    <label>make glucose mash (potato)</label>
+    <description>Brew glucose mash from potatoes at the brewery.</description>
+    <jobString>Making glucose mash from potatoes.</jobString>
+    <workAmount>1800</workAmount>
+    <effectOnly>false</effectOnly>
+    <recipeUsers>
+      <li>Brewery</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Potato</li>
+          </thingDefs>
+        </filter>
+        <count>10</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_GlucoseMash>1</MEE_GlucoseMash>
+    </products>
+    <skillRequirements>
+      <li>
+        <skill>Cooking</skill>
+        <minLevel>2</minLevel>
+      </li>
+    </skillRequirements>
+    <workSkill>Cooking</workSkill>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+</Defs>

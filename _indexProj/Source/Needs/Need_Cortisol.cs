@@ -58,6 +58,15 @@ namespace Hormones
         /// <summary>外部 Mod 重置额外皮质醇衰减为默认 0。</summary>
         public void ResetExtraCortisolDecay() => extraCortisolDecayPerInterval = 0f;
 
+        // ===== 外置 Mod 接口（独立通道）：「糖逻辑」对皮质醇的额外调制 =====
+        // 与上面饮品拓展用的 extraCortisolDecayPerInterval 互不干扰，专供 Metabolic Essential 的糖模块使用，
+        // 避免不同外部 Mod 抢占同一字段。单位：%/日（正值=额外衰减/抑制增长，负值=额外增长/催高）。
+        private float sugarCortisolModPerDay = 0f;
+        /// <summary>由 Metabolic Essential「糖逻辑」设置皮质醇额外每日变化率（%/日）。正值抑制增长，负值催高。设 0 取消。</summary>
+        public void SetSugarCortisolModulation(float perDayPercent) => sugarCortisolModPerDay = perDayPercent;
+        /// <summary>由 Metabolic Essential「糖逻辑」重置皮质醇调制为默认 0。</summary>
+        public void ResetSugarCortisolModulation() => sugarCortisolModPerDay = 0f;
+
         // 坏症状组触发门控：皮质醇持续高于阈值达 1 游戏天后，canBadCortisolHediff 置 true，检测(roll)才允许运行
         private int badHediffSustainTimer = 0;
         private bool canBadCortisolHediff = false;
@@ -158,6 +167,8 @@ namespace Hormones
             if (IsFrozen)
                 return;
 
+            float beforeLevel = CurLevel; // 变化事件基准值
+
             if (!hasLoggedFirstTick)
             {
                 hasLoggedFirstTick = true;
@@ -203,6 +214,18 @@ namespace Hormones
 
                 // 限制范围
                 CurLevel = CurLevel < 0f ? 0f : (CurLevel > MaxLevel ? MaxLevel : CurLevel);
+
+                // 外部「糖逻辑」调制（%/日 → 每 150 tick 区间点数；MaxLevel=10000，1%=100 点）。
+                // 按设计直接施加，不随上面 ×2 整体缩放，使 10%/13% 即为其净效果。
+                if (sugarCortisolModPerDay != 0f)
+                {
+                    CurLevel -= sugarCortisolModPerDay * 100f * 150f / 60000f;
+                    CurLevel = CurLevel < 0f ? 0f : (CurLevel > MaxLevel ? MaxLevel : CurLevel);
+                }
+
+                // 触发皮质醇变化事件（供外部模块监听，如 Metabolic Essential 的糖逻辑）。
+                if (beforeLevel != CurLevel)
+                    NeedChangeEvents.FireCortisolChanged(pawn, beforeLevel, CurLevel);
 
                 // 流程日志：每 5 次调用（约 750 tick）打印一次，确认引擎工作
                 LogCortisolFlow(severity, decay, growth, physiqueGrowth);

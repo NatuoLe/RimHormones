@@ -13,12 +13,16 @@
 
 ## 可选模块 MetabolicEssential（2026-08-09 定案）
 - 四个代谢需求 `Need_MEE_Water/Sugar/Electrolytes/Protein`（水/糖/电解质/蛋白）源码在主 mod `_indexProj/Source/Needs/`（命名空间 Hormones），**默认加载、常驻实例化**；代谢机制受模块 DLL 开关控制。
-- 标志：`MetabolicState.Active`（loader Init 后置 true，驱动 `Need_MEE_Base.NeedInterval` 前置 `if(!Active) return;`）+ `MetabolicState.IsLoadedMME`（同置位，驱动 `Need_MEE_Base.ShowOnNeedList => IsLoadedMME` → 未启用时四需求隐藏但仍实例化、不消耗、零副作用）。
+- 标志：`MetaBolicLoadCtrl.Active`（Init 后置 true，驱动 `Need_MEE_Base.NeedInterval` 前置 `if(!Active) return;`）+ `MetaBolicLoadCtrl.IsLoadedMME`（同置位，驱动 `Need_MEE_Base.ShowOnNeedList => IsLoadedMME` → 未启用时四需求隐藏但仍实例化、不消耗、零副作用）。
 - 接口解耦：主 mod 只认 `Hormones.IMetabolicModule` 接口，绝不编译引用具体实现；二级 DLL 反向引 RimHormones.dll。
-- 加载：勾选「启用 Metabolic Essential」+重启 → `MetabolicBootstrap`([StaticConstructorOnStartup]) 调 `MetabolicLoader.TryLoad` → 文件存在且开关开 → `Assembly.LoadFrom(<modRoot>/MetabolicEssential/MetabolicEssential.dll)` → 反射 `IMetabolicModule.Init` → 置 Active/IsLoadedMME。关闭=程序集完全不载入。模块类禁 `[StaticConstructorOnStartup]`/副作用字段初始化器。
+- 加载：勾选「启用 Metabolic Essential」+重启 → `MetaBolicLoadCtrl`([StaticConstructorOnStartup] 静态构造器) 调 `MetaBolicLoadCtrl.TryLoad` → 文件存在且开关开 → `Assembly.LoadFrom(<modRoot>/MetabolicEssential/MetabolicEssential.dll)` → 反射 `IMetabolicModule.Init` → 置 Active/IsLoadedMME。关闭=程序集完全不载入。模块类禁 `[StaticConstructorOnStartup]`/副作用字段初始化器。
 - 食谱显隐：主 mod `RecipeDef_AvailableNow_MEE_Patch`(Harmony postfix) 拦 `RecipeDef.AvailableNow`，对带 `MEERecipeMarker` DefModExtension 且 `!IsLoadedMME` 的食谱翻 false（隐藏且不可做）。MEE 食谱 XML 需加 `<modExtensions><li Class="Hormones.MEERecipeMarker"/></modExtensions>`。
-- 物品显隐：ThingDef **无** ShowOnNeedList 等价物，仅能靠"无配方则不被制造"间接隐藏；若要彻底隐藏需拆成独立子 mod。当前 MEE 物品（MEE_RawSugar/MEE_Salt/MEE_ProteinExtract/MEE_WaterBottle）为常驻 def，未做隐藏。
+- 物品显隐：ThingDef **无** ShowOnNeedList 等价物，仅能靠"无配方则不被制造"间接隐藏；若要彻底隐藏需拆成独立子 mod。当前 MEE 物品（MEE_Salt/MEE_ProteinExtract/MEE_WaterBottle/MEE_GlucoseMash）为常驻 def，未做隐藏。
 - 后期拆独立 mod：移工程+About.xml，启用 MetabolicEssentialModule.cs 注释的 Bootstrap。
+- 已落地 MEE 食谱链：土豆/玉米在酿造台(Brewery)→葡萄糖原浆(MEE_GlucoseMash)。食谱 `MEE_MakeGlucoseMashFromPotato/FromCorn`：`recipeUsers=Brewery` + `<modExtensions><li Class="Hormones.MEERecipeMarker"/></modExtensions>`（仅模块启用可见）。MEE_GlucoseMash 为 ResourceBase 常驻 def，是「糖」需求的唯一来源（MEE_RawSugar 已移除，葡萄糖原浆即糖）。
+- 占位贴图自包含：1.6 原版贴图打包进资源、无松散 PNG 可 copy，故用纯色块 PNG 生成到 `Textures/Things/Item/MEE/`（MEE_Salt/ProteinExtract/WaterBottle/GlucoseMash），4 个 ThingDef 的 texPath 已全部改指本地，不再引用原版路径。生成器 `文档/gen_placeholders.py`（纯 stdlib）。
+- 糖↔皮质醇双向联动（2026-08-10）：模块 `_metabolicEssentialsExtendedProj/Source/MetabolicLogic_Sugar.cs` 监听主 mod 的 `NeedChangeEvents`（**事件中心不在 Metabolic 文件夹、已移至主工程根 `Source/NeedChangeEvents.cs`**，属主体通用机制而非代谢特性；静态事件 `OnStrainChanged/OnCortisolChanged/OnSugarChanged`，**public 订阅 / internal 触发**；触发点在 `Need_MuscleStrain`/`Need_Cortisol`/`Need_MEE_Sugar` 的 CurLevel 变化处）。模块**仅通过主 mod 公共接口**回写效果——`Need_Cortisol.SetSugarCortisolModulation(perDayPercent)`（%/日，正=抑制增长/负=催高，独立通道不与饮品拓展的 extraCortisolDecay 冲突）与 `Need_MEE_Base.SetExtraFallPerDay(f)`（叠加糖消耗速率）——**绝不读/写主 mod 私有字段**，满足「避免 Metabolic 字段入侵主工程」。逻辑：皮质醇>20% 时，糖>33%→抑制皮质醇增长10%/日，糖<33%→催高13%/日；皮质醇>20%→糖消耗降为30%/日（基础40%）。`Init` 中 `MetabolicLogic_Sugar.Register()` 订阅。两工程均 0 错编译。
+- 文件重组（2026-08-10）：原 `_indexProj/Source/Metabolic/` 下 5 个冗余文件（`IMetabolicModule.cs`/`MetabolicLoader.cs`/`MetabolicBootstrap.cs`/`MetabolicState.cs`/`MEERecipeMarker.cs`）已合并为单个 `Source/Metabolic/MetaBolicLoadCtrl.cs`（[StaticConstructorOnStartup] 单一静态类，合并状态标志+TryLoad 加载+静态构造器启动触发；`IMetabolicModule` 接口与 `MEERecipeMarker` 因 C# 继承约束保留为同文件内的独立类型，模块工程无感）；`NeedChangeEvents.cs` 移出 Metabolic 文件夹至主工程根 `Source/NeedChangeEvents.cs`。csproj 编译清单已同步更新。`RecipeDef_AvailableNow_MEE_Patch.cs` 仍单列保留。
 
 ## 姊妹 mod：Function Drinks Expanded
 - 源码 `D:\RimMods\Rim-Hormones\Function-Drinks-Expanded\`（独立 git，已发工坊）；packageId `Lenatuo.functiondrinksexpanded`，程序集名仍 `DrinkingwaterIsGood`。依赖 DBH Lite + VCE + Rim-Hormones。

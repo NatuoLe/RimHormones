@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 葡萄糖原浆：由土豆/玉米在酿造台发酵制成，代谢扩展模块的基础糖资源（占位贴图，后续可换专用贴图） -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>MEE_GlucoseMash</defName>
+    <label>glucose mash</label>
+    <description>Unrefined glucose mash brewed from potatoes or corn. A basic metabolic resource used by the Metabolic Essential module to satisfy the sugar need.</description>
+    <graphicData>
+      <texPath>Things/Item/MEE/MEE_GlucoseMash</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+      <drawSize>(0.6,0.6)</drawSize>
+    </graphicData>
+    <stackLimit>50</stackLimit>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <MarketValue>0.8</MarketValue>
+      <Mass>0.3</Mass>
+      <Flammability>1</Flammability>
+    </statBases>
+  </ThingDef>
+</Defs>

@@ -4,7 +4,7 @@
     <LangVersion>9.0</LangVersion>
     <AssemblyName>MetabolicEssential</AssemblyName>
     <RootNamespace>MetabolicEssential</RootNamespace>
-    <!-- 产出到 mod 根的 MetabolicEssential\ 子目录（不在 Assemblies\ 下），由主 mod 的 MetabolicLoader 在开关开启时 Assembly.LoadFrom 加载 -->
+    <!-- 产出到 mod 根的 MetabolicEssential\ 子目录（不在 Assemblies\ 下），由主 mod 的 MetaBolicLoadCtrl 在开关开启时 Assembly.LoadFrom 加载 -->
     <OutputPath>..\MetabolicEssential\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -15,6 +15,7 @@
   <ItemGroup>
     <!-- 注意：代谢需求（Need_MEE_*）已迁回主 mod（_indexProj/Source/Needs/），本模块只保留 Harmony 逻辑。 -->
     <Compile Include="Source\MetabolicEssentialModule.cs" />
+    <Compile Include="Source\MetabolicLogic_Sugar.cs" />
   </ItemGroup>
   <ItemGroup>
     <!-- 复用主工程(_indexProj)旁的 RimWorld / Harmony 程序集；Private=false 避免把这些 DLL 拷进产物 -->

@@ -14,7 +14,7 @@ set "MAIN_OUT=%PROJECT_DIR%_indexProj\bin\Release\net48"
 
 rem --- optional module project (MetabolicEssential.dll) ---
 rem     Its csproj outputs into %PROJECT_DIR%MetabolicEssential\ (a subfolder OUTSIDE Assemblies),
-rem     so RimWorld does NOT auto-load it. The main mod's MetabolicLoader only Assembly.LoadFrom's
+rem     so RimWorld does NOT auto-load it. The main mod's MetaBolicLoadCtrl only Assembly.LoadFrom's
 rem     it when the in-game setting is checked and the game is restarted.
 set "META_PROJ=%PROJECT_DIR%_metabolicEssentialsExtendedProj\MetabolicEssential.csproj"
 set "META_OUT=%PROJECT_DIR%MetabolicEssential"
