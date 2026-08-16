@@ -28,6 +28,29 @@ echo.
 
 cd /d "%PROJECT_DIR%"
 
+rem --- SAFETY NOTE: a running RimWorld locks its loaded assemblies
+rem     (RimHormones.dll), so the DLL cannot be overwritten. We do NOT abort
+rem     outright (that would block every XML-only redeploy too). Instead we
+rem     warn, still deploy all content, and only the DLL copy may fail — we
+rem     detect that and tell the user to close the game + restart. ---
+set "GAME_RUNNING=0"
+tasklist /FI "IMAGENAME eq RimWorldWin64.exe" 2>NUL | find /I "RimWorldWin64.exe" >NUL
+if not errorlevel 1 set "GAME_RUNNING=1"
+tasklist /FI "IMAGENAME eq RimWorld.exe" 2>NUL | find /I "RimWorld.exe" >NUL
+if not errorlevel 1 set "GAME_RUNNING=1"
+if "%GAME_RUNNING%"=="1" (
+    echo.
+    echo ============================================================
+    echo   NOTE: RimWorld appears to be running.
+    echo   - XML / Defs / Languages will still be deployed now.
+    echo     They apply on the next load / restart.
+    echo   - RimHormones.dll is LOCKED by the running game and may NOT
+    echo     update. Close the game completely and re-run this script
+    echo     to refresh the DLL.
+    echo ============================================================
+    echo.
+)
+
 echo ========================================
 echo   Step 1: Build RimHormones.dll
 echo ========================================
@@ -123,6 +146,44 @@ if exist "%DEST_DIR%\Defs\TraitDefs\Trait_PhysiqueAptitudes.xml" (
     del "%DEST_DIR%\Defs\TraitDefs\Trait_PhysiqueAptitudes.xml"
 )
 
+rem SAFETY: xcopy (Step 5) is additive and won't delete stale files in the destination.
+rem These defs were renamed to .disabled to block the water-well feature; remove the
+rem old enabled copies from the deployed mod so they don't re-appear.
+if exist "%DEST_DIR%\Defs\ThingDefs\Thing_MEE_WaterBuildings.xml" (
+    echo Removing blocked (renamed-to-.disabled) Thing_MEE_WaterBuildings.xml from deployed Defs...
+    del "%DEST_DIR%\Defs\ThingDefs\Thing_MEE_WaterBuildings.xml"
+)
+if exist "%DEST_DIR%\Defs\RecipeDefs\Recipe_MEE_WaterBottle.xml" (
+    echo Removing blocked Recipe_MEE_WaterBottle.xml from deployed Defs...
+    del "%DEST_DIR%\Defs\RecipeDefs\Recipe_MEE_WaterBottle.xml"
+)
+if exist "%DEST_DIR%\Defs\WorkGiverDefs\WorkGiver_MEE_Water.xml" (
+    echo Removing blocked WorkGiver_MEE_Water.xml from deployed Defs...
+    del "%DEST_DIR%\Defs\WorkGiverDefs\WorkGiver_MEE_Water.xml"
+)
+
+rem SAFETY: same xcopy-additive problem for renamed/removed files. These stale
+rem copies are NOT in the source tree anymore; if they survive in the deployed
+rem mod they re-introduce old defs (e.g. the old MEE_RainwaterCollector referenced
+rem a comp class that no longer exists -> load error). Remove them here so a
+rem re-run of this script self-heals the deployed copy.
+if exist "%DEST_DIR%\Defs\ThingDefs\Thing_MEE_RainwaterCollector.xml" (
+    echo Removing stale Thing_MEE_RainwaterCollector.xml from deployed Defs...
+    del "%DEST_DIR%\Defs\ThingDefs\Thing_MEE_RainwaterCollector.xml"
+)
+if exist "%DEST_DIR%\Defs\RecipeDefs\Recipe_MEE_GlucoseMash_FromPotato.xml" (
+    echo Removing stale Recipe_MEE_GlucoseMash_FromPotato.xml from deployed Defs...
+    del "%DEST_DIR%\Defs\RecipeDefs\Recipe_MEE_GlucoseMash_FromPotato.xml"
+)
+if exist "%DEST_DIR%\Patches\Trait_PhysiqueAptitudes.xml.bak" (
+    echo Removing stale Trait_PhysiqueAptitudes.xml.bak from deployed Patches...
+    del "%DEST_DIR%\Patches\Trait_PhysiqueAptitudes.xml.bak"
+)
+if exist "%DEST_DIR%\Languages\ChineseSimplified\DefInjected\HediffDef\Physique.xml" (
+    echo Removing stale HediffDef\Physique.xml from deployed Languages...
+    del "%DEST_DIR%\Languages\ChineseSimplified\DefInjected\HediffDef\Physique.xml"
+)
+
 echo.
 
 echo ========================================
@@ -147,6 +208,9 @@ xcopy /E /I /Y "%PROJECT_DIR%Patches" "%DEST_DIR%\Patches"
 echo Copy Languages folder...
 xcopy /E /I /Y "%PROJECT_DIR%Languages" "%DEST_DIR%\Languages"
 
+echo Copy Textures folder...
+xcopy /E /I /Y "%PROJECT_DIR%Textures" "%DEST_DIR%\Textures"
+
 if exist "%PROJECT_DIR%Config" (
     echo Copy Config folder...
     xcopy /E /I /Y "%PROJECT_DIR%Config" "%DEST_DIR%\Config"
@@ -160,7 +224,20 @@ echo ========================================
 echo.
 
 if not exist "%DEST_ASM%" mkdir "%DEST_ASM%"
-xcopy /I /Y "%SRC_ASM%\*.dll" "%DEST_ASM%"
+
+rem Deploy core assemblies. If the main DLL is locked by a running game,
+rem the copy fails — detect it and warn instead of silently leaving a stale DLL.
+copy /Y "%SRC_ASM%\RimHormones.dll" "%DEST_ASM%\"
+if errorlevel 1 (
+    echo.
+    echo WARNING: RimHormones.dll could NOT be overwritten (locked by RimWorld).
+    echo Close the game completely and re-run this script, or restart RimWorld
+    echo to load the freshly built DLL on next launch.
+    echo.
+) else (
+    echo Deployed core assembly: RimHormones.dll
+)
+if exist "%SRC_ASM%\0Harmony.dll" copy /Y "%SRC_ASM%\0Harmony.dll" "%DEST_ASM%\"
 
 echo.
 echo Deployed core assemblies:

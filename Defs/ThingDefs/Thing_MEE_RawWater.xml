@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 生水：水井/取水机器/野外取得的基础水。可饮用（补水），但有概率致病。烧开后变为安全饮用水。 -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>MEE_RawWater</defName>
+    <label>raw water</label>
+    <description>Untreated water drawn from wells, extractors or the wild. Drinkable and satisfies the water need, but may cause illness.</description>
+    <graphicData>
+      <texPath>Things/Item/MEE/MEE_RawWater</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.6,0.6)</drawSize>
+    </graphicData>
+    <stackLimit>50</stackLimit>
+    <thingCategories>
+      <li>Foods</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>40</MaxHitPoints>
+      <MarketValue>0.3</MarketValue>
+      <Mass>0.3</Mass>
+      <Flammability>1</Flammability>
+      <Nutrition>0</Nutrition>
+    </statBases>
+    <!-- 模式 B：补剂非饭；摄入时由 Comp_MEE_Satisfier 补充水需求，并按概率致病 -->
+    <ingestible>
+      <preferability>NeverForNutrition</preferability>
+      <foodType>Fluid</foodType>
+    </ingestible>
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_Satisfier">
+        <needDef>MEEWater</needDef>
+        <satisfyFraction>0.5</satisfyFraction>
+        <sicknessChance>0.25</sicknessChance>
+        <sicknessHediff>FoodPoisoning</sicknessHediff>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>

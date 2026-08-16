@@ -15,4 +15,11 @@
 
   <Physique>Physique</Physique>
   <Physique_Description>Represents a pawn's physical fitness, cardiorespiratory endurance, stress resilience, and hormone metabolism efficiency.</Physique_Description>
+
+  <!-- Health panel dual-UI toggle -->
+  <HormonesHealthTab_Vanilla>Health</HormonesHealthTab_Vanilla>
+  <HormonesHealthTab_Physique>Physique</HormonesHealthTab_Physique>
+  <WorkEfficiency>Work efficiency</WorkEfficiency>
+  <MetabolicRate>Metabolic rate</MetabolicRate>
+  <HungerRate>Hunger rate</HungerRate>
 </LanguageData>

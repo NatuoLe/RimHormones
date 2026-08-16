@@ -3,19 +3,34 @@
   <!-- 水瓶：代谢扩展模块的水需求基础资源（占位贴图，后续可换专用贴图） -->
   <ThingDef ParentName="ResourceBase">
     <defName>MEE_WaterBottle</defName>
-    <label>water bottle</label>
-    <description>A bottle of water. A basic metabolic resource used by the Metabolic Essential module to satisfy the water need.</description>
+    <label>drinking water</label>
+    <description>Boiled, safe drinking water. A basic metabolic resource used by the Metabolic Essential module to satisfy the water need. Made by boiling raw water at a fire source.</description>
     <graphicData>
       <texPath>Things/Item/MEE/MEE_WaterBottle</texPath>
-      <graphicClass>Graphic_StackCount</graphicClass>
+      <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(0.6,0.6)</drawSize>
     </graphicData>
     <stackLimit>50</stackLimit>
+    <thingCategories>
+      <li>Foods</li>
+    </thingCategories>
     <statBases>
       <MaxHitPoints>40</MaxHitPoints>
       <MarketValue>0.6</MarketValue>
       <Mass>0.3</Mass>
       <Flammability>1</Flammability>
+      <Nutrition>0</Nutrition>
     </statBases>
+    <!-- 水瓶：代谢扩展模块的水需求基础资源。模式 B：补剂非饭（Nutrition=0、preferability=NeverForNutrition，不计入正常饮食）；摄入时由 Comp_MEE_Satisfier 补充水需求 -->
+    <ingestible>
+      <preferability>NeverForNutrition</preferability>
+      <foodType>Fluid</foodType>
+    </ingestible>
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_Satisfier">
+        <needDef>MEEWater</needDef>
+        <satisfyFraction>0.5</satisfyFraction>
+      </li>
+    </comps>
   </ThingDef>
 </Defs>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 淡盐水：水+盐（带火建筑）。仅 Metabolic Essential 模块启用时可见 -->
+  <RecipeDef>
+    <defName>MEE_MakeLightSaltWater</defName>
+    <label>make light salt water</label>
+    <description>Mix drinking water with a little salt at a fire source.</description>
+    <jobString>Making light salt water.</jobString>
+    <workAmount>800</workAmount>
+    <recipeUsers>
+      <li>Campfire</li>
+      <li>FueledStove</li>
+      <li>ElectricStove</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MEE_WaterBottle</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MEE_Salt</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_LightSaltWater>5</MEE_LightSaltWater>
+    </products>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+</Defs>

@@ -63,6 +63,10 @@
   <AuditoryStrain.stages.0.label>耳鸣</AuditoryStrain.stages.0.label>
   <AuditoryStrain.stages.1.label>听力损伤</AuditoryStrain.stages.1.label>
 
+  <!-- 优质睡眠 -->
+  <GoodSleep.label>优质睡眠</GoodSleep.label>
+  <GoodSleep.description>在美观房间中获得充足的高质量睡眠。感到精神焕发，工作更有动力。</GoodSleep.description>
+
   <!-- 疲惫状态 -->
   <PhysiqueStrainExhausted.label>精疲力竭</PhysiqueStrainExhausted.label>
   <PhysiqueStrainExhausted.description>体力储备已耗尽。不会自动承担重体力工作（手动分配仍然有效）。休息或娱乐可恢复体力储备。</PhysiqueStrainExhausted.description>

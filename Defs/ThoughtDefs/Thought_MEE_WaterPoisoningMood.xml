@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <ThoughtDef>
+  <defName>MEE_WaterPoisoningMood</defName>
+  <label>水中毒</label>
+  <description>水中毒让我反胃难受。</description>
+  <durationDays>1</durationDays>
+  <thoughtClass>Thought_Memory</thoughtClass>
+  <stages>
+    <li>
+      <label>水中毒</label>
+      <description>水中毒让我反胃难受。</description>
+      <baseMoodEffect>-8</baseMoodEffect>
+    </li>
+  </stages>
+</ThoughtDef>
+</Defs>

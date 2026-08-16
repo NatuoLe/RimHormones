@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ===== 水井 (hand-pumped water well) ===== -->
+  <!-- 生产建筑：殖民者在此挂「灌装水瓶」账单，花费时间产出 MEE_WaterBottle。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>MEE_WaterWell</defName>
+    <label>water well</label>
+    <description>A simple hand-dug well. Colonists can draw water here to fill water bottles. Part of the Metabolic Essential module.</description>
+    <!-- 贴图参考 DBH 的水井 (PrimitiveWell)，已复制到本 mod 的 Textures/Things/Building/MEE/ -->
+    <graphicData>
+      <texPath>Things/Building/MEE/MEE_WaterWell</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <thingClass>Building_WorkTable</thingClass>
+    <category>Building</category>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>60</pathCost>
+    <blockWind>false</blockWind>
+    <size>(1,1)</size>
+    <rotatable>false</rotatable>
+    <useHitPoints>true</useHitPoints>
+    <fillPercent>0.4</fillPercent>
+    <statBases>
+      <MaxHitPoints>120</MaxHitPoints>
+      <WorkToBuild>1500</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-2</Beauty>
+    </statBases>
+    <costList>
+      <WoodLog>40</WoodLog>
+      <Steel>10</Steel>
+    </costList>
+    <building>
+      <isEdifice>false</isEdifice>
+    </building>
+    <designationCategory>Misc</designationCategory>
+    <modExtensions>
+      <li Class="Hormones.MEEBuildingMarker" />
+    </modExtensions>
+    <constructionSkillPrerequisite>2</constructionSkillPrerequisite>
+    <!-- 生产账单：让水井像制作台一样有『账单』页签，可挂「灌装水瓶」 -->
+    <hasInteractionCell>True</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <recipes>
+      <li>MEE_MakeWaterBottle</li>
+    </recipes>
+  </ThingDef>
+
+  <!-- ===== 取水机器 (electric water extractor) ===== -->
+  <!-- 后期电动版：耗电、更快，属于同一生产链。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>MEE_WaterExtractor</defName>
+    <label>water extractor</label>
+    <description>An electric water extractor that pumps groundwater and fills bottles automatically. Part of the Metabolic Essential module.</description>
+    <!-- 贴图参考 DBH 的深水井 (DeepWaterWell)，已复制到本 mod 的 Textures/Things/Building/MEE/ -->
+    <graphicData>
+      <texPath>Things/Building/MEE/MEE_WaterExtractor</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <thingClass>Building_WorkTable</thingClass>
+    <category>Building</category>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>60</pathCost>
+    <blockWind>false</blockWind>
+    <size>(1,1)</size>
+    <rotatable>false</rotatable>
+    <useHitPoints>true</useHitPoints>
+    <fillPercent>0.4</fillPercent>
+    <statBases>
+      <MaxHitPoints>150</MaxHitPoints>
+      <WorkToBuild>2500</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-3</Beauty>
+    </statBases>
+    <costList>
+      <Steel>80</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <building>
+      <isEdifice>false</isEdifice>
+    </building>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>200</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+    <designationCategory>Misc</designationCategory>
+    <modExtensions>
+      <li Class="Hormones.MEEBuildingMarker" />
+    </modExtensions>
+    <constructionSkillPrerequisite>4</constructionSkillPrerequisite>
+    <!-- 生产账单：让取水机器像制作台一样有『账单』页签，可挂「灌装水瓶」 -->
+    <hasInteractionCell>True</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <recipes>
+      <li>MEE_MakeWaterBottle</li>
+    </recipes>
+  </ThingDef>
+
+</Defs>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 代谢扩展模块的「代谢原料」分类：收纳盐、蛋白提取物等非食用代谢资源，使其可进入存储区 -->
+  <ThingCategoryDef>
+    <defName>MEE_Ingredients</defName>
+    <label>metabolic ingredients</label>
+    <parent>ResourcesRaw</parent>
+  </ThingCategoryDef>
+</Defs>

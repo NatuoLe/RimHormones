@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <ThoughtDef>
+  <defName>MEE_Thirsty</defName>
+  <label>我渴了</label>
+  <description>有点缺水，口渴难耐。</description>
+  <durationDays>1</durationDays>
+  <thoughtClass>Thought_Memory</thoughtClass>
+  <stages>
+    <li>
+      <label>我渴了</label>
+      <description>有点缺水，口渴难耐。</description>
+      <baseMoodEffect>-3</baseMoodEffect>
+    </li>
+  </stages>
+</ThoughtDef>
+</Defs>

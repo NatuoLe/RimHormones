@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 果蔬汁 Buff：体魄总经验值增长+25%、心情-3，持续 12h（30000 tick）。 -->
+  <HediffDef>
+    <defName>MEE_Buff_VegFruitJuice</defName>
+    <label>veg-fruit juice</label>
+    <description>Boosts total physique XP gain by 25% but lowers mood, for 12 hours.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <makesSickThought>false</makesSickThought>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>30000</disappearsAfterTicks>
+      </li>
+      <li Class="Hormones.CompProperties_MEEBuff">
+        <physiqueXpMult>1.25</physiqueXpMult>
+        <moodThought>MEE_Thought_VegFruitJuice</moodThought>
+      </li>
+    </comps>
+    <stages>
+      <li></li>
+    </stages>
+  </HediffDef>
+</Defs>

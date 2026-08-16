@@ -4,8 +4,37 @@
   <MEE_Salt.description>Table salt. A basic metabolic resource used by the Metabolic Essential module to satisfy the electrolytes need.</MEE_Salt.description>
   <MEE_ProteinExtract.label>protein extract</MEE_ProteinExtract.label>
   <MEE_ProteinExtract.description>Refined protein. A basic metabolic resource used by the Metabolic Essential module to satisfy the protein need.</MEE_ProteinExtract.description>
-  <MEE_WaterBottle.label>water bottle</MEE_WaterBottle.label>
-  <MEE_WaterBottle.description>A bottle of water. A basic metabolic resource used by the Metabolic Essential module to satisfy the water need.</MEE_WaterBottle.description>
-  <MEE_GlucoseMash.label>glucose mash</MEE_GlucoseMash.label>
-  <MEE_GlucoseMash.description>Unrefined glucose mash brewed from potatoes or corn at the brewery. A basic metabolic resource used by the Metabolic Essential module to satisfy the sugar need.</MEE_GlucoseMash.description>
+  <MEE_WaterBottle.label>drinking water</MEE_WaterBottle.label>
+  <MEE_WaterBottle.description>Boiled, safe drinking water. A basic metabolic resource used by the Metabolic Essential module to satisfy the water need. Made by boiling raw water at a fire source.</MEE_WaterBottle.description>
+  <MEE_GlucoseMash.label>glucose syrup</MEE_GlucoseMash.label>
+  <MEE_GlucoseMash.description>Unrefined glucose syrup brewed from corn or fruit. A basic metabolic resource used by the Metabolic Essential module to satisfy the sugar need.</MEE_GlucoseMash.description>
+  <MEE_WaterWell.label>water well</MEE_WaterWell.label>
+  <MEE_WaterWell.description>A simple hand-dug well. Colonists can draw water here to fill water bottles. Part of the Metabolic Essential module.</MEE_WaterWell.description>
+  <MEE_WaterExtractor.label>water extractor</MEE_WaterExtractor.label>
+  <MEE_WaterExtractor.description>An electric water extractor that pumps groundwater and fills bottles automatically. Part of the Metabolic Essential module.</MEE_WaterExtractor.description>
+
+  <!-- 2026-08-13 expansion: raw water / drinks -->
+  <MEE_RawWater.label>raw water</MEE_RawWater.label>
+  <MEE_RawWater.description>Untreated water drawn from wells, extractors or the wild. Drinkable and satisfies the water need, but may cause illness. Boil at a fire source to make safe drinking water.</MEE_RawWater.description>
+  <MEE_LightSaltWater.label>light salt water</MEE_LightSaltWater.label>
+  <MEE_LightSaltWater.description>Water mixed with a little salt. Satisfies the water need, but slows strain recovery by 25% for 12 hours.</MEE_LightSaltWater.description>
+  <MEE_FunctionalDrink.label>functional drink</MEE_FunctionalDrink.label>
+  <MEE_FunctionalDrink.description>An energy drink made from water and sugar. Instantly reduces muscle strain by 25%, counts as exercise (no physique decay), and lifts mood for 12 hours.</MEE_FunctionalDrink.description>
+  <MEE_VegFruitJuice.label>veg-fruit juice</MEE_VegFruitJuice.label>
+  <MEE_VegFruitJuice.description>Juice of water and fruit. Satisfies the water need, boosts total physique XP gain by 25%, but lowers mood slightly for 12 hours.</MEE_VegFruitJuice.description>
+  <MEE_MilkTea.label>milk tea</MEE_MilkTea.label>
+  <MEE_MilkTea.description>Tea of water and milk. Satisfies the water need, provides 33% satiety, lowers daily cortisol by 13%, and lifts mood for 12 hours.</MEE_MilkTea.description>
+
+  <!-- 2026-08-16 new: moisture collector / simple rainwater collector -->
+  <MEE_MoistureCollector.label>moisture collector</MEE_MoistureCollector.label>
+  <MEE_MoistureCollector.description>A powered collector that draws moisture from the air at a steady rate even when it is not raining (about half the rain rate), and gathers twice as much while it is raining or snowing. Requires a power connection. No colonist labor. Part of the Metabolic Essential module. Boil the raw water at a fire source to make it safe to drink.</MEE_MoistureCollector.description>
+  <MEE_SimpleRainwaterCollector.label>simple rainwater collector</MEE_SimpleRainwaterCollector.label>
+  <MEE_SimpleRainwaterCollector.description>A cheap open-air collector that gathers rain only while it is raining, at the same rate as the moisture collector's rain intake. Must be placed under open sky (no roof). Needs no power. Part of the Metabolic Essential module. Boil the raw water at a fire source to make it safe to drink.</MEE_SimpleRainwaterCollector.description>
+  <MEE_WaterCollectorStored>Stored water</MEE_WaterCollectorStored>
+  <MEE_WaterCollectorRate>Current intake: ~{0} bottles/day</MEE_WaterCollectorRate>
+  <MEE_WaterCollectorIdle>No precipitation; collection paused</MEE_WaterCollectorIdle>
+  <MEE_WaterCollectorAir>From air: ~{0} bottles/day</MEE_WaterCollectorAir>
+  <MEE_WaterCollectorNoPower>No power; collection stopped</MEE_WaterCollectorNoPower>
+  <MEE_WaterCollectorNoRoof>Under a roof; cannot catch rain</MEE_WaterCollectorNoRoof>
+  <MEE_WaterCollectorFull>Tank full — producing raw water.</MEE_WaterCollectorFull>
 </LanguageData>

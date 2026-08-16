@@ -12,6 +12,7 @@ namespace Hormones
             Settings = GetSettings<Settings>();
             // 启动时加载「背景故事 → 体魄偏移」配置（Config/BackstoryPhysique.xml）
             BackstoryPhysiqueConfig.Init(content.RootDir);
+            // MEE 需求飘字已迁移至 MEE 模块内的 MetabolicEssential.MEEMgr（随模块 Init 注册），主 mod 不再保留 MEE 专属显示逻辑。
         }
 
         public override void DoSettingsWindowContents(Rect inRect)
@@ -47,6 +48,18 @@ namespace Hormones
             {
                 listing.CheckboxLabeled("    └ 同时显示敌方/非玩家的身体损伤飘字", ref Settings.ShowEnemyBodyDamageMotes,
                     "关闭时（默认）只显示玩家殖民者的身体损伤飘字；开启后，敌人、野生动物等非玩家阵营的身体损伤也会飘字");
+            }
+
+            listing.GapLine();
+            listing.Label("代谢扩展（MEE）需求飘字");
+            listing.CheckboxLabeled("显示 MEE 需求飘字", ref Settings.ShowMEEMotes,
+                "四个代谢需求（水分 / 糖 / 电解质 / 蛋白质）被修改时，在角色头顶显示飘字的总开关");
+            if (Settings.ShowMEEMotes)
+            {
+                listing.CheckboxLabeled("    └ 水分飘字", ref Settings.ShowMEEWaterMotes, "水分需求变化时显示飘字");
+                listing.CheckboxLabeled("    └ 糖分飘字", ref Settings.ShowMEESugarMotes, "糖分需求变化时显示飘字");
+                listing.CheckboxLabeled("    └ 电解质飘字", ref Settings.ShowMEEElectrolytesMotes, "电解质需求变化时显示飘字");
+                listing.CheckboxLabeled("    └ 蛋白质飘字", ref Settings.ShowMEEProteinMotes, "蛋白质需求变化时显示飘字");
             }
 
             listing.GapLine();
@@ -91,6 +104,13 @@ namespace Hormones
         public bool ShowBodyDamageMotes = true;  // 身体损伤飘字（肌肉拉伤 + 透支损伤），默认开启
         public bool ShowEnemyBodyDamageMotes = false;  // 是否显示非玩家阵营的身体损伤飘字，默认关闭（只显示自己殖民者）
 
+        // MEE（代谢扩展）需求飘字开关
+        public bool ShowMEEMotes = true;  // 总开关，默认开启（MEE 模块启用时即可见需求飘字）
+        public bool ShowMEEWaterMotes = true;  // 水分飘字子开关
+        public bool ShowMEESugarMotes = true;  // 糖分飘字子开关
+        public bool ShowMEEElectrolytesMotes = true;  // 电解质飘字子开关
+        public bool ShowMEEProteinMotes = true;  // 蛋白质飘字子开关
+
         // D: 肌肉拉伤玩家可调项
         public float StrainTriggerThresholdPct = Define.DefaultStrainTriggerThresholdPct;
         public float StrainChanceMultiplier = Define.DefaultStrainChanceMultiplier;
@@ -117,6 +137,11 @@ namespace Hormones
             Scribe_Values.Look(ref ShowCortisolInsomniaMotes, "showCortisolInsomniaMotes", false);
             Scribe_Values.Look(ref ShowBodyDamageMotes, "showBodyDamageMotes", true);
             Scribe_Values.Look(ref ShowEnemyBodyDamageMotes, "showEnemyBodyDamageMotes", false);
+            Scribe_Values.Look(ref ShowMEEMotes, "showMEEMotes", true);
+            Scribe_Values.Look(ref ShowMEEWaterMotes, "showMEEWaterMotes", true);
+            Scribe_Values.Look(ref ShowMEESugarMotes, "showMEESugarMotes", true);
+            Scribe_Values.Look(ref ShowMEEElectrolytesMotes, "showMEEElectrolytesMotes", true);
+            Scribe_Values.Look(ref ShowMEEProteinMotes, "showMEEProteinMotes", true);
             Scribe_Values.Look(ref StrainTriggerThresholdPct, "strainTriggerThresholdPct", Define.DefaultStrainTriggerThresholdPct);
             Scribe_Values.Look(ref StrainChanceMultiplier, "strainChanceMultiplier", Define.DefaultStrainChanceMultiplier);
             Scribe_Values.Look(ref PhysiqueDecayGlobalMult, "physiqueDecayGlobalMult", Define.DefaultPhysiqueDecayGlobalMult);

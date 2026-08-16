@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 野果 → 葡萄糖糖浆（批量 ×10，酿造台）。仅当 Metabolic Essential 模块启用时可见 -->
+  <RecipeDef>
+    <defName>MEE_MakeGlucoseMashFromFruitBulk10</defName>
+    <label>make glucose syrup (fruit · bulk 100→10)</label>
+    <description>Brew glucose syrup from 100 fruit into 10 at the brewery.</description>
+    <jobString>Making glucose syrup from fruit in bulk.</jobString>
+    <workAmount>18000</workAmount>
+    <recipeUsers>
+      <li>Brewery</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>RawBerries</li>
+          </thingDefs>
+        </filter>
+        <count>100</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_GlucoseMash>10</MEE_GlucoseMash>
+    </products>
+    <skillRequirements>
+      <Cooking>2</Cooking>
+    </skillRequirements>
+    <workSkill>Cooking</workSkill>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+</Defs>

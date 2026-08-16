@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 奶茶 Buff：皮质醇每日降低13%、心情+3，持续 12h（30000 tick）。 -->
+  <HediffDef>
+    <defName>MEE_Buff_MilkTea</defName>
+    <label>milk tea</label>
+    <description>Lowers daily cortisol by 13% and lifts mood for 12 hours.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <makesSickThought>false</makesSickThought>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>30000</disappearsAfterTicks>
+      </li>
+      <li Class="Hormones.CompProperties_MEEBuff">
+        <cortisolDecayPerInterval>-3.25</cortisolDecayPerInterval>
+        <moodThought>MEE_Thought_MilkTea</moodThought>
+      </li>
+    </comps>
+    <stages>
+      <li></li>
+    </stages>
+  </HediffDef>
+</Defs>

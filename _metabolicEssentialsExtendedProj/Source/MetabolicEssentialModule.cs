@@ -36,6 +36,16 @@ namespace MetabolicEssential
             // 注册糖↔皮质醇双向反馈逻辑（订阅主 mod 的需求变化事件）。
             MetabolicLogic_Sugar.Register();
 
+            // 注册蛋白质↔体魄升级联动（订阅升级事件 + 安装升级门控）。
+            MetabolicLogic_Protein.Register();
+            Hormones.MetaBolicLoadCtrl.PhysiqueUpgradeGate = MetabolicLogic_Protein.Gate;
+
+            // 注册代谢负面状态触发（脱水 / 水中毒 / 浑身无力）。
+            MetabolicLogic_Hediffs.Register();
+
+            // 注册 MEE 需求飘字（订阅 NeedChangeEvents 四事件，集中处理水分/糖/电解质/蛋白质的飘字）。
+            MEEMgr.Register();
+
             Log.Message("[MetabolicEssential] 代谢扩展模块已初始化（实验性骨架）。");
         }
     }

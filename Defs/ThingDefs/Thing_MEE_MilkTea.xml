@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 奶茶：水+牛奶调制。补水 + 提供33%饱食度 + 皮质醇每日降低13% + 心情+3（12h）。 -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>MEE_MilkTea</defName>
+    <label>milk tea</label>
+    <description>Tea of water and milk. Satisfies the water need, provides 33% satiety, lowers daily cortisol by 13%, and lifts mood for 12 hours.</description>
+    <graphicData>
+      <texPath>Things/Item/MEE/MEE_MilkTea</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.6,0.6)</drawSize>
+    </graphicData>
+    <stackLimit>50</stackLimit>
+    <thingCategories>
+      <li>Foods</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>40</MaxHitPoints>
+      <MarketValue>1.0</MarketValue>
+      <Mass>0.3</Mass>
+      <Flammability>1</Flammability>
+      <Nutrition>0.33</Nutrition>
+    </statBases>
+    <socialPropernessMatters>true</socialPropernessMatters>
+    <ingestible>
+      <preferability>MealAwful</preferability>
+      <foodType>Fluid</foodType>
+    </ingestible>
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_Satisfier">
+        <needDef>MEEWater</needDef>
+        <satisfyFraction>0.5</satisfyFraction>
+        <applyBuffHediff>MEE_Buff_MilkTea</applyBuffHediff>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>

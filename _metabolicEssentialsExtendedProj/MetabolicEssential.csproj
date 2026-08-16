@@ -16,6 +16,9 @@
     <!-- 注意：代谢需求（Need_MEE_*）已迁回主 mod（_indexProj/Source/Needs/），本模块只保留 Harmony 逻辑。 -->
     <Compile Include="Source\MetabolicEssentialModule.cs" />
     <Compile Include="Source\MetabolicLogic_Sugar.cs" />
+    <Compile Include="Source\MetabolicLogic_Protein.cs" />
+    <Compile Include="Source\MetabolicLogic_Hediffs.cs" />
+    <Compile Include="Source\Logic\MEEMgr.cs" />
   </ItemGroup>
   <ItemGroup>
     <!-- 复用主工程(_indexProj)旁的 RimWorld / Harmony 程序集；Private=false 避免把这些 DLL 拷进产物 -->

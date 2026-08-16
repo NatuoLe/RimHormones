@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 功能饮品：水+葡萄糖糖浆（带火建筑）。仅 Metabolic Essential 模块启用时可见 -->
+  <RecipeDef>
+    <defName>MEE_MakeFunctionalDrink</defName>
+    <label>make functional drink</label>
+    <description>Mix drinking water with glucose syrup at a fire source.</description>
+    <jobString>Making functional drink.</jobString>
+    <workAmount>1000</workAmount>
+    <recipeUsers>
+      <li>Campfire</li>
+      <li>FueledStove</li>
+      <li>ElectricStove</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MEE_WaterBottle</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MEE_GlucoseMash</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_FunctionalDrink>2</MEE_FunctionalDrink>
+    </products>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+</Defs>

@@ -1,15 +1,61 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-  <MEE_MakeGlucoseMashFromPotato.label>make glucose mash (potato)</MEE_MakeGlucoseMashFromPotato.label>
-  <MEE_MakeGlucoseMashFromPotato.description>Brew glucose mash from potatoes at the brewery.</MEE_MakeGlucoseMashFromPotato.description>
-  <MEE_MakeGlucoseMashFromCorn.label>make glucose mash (corn)</MEE_MakeGlucoseMashFromCorn.label>
-  <MEE_MakeGlucoseMashFromCorn.description>Brew glucose mash from corn at the brewery.</MEE_MakeGlucoseMashFromCorn.description>
+  <MEE_MakeGlucoseMashFromCorn.label>make glucose syrup (corn)</MEE_MakeGlucoseMashFromCorn.label>
+  <MEE_MakeGlucoseMashFromCorn.description>Brew glucose syrup from corn at the brewery.</MEE_MakeGlucoseMashFromCorn.description>
+  <MEE_MakeGlucoseMashFromCorn.jobString>Making glucose syrup from corn.</MEE_MakeGlucoseMashFromCorn.jobString>
+  <MEE_MakeGlucoseMashFromFruit.label>make glucose syrup (fruit)</MEE_MakeGlucoseMashFromFruit.label>
+  <MEE_MakeGlucoseMashFromFruit.description>Brew glucose syrup from fruit at the brewery.</MEE_MakeGlucoseMashFromFruit.description>
+  <MEE_MakeGlucoseMashFromFruit.jobString>Making glucose syrup from fruit.</MEE_MakeGlucoseMashFromFruit.jobString>
+  <MEE_MakeGlucoseMashFromCornBulk5.label>make glucose syrup (corn · bulk 50→25)</MEE_MakeGlucoseMashFromCornBulk5.label>
+  <MEE_MakeGlucoseMashFromCornBulk5.description>Brew 50 corn into 25 glucose syrup at the brewery. Work scales linearly with batch size.</MEE_MakeGlucoseMashFromCornBulk5.description>
+  <MEE_MakeGlucoseMashFromCornBulk5.jobString>Making glucose syrup from corn in bulk.</MEE_MakeGlucoseMashFromCornBulk5.jobString>
+  <MEE_MakeGlucoseMashFromCornBulk10.label>make glucose syrup (corn · bulk 100→50)</MEE_MakeGlucoseMashFromCornBulk10.label>
+  <MEE_MakeGlucoseMashFromCornBulk10.description>Brew 100 corn into 50 glucose syrup at the brewery. Work scales linearly with batch size.</MEE_MakeGlucoseMashFromCornBulk10.description>
+  <MEE_MakeGlucoseMashFromCornBulk10.jobString>Making glucose syrup from corn in bulk.</MEE_MakeGlucoseMashFromCornBulk10.jobString>
+  <MEE_MakeGlucoseMashFromFruitBulk5.label>make glucose syrup (fruit · bulk 50→5)</MEE_MakeGlucoseMashFromFruitBulk5.label>
+  <MEE_MakeGlucoseMashFromFruitBulk5.description>Brew 50 fruit into 5 glucose syrup at the brewery. Work scales linearly with batch size.</MEE_MakeGlucoseMashFromFruitBulk5.description>
+  <MEE_MakeGlucoseMashFromFruitBulk5.jobString>Making glucose syrup from fruit in bulk.</MEE_MakeGlucoseMashFromFruitBulk5.jobString>
+  <MEE_MakeGlucoseMashFromFruitBulk10.label>make glucose syrup (fruit · bulk 100→10)</MEE_MakeGlucoseMashFromFruitBulk10.label>
+  <MEE_MakeGlucoseMashFromFruitBulk10.description>Brew 100 fruit into 10 glucose syrup at the brewery. Work scales linearly with batch size.</MEE_MakeGlucoseMashFromFruitBulk10.description>
+  <MEE_MakeGlucoseMashFromFruitBulk10.jobString>Making glucose syrup from fruit in bulk.</MEE_MakeGlucoseMashFromFruitBulk10.jobString>
   <MEE_MakeSaltFromStone.label>grind salt from stone</MEE_MakeSaltFromStone.label>
   <MEE_MakeSaltFromStone.description>Grind metabolic salt from stone blocks at the stonecutter.</MEE_MakeSaltFromStone.description>
+  <MEE_MakeSaltFromStone.jobString>Grinding metabolic salt.</MEE_MakeSaltFromStone.jobString>
   <MEE_MakeProteinExtractFromMilk.label>make protein extract (milk)</MEE_MakeProteinExtractFromMilk.label>
-  <MEE_MakeProteinExtractFromMilk.description>Process milk into protein extract at the stove.</MEE_MakeProteinExtractFromMilk.description>
+  <MEE_MakeProteinExtractFromMilk.description>Process milk into protein extract at the refinery.</MEE_MakeProteinExtractFromMilk.description>
+  <MEE_MakeProteinExtractFromMilk.jobString>Making protein extract from milk.</MEE_MakeProteinExtractFromMilk.jobString>
   <MEE_MakeProteinExtractFromEggs.label>make protein extract (eggs)</MEE_MakeProteinExtractFromEggs.label>
-  <MEE_MakeProteinExtractFromEggs.description>Process eggs into protein extract at the stove.</MEE_MakeProteinExtractFromEggs.description>
+  <MEE_MakeProteinExtractFromEggs.description>Process eggs into protein extract at the refinery.</MEE_MakeProteinExtractFromEggs.description>
+  <MEE_MakeProteinExtractFromEggs.jobString>Making protein extract from eggs.</MEE_MakeProteinExtractFromEggs.jobString>
   <MEE_MakeProteinExtractFromMeat.label>make protein extract (meat)</MEE_MakeProteinExtractFromMeat.label>
-  <MEE_MakeProteinExtractFromMeat.description>Process raw meat into protein extract at the stove.</MEE_MakeProteinExtractFromMeat.description>
+  <MEE_MakeProteinExtractFromMeat.description>Process raw meat into protein extract at the refinery.</MEE_MakeProteinExtractFromMeat.description>
+  <MEE_MakeProteinExtractFromMeat.jobString>Making protein extract from meat.</MEE_MakeProteinExtractFromMeat.jobString>
+
+  <!-- water: draw / boil -->
+  <MEE_MakeWaterBottle.label>draw raw water</MEE_MakeWaterBottle.label>
+  <MEE_MakeWaterBottle.description>Draw untreated raw water and fill bottles at a water well or water extractor. Boil at a fire source to make safe drinking water.</MEE_MakeWaterBottle.description>
+  <MEE_MakeWaterBottle.jobString>Drawing raw water.</MEE_MakeWaterBottle.jobString>
+  <MEE_BoilWater.label>boil water</MEE_BoilWater.label>
+  <MEE_BoilWater.description>Boil raw water at a fire source to make it safe to drink.</MEE_BoilWater.description>
+  <MEE_BoilWater.jobString>Boiling water.</MEE_BoilWater.jobString>
+  <MEE_BoilWaterBulk12.label>boil water (bulk 12→10)</MEE_BoilWaterBulk12.label>
+  <MEE_BoilWaterBulk12.description>Boil 12 raw water at a fire source into 10 safe drinking water. Faster per unit than single boils.</MEE_BoilWaterBulk12.description>
+  <MEE_BoilWaterBulk12.jobString>Boiling water in bulk.</MEE_BoilWaterBulk12.jobString>
+  <MEE_BoilWaterBulk30.label>boil water (bulk 30→25)</MEE_BoilWaterBulk30.label>
+  <MEE_BoilWaterBulk30.description>Boil 30 raw water at a fire source into 25 safe drinking water. Even faster per unit.</MEE_BoilWaterBulk30.description>
+  <MEE_BoilWaterBulk30.jobString>Boiling water in bulk.</MEE_BoilWaterBulk30.jobString>
+
+  <!-- drinks -->
+  <MEE_MakeLightSaltWater.label>make light salt water</MEE_MakeLightSaltWater.label>
+  <MEE_MakeLightSaltWater.description>Mix drinking water with a little salt at a fire source.</MEE_MakeLightSaltWater.description>
+  <MEE_MakeLightSaltWater.jobString>Making light salt water.</MEE_MakeLightSaltWater.jobString>
+  <MEE_MakeFunctionalDrink.label>make functional drink</MEE_MakeFunctionalDrink.label>
+  <MEE_MakeFunctionalDrink.description>Mix drinking water with glucose syrup at a fire source.</MEE_MakeFunctionalDrink.description>
+  <MEE_MakeFunctionalDrink.jobString>Making functional drink.</MEE_MakeFunctionalDrink.jobString>
+  <MEE_MakeVegFruitJuice.label>make veg-fruit juice</MEE_MakeVegFruitJuice.label>
+  <MEE_MakeVegFruitJuice.description>Juice drinking water with fruit at a fire source.</MEE_MakeVegFruitJuice.description>
+  <MEE_MakeVegFruitJuice.jobString>Making veg-fruit juice.</MEE_MakeVegFruitJuice.jobString>
+  <MEE_MakeMilkTea.label>make milk tea</MEE_MakeMilkTea.label>
+  <MEE_MakeMilkTea.description>Brew drinking water with milk at a fire source.</MEE_MakeMilkTea.description>
+  <MEE_MakeMilkTea.jobString>Making milk tea.</MEE_MakeMilkTea.jobString>
 </LanguageData>

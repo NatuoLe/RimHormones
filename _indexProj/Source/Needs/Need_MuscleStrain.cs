@@ -53,6 +53,15 @@ namespace Hormones
         /// <summary>读取劳损积累速率额外乘区（内部/跨类使用）。</summary>
         public float GetExtraStrainRateMultiplier() => extraStrainRateMult;
 
+        // 劳损【恢复】速率额外乘区（由饮品等外部系统设置；淡盐水 0.75 = 恢复效率-25%）。
+        private float extraStrainRecoveryMult = 1f;
+        /// <summary>外部 Mod 设置劳损恢复速率额外乘区（默认 1.0）。饮品如淡盐水可设 0.75f 表示恢复效率降低 25%。</summary>
+        public void SetExtraStrainRecoveryMultiplier(float mult) => extraStrainRecoveryMult = mult;
+        /// <summary>外部 Mod 重置劳损恢复速率额外乘区为默认 1.0。</summary>
+        public void ResetExtraStrainRecoveryMultiplier() => extraStrainRecoveryMult = 1f;
+        /// <summary>读取劳损恢复速率额外乘区（内部/跨类使用）。</summary>
+        public float GetExtraStrainRecoveryMultiplier() => extraStrainRecoveryMult;
+
         /// <summary>外部 Mod 设置体魄经验额外乘区（默认 1.0，无影响）。饮品如果蔬汁可设 1.25f 表示 +25%。</summary>
         public void SetExtraPhysiqueXpMultiplier(float mult) => extraPhysiqueXpMult = mult;
         /// <summary>外部 Mod 重置体魄经验额外乘区为默认 1.0。</summary>
@@ -109,6 +118,16 @@ namespace Hormones
             CurLevel -= amount;
             if (CurLevel < 0f) CurLevel = 0f;
 
+            if (before != CurLevel)
+                NeedChangeEvents.FireStrainChanged(pawn, before, CurLevel);
+        }
+
+        /// <summary>直接降低劳损值（饮品即时效果，如功能饮品 -25%）。不施加积累速率乘区，与 AddStrain 方向相反。</summary>
+        public void ReduceStrain(float amount)
+        {
+            float before = CurLevel;
+            CurLevel += amount;
+            if (CurLevel > MaxLevel) CurLevel = MaxLevel;
             if (before != CurLevel)
                 NeedChangeEvents.FireStrainChanged(pawn, before, CurLevel);
         }

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ===== 水分收集器 (moisture collector, 2x2, 需电) ===== -->
+  <!-- 通电建筑：不下雨时也能从空气中恒定抽取水分（½ 当前速率）；下雨/下雪时速率翻倍（2× 当前）。 -->
+  <!-- 属于 Metabolic Essential 模块：带 MEEBuildingMarker，模块关闭时从建造菜单隐藏。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>MEE_MoistureCollector</defName>
+    <label>moisture collector</label>
+    <description>A powered collector that draws moisture from the air at a steady rate even when it is not raining, and gathers twice as much while it is raining or snowing. Requires a power connection. Needs no colonist labor. Part of the Metabolic Essential module. Boil the raw water at a fire source to make it safe to drink.</description>
+    <!-- 占位贴图（纯色块），后续可换专用贴图 -->
+    <graphicData>
+      <texPath>Things/Building/MEE/MEE_MoistureCollector</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <altitudeLayer>Building</altitudeLayer>
+    <!-- 实心 2x2 结构：用 Impassable 真正挡路、不可堆叠；
+         原版 ThingDef.ConfigErrors 对「不可通行 + 玩家可建 + 非满覆盖」会报
+         "impassable, player-buildable building that can be shot/seen over."，
+         用 disableImpassableShotOverConfigError=true 显式声明“这正是设计意图”来规避
+         （fillPercent 保持 0.5 也避免触发另一条 "fillPercent 1.00 但不是 edifice"）。 -->
+    <passability>Impassable</passability>
+    <disableImpassableShotOverConfigError>true</disableImpassableShotOverConfigError>
+    <!-- 确保进入 Normal tick 列表，每 tick 回调 CompTick()（同时已重写 CompTickRare 兜底，
+         即便某些情况下回到 Rare 列表也能正常累积）。 -->
+    <tickerType>Normal</tickerType>
+    <blockWind>false</blockWind>
+    <size>(2,2)</size>
+    <rotatable>false</rotatable>
+    <useHitPoints>true</useHitPoints>
+    <fillPercent>0.5</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <statBases>
+      <MaxHitPoints>220</MaxHitPoints>
+      <WorkToBuild>2200</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-1</Beauty>
+    </statBases>
+    <costList>
+      <WoodLog>50</WoodLog>
+      <Steel>25</Steel>
+      <ComponentIndustrial>1</ComponentIndustrial>
+    </costList>
+    <building>
+      <!-- isEdifice 必须保持原版默认的 true（BuildingProperties.cs:12）。
+           这是「禁止与其他建筑重叠」的关键：GenConstruct.CanPlaceBlueprintOver
+           只有在 newThingDef.IsEdifice()==true 时才会对「压在墙/生产台等 edifice 上」
+           返回 false；写成 false 会进入「非 edifice」分支，而目标建筑的
+           canBuildNonEdificesUnder 默认也是 true（BuildingProperties.cs:73）
+           → 直接 return true 放行，于是收集器能叠在任何建筑上。
+           注意：passability=Impassable 在该函数里**完全不参与**建筑重叠判定
+           （只对「不可通行的植物」有一处判断），所以靠 Impassable 拦不住重叠。 -->
+      <canBuildNonEdificesUnder>false</canBuildNonEdificesUnder>
+    </building>
+    <designationCategory>Misc</designationCategory>
+    <modExtensions>
+      <li Class="Hormones.MEEBuildingMarker" />
+    </modExtensions>
+    <!-- 重叠拦截依靠 isEdifice=true（原版默认）+ canBuildNonEdificesUnder=false：
+         前者使「压在墙/生产台等建筑上」被 CanPlaceBlueprintOver 拒绝，
+         后者禁止别人把电线/家具等非 edifice 塞进本建筑格子里。
+         不要写 isEdifice=false —— 那会关掉整套保护（详见上方 building 段注释）。 -->
+    <constructionSkillPrerequisite>3</constructionSkillPrerequisite>
+    <!-- 水分收集逻辑：不下雨从空气恒定抽取（airMultiplier=0.5 → ½ 当前），
+         下雨/下雪速率翻倍（rainMultiplier=2 → 2× 当前），须通电（requiresPower + CompPowerTrader）。
+         每攒够 1 份即产出生水（即产即出）。耗电 50W。 -->
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_WaterCollector">
+        <bottlesPerDay>10</bottlesPerDay>
+        <maxStored>12</maxStored>
+        <spawnDefName>MEE_RawWater</spawnDefName>
+        <collectSnow>true</collectSnow>
+        <rainMultiplier>2</rainMultiplier>
+        <airMultiplier>0.5</airMultiplier>
+        <requiresPower>true</requiresPower>
+        <needsNoRoof>false</needsNoRoof>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>50</basePowerConsumption>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

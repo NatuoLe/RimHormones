@@ -10,9 +10,8 @@
     <description>Process milk into protein extract at the stove.</description>
     <jobString>Processing protein extract from milk.</jobString>
     <workAmount>1500</workAmount>
-    <effectOnly>false</effectOnly>
     <recipeUsers>
-      <li>Stove</li>
+      <li>ElectricSmelter</li>
     </recipeUsers>
     <ingredients>
       <li>
@@ -28,10 +27,7 @@
       <MEE_ProteinExtract>1</MEE_ProteinExtract>
     </products>
     <skillRequirements>
-      <li>
-        <skill>Cooking</skill>
-        <minLevel>2</minLevel>
-      </li>
+      <Cooking>2</Cooking>
     </skillRequirements>
     <workSkill>Cooking</workSkill>
     <modExtensions>
@@ -46,15 +42,15 @@
     <description>Process eggs into protein extract at the stove.</description>
     <jobString>Processing protein extract from eggs.</jobString>
     <workAmount>1500</workAmount>
-    <effectOnly>false</effectOnly>
     <recipeUsers>
-      <li>Stove</li>
+      <li>ElectricSmelter</li>
     </recipeUsers>
     <ingredients>
       <li>
         <filter>
           <thingDefs>
-            <li>EggChicken</li>
+            <li>EggChickenUnfertilized</li>
+            <li>EggChickenFertilized</li>
           </thingDefs>
         </filter>
         <count>10</count>
@@ -64,10 +60,7 @@
       <MEE_ProteinExtract>1</MEE_ProteinExtract>
     </products>
     <skillRequirements>
-      <li>
-        <skill>Cooking</skill>
-        <minLevel>2</minLevel>
-      </li>
+      <Cooking>2</Cooking>
     </skillRequirements>
     <workSkill>Cooking</workSkill>
     <modExtensions>
@@ -82,9 +75,8 @@
     <description>Process raw meat into protein extract at the stove.</description>
     <jobString>Processing protein extract from meat.</jobString>
     <workAmount>1500</workAmount>
-    <effectOnly>false</effectOnly>
     <recipeUsers>
-      <li>Stove</li>
+      <li>ElectricSmelter</li>
     </recipeUsers>
     <ingredients>
       <li>
@@ -100,10 +92,7 @@
       <MEE_ProteinExtract>1</MEE_ProteinExtract>
     </products>
     <skillRequirements>
-      <li>
-        <skill>Cooking</skill>
-        <minLevel>2</minLevel>
-      </li>
+      <Cooking>2</Cooking>
     </skillRequirements>
     <workSkill>Cooking</workSkill>
     <modExtensions>

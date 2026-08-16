@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ===== 简易雨水收集器 (simple rainwater collector, 1x1, 无电) ===== -->
+  <!-- 廉价露天装置：仅在“下雨”时按当前速率收集（与水分收集器下雨速率相同），不下雨不收集。 -->
+  <!-- 必须露天（未被屋顶覆盖）才能接到雨水（needsNoRoof=true）。属于 Metabolic Essential 模块。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>MEE_SimpleRainwaterCollector</defName>
+    <label>simple rainwater collector</label>
+    <description>A cheap open-air collector that gathers rain only while it is raining, at the same rate as the moisture collector's rain intake. Must be placed under open sky (no roof). Needs no power. Part of the Metabolic Essential module. Boil the raw water at a fire source to make it safe to drink.</description>
+    <!-- 占位贴图（纯色块），后续可换专用贴图 -->
+    <graphicData>
+      <texPath>Things/Building/MEE/MEE_SimpleRainwaterCollector</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <altitudeLayer>Building</altitudeLayer>
+    <!-- 实心 1x1 结构：Impassable 真正挡路、不可堆叠；disableImpassableShotOverConfigError 规避 ConfigError。 -->
+    <passability>Impassable</passability>
+    <disableImpassableShotOverConfigError>true</disableImpassableShotOverConfigError>
+    <tickerType>Normal</tickerType>
+    <blockWind>false</blockWind>
+    <size>(1,1)</size>
+    <rotatable>false</rotatable>
+    <useHitPoints>true</useHitPoints>
+    <fillPercent>0.5</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <statBases>
+      <MaxHitPoints>120</MaxHitPoints>
+      <WorkToBuild>900</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <Beauty>-1</Beauty>
+    </statBases>
+    <costList>
+      <WoodLog>10</WoodLog>
+    </costList>
+    <building>
+      <!-- isEdifice=true（原版默认）+ canBuildNonEdificesUnder=false → 原版默认禁止与其他建筑重叠。 -->
+      <canBuildNonEdificesUnder>false</canBuildNonEdificesUnder>
+    </building>
+    <designationCategory>Misc</designationCategory>
+    <modExtensions>
+      <li Class="Hormones.MEEBuildingMarker" />
+    </modExtensions>
+    <constructionSkillPrerequisite>2</constructionSkillPrerequisite>
+    <!-- 简易收集逻辑：仅下雨（collectSnow=false，只认雨）按当前速率收集（rainMultiplier=1，同水分收集器下雨速率）；
+         needsNoRoof=true 要求露天；airMultiplier=0 不下雨不收集；无需电。每攒够 1 份即产出生水（即产即出）。 -->
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_WaterCollector">
+        <bottlesPerDay>10</bottlesPerDay>
+        <maxStored>6</maxStored>
+        <spawnDefName>MEE_RawWater</spawnDefName>
+        <collectSnow>false</collectSnow>
+        <rainMultiplier>1</rainMultiplier>
+        <airMultiplier>0</airMultiplier>
+        <requiresPower>false</requiresPower>
+        <needsNoRoof>true</needsNoRoof>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

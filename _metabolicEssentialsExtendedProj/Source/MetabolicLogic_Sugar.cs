@@ -39,12 +39,18 @@ namespace MetabolicEssential
         private const float CortisolSurgePerDay = -13f;
 
         // —— 皮质醇 / 劳损 → 糖消耗（单位：占 MaxLevel 的 0~1 比例，即 %/日） ——
-        /// <summary>糖基础每日自然消耗速率（默认 10%/日，与 Need_MEE_Sugar.FallPerDay 基准保持一致）。</summary>
-        private const float SugarFallBase = 0.10f;
+        /// <summary>糖基础每日自然消耗速率（默认 40%/日，与 Need_MEE_Sugar.FallPerDay 基准保持一致）。</summary>
+        private const float SugarFallBase = 0.40f;
         /// <summary>皮质醇&gt;20% 时糖每日消耗降为 30%/日。</summary>
         private const float SugarFallWhenCortisolHigh = 0.30f;
         /// <summary>执行劳损（训练窗口内）时，糖额外每日消耗 +20%/日。</summary>
         private const float SugarFallFromStrain = 0.20f;
+
+        // —— 劳损 → 水 / 电解质 额外消耗（占 MaxLevel 的 0~1 比例，即 %/日） ——
+        /// <summary>执行劳损（训练窗口内）时，水额外每日消耗最高 +40%/日（草稿 2.2）。</summary>
+        private const float WaterFallFromStrain = 0.40f;
+        /// <summary>执行劳损（训练窗口内）时，电解质额外每日消耗最高 +33%/日（草稿 4.2）。</summary>
+        private const float ElectrolytesFallFromStrain = 0.33f;
 
         // —— 劳损窗口：每次训练动作(AddStrain，即劳损储备被消耗)刷新该窗；窗内视为“正在执行劳损” ——
         /// <summary>劳损生效窗口（游戏 tick）。≈50 秒，覆盖连续训练动作之间的间隔；停止训练后窗过期即不再加成。</summary>
@@ -117,6 +123,16 @@ namespace MetabolicEssential
                 extra += SugarFallFromStrain; // +0.20
 
             sugar.SetExtraFallPerDay(extra);
+
+            // 劳损 → 水 / 电解质 额外消耗（复用同一劳损窗口）
+            Need_MEE_Water water = pawn.needs.TryGetNeed<Need_MEE_Water>();
+            if (water != null)
+                water.SetExtraFallPerDay(straining ? WaterFallFromStrain : 0f);
+
+            Need_MEE_Electrolytes electrolytes = pawn.needs.TryGetNeed<Need_MEE_Electrolytes>();
+            if (electrolytes != null)
+                electrolytes.SetExtraFallPerDay(straining ? ElectrolytesFallFromStrain : 0f);
+            //
         }
     }
 }

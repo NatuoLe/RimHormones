@@ -9,5 +9,10 @@ namespace Hormones
         public Need_MEE_Electrolytes(Pawn pawn) : base(pawn) { }
 
         protected override float FallPerDay => 0.3f; // 每日约消耗 30%
+
+        protected override void OnModified(float before, float after)
+        {
+            NeedChangeEvents.FireElectrolytesChanged(pawn, before, after);
+        }
     }
 }

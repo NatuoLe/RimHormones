@@ -526,7 +526,11 @@ namespace Hormones
                     multiplier = Define.PhysiqueStageAverageStrainRecoveryMultiplier;
                     break;
             }
-            
+
+            // 外置 Mod 接口：劳损【恢复】速率额外乘区（如淡盐水 0.75 = 恢复效率-25%）。
+            Need_MuscleStrain ms = pawn.needs?.TryGetNeed<Need_MuscleStrain>();
+            if (ms != null) multiplier *= ms.GetExtraStrainRecoveryMultiplier();
+
             return Define.MuscleStrainBaseRecoveryPerHour * multiplier;
         }
 

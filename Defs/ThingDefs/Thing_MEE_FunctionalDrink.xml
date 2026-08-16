@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 功能饮品：水+糖调制。补水 + 立即降低劳损25% + 视为一次锻炼（体魄不衰减） + 心情+1（12h）。 -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>MEE_FunctionalDrink</defName>
+    <label>functional drink</label>
+    <description>An energy drink made from water and sugar. Instantly reduces muscle strain by 25%, counts as exercise (no physique decay), and lifts mood for 12 hours.</description>
+    <graphicData>
+      <texPath>Things/Item/MEE/MEE_FunctionalDrink</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.6,0.6)</drawSize>
+    </graphicData>
+    <stackLimit>50</stackLimit>
+    <thingCategories>
+      <li>Foods</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>40</MaxHitPoints>
+      <MarketValue>0.8</MarketValue>
+      <Mass>0.3</Mass>
+      <Flammability>1</Flammability>
+      <Nutrition>0</Nutrition>
+    </statBases>
+    <ingestible>
+      <preferability>NeverForNutrition</preferability>
+      <foodType>Fluid</foodType>
+    </ingestible>
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_Satisfier">
+        <needDef>MEEWater</needDef>
+        <satisfyFraction>0.5</satisfyFraction>
+        <immediateStrainDelta>-0.25</immediateStrainDelta>
+        <markExercise>true</markExercise>
+        <applyBuffHediff>MEE_Buff_FunctionalDrink</applyBuffHediff>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 烧水：在带火的建筑（营火/燃木灶/电灶）上将生水煮沸为安全饮用水。仅 Metabolic Essential 模块启用时可见 -->
+  <RecipeDef>
+    <defName>MEE_BoilWater</defName>
+    <label>boil water</label>
+    <description>Boil raw water at a fire source to make it safe to drink.</description>
+    <jobString>Boiling water.</jobString>
+    <workAmount>200</workAmount>
+    <recipeUsers>
+      <li>Campfire</li>
+      <li>FueledStove</li>
+      <li>ElectricStove</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MEE_RawWater</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_WaterBottle>1</MEE_WaterBottle>
+    </products>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+</Defs>

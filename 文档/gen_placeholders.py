@@ -42,3 +42,9 @@ make(os.path.join(OUT, "MEE_Salt.png"),          (245, 245, 250, 255), (200, 200
 make(os.path.join(OUT, "MEE_ProteinExtract.png"),(220, 140, 140, 255), (180, 100, 100, 255))
 make(os.path.join(OUT, "MEE_WaterBottle.png"),   (120, 180, 230, 255), (80, 140, 200, 255))
 make(os.path.join(OUT, "MEE_GlucoseMash.png"),   (230, 190, 90, 255),  (200, 150, 50, 255))
+# 新增 MEE 饮品/水（2026-08-13 扩展）
+make(os.path.join(OUT, "MEE_RawWater.png"),      (140, 160, 120, 255), (100, 120, 80, 255))   # 生水：浑浊绿褐
+make(os.path.join(OUT, "MEE_LightSaltWater.png"),(185, 210, 220, 255), (150, 180, 195, 255))  # 淡盐水：淡青灰
+make(os.path.join(OUT, "MEE_FunctionalDrink.png"),(120, 200, 140, 255),(80, 160, 105, 255))   # 功能饮品：鲜绿
+make(os.path.join(OUT, "MEE_VegFruitJuice.png"), (235, 155, 85, 255),  (200, 120, 55, 255))    # 果蔬汁：橙
+make(os.path.join(OUT, "MEE_MilkTea.png"),       (205, 175, 135, 255), (170, 140, 100, 255))  # 奶茶：奶茶色

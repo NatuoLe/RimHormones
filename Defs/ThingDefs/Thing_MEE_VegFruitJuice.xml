@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 果蔬汁：水+水果调制。补水 + 体魄总经验值增长+25% + 心情-3（12h）。 -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>MEE_VegFruitJuice</defName>
+    <label>veg-fruit juice</label>
+    <description>Juice of water and fruit. Satisfies the water need, boosts total physique XP gain by 25%, but lowers mood slightly for 12 hours.</description>
+    <graphicData>
+      <texPath>Things/Item/MEE/MEE_VegFruitJuice</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.6,0.6)</drawSize>
+    </graphicData>
+    <stackLimit>50</stackLimit>
+    <thingCategories>
+      <li>Foods</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>40</MaxHitPoints>
+      <MarketValue>0.7</MarketValue>
+      <Mass>0.3</Mass>
+      <Flammability>1</Flammability>
+      <Nutrition>0</Nutrition>
+    </statBases>
+    <ingestible>
+      <preferability>NeverForNutrition</preferability>
+      <foodType>Fluid</foodType>
+    </ingestible>
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_Satisfier">
+        <needDef>MEEWater</needDef>
+        <satisfyFraction>0.5</satisfyFraction>
+        <applyBuffHediff>MEE_Buff_VegFruitJuice</applyBuffHediff>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>

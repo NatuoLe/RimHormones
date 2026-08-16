@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 功能饮品 Buff：心情+1，持续 12h（30000 tick）。即时劳损-25%与锻炼标记由摄入时直接处理。 -->
+  <HediffDef>
+    <defName>MEE_Buff_FunctionalDrink</defName>
+    <label>functional drink</label>
+    <description>Lifts mood for 12 hours.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <makesSickThought>false</makesSickThought>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>30000</disappearsAfterTicks>
+      </li>
+      <li Class="Hormones.CompProperties_MEEBuff">
+        <moodThought>MEE_Thought_FunctionalDrink</moodThought>
+      </li>
+    </comps>
+    <stages>
+      <li></li>
+    </stages>
+  </HediffDef>
+</Defs>

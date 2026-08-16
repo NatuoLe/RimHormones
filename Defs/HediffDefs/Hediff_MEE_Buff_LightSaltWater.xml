@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 淡盐水 Buff：劳损恢复效率-25%，持续 12h（30000 tick）。效果由 HediffComp_MEEBuff 经解耦接口施加。 -->
+  <HediffDef>
+    <defName>MEE_Buff_LightSaltWater</defName>
+    <label>light salt water</label>
+    <description>Slows muscle strain recovery by 25% for 12 hours.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <makesSickThought>false</makesSickThought>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>30000</disappearsAfterTicks>
+      </li>
+      <li Class="Hormones.CompProperties_MEEBuff">
+        <strainRecoveryMult>0.75</strainRecoveryMult>
+      </li>
+    </comps>
+    <stages>
+      <li></li>
+    </stages>
+  </HediffDef>
+</Defs>

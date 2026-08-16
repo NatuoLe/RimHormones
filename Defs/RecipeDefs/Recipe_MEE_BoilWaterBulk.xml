@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 烧水（大量）：在火源（营火/燃木灶/电灶）批量煮沸生水。仅 Metabolic Essential 模块启用时可见 -->
+  <RecipeDef>
+    <defName>MEE_BoilWaterBulk12</defName>
+    <label>boil water (bulk 12→10)</label>
+    <description>Boil 12 raw water at a fire source into 10 safe drinking water. Faster per unit than single boils.</description>
+    <jobString>Boiling water in bulk.</jobString>
+    <workAmount>1000</workAmount>
+    <recipeUsers>
+      <li>Campfire</li>
+      <li>FueledStove</li>
+      <li>ElectricStove</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MEE_RawWater</li>
+          </thingDefs>
+        </filter>
+        <count>12</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_WaterBottle>10</MEE_WaterBottle>
+    </products>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>MEE_BoilWaterBulk30</defName>
+    <label>boil water (bulk 30→25)</label>
+    <description>Boil 30 raw water at a fire source into 25 safe drinking water. Even faster per unit.</description>
+    <jobString>Boiling water in bulk.</jobString>
+    <workAmount>1600</workAmount>
+    <recipeUsers>
+      <li>Campfire</li>
+      <li>FueledStove</li>
+      <li>ElectricStove</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MEE_RawWater</li>
+          </thingDefs>
+        </filter>
+        <count>30</count>
+      </li>
+    </ingredients>
+    <products>
+      <MEE_WaterBottle>25</MEE_WaterBottle>
+    </products>
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+</Defs>

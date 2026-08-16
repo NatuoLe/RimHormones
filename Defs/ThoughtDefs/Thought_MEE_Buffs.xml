@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 功能饮品心情记忆：+1，持续 12h（与 Buff Hediff 同寿命，由 HediffComp_MEEBuff 在摄入时 TryGainMemory 施加） -->
+  <ThoughtDef>
+    <defName>MEE_Thought_FunctionalDrink</defName>
+    <label>functional drink</label>
+    <description>Feeling refreshed after a functional drink.</description>
+    <durationDays>0.5</durationDays>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>functional drink</label>
+        <description>Feeling refreshed after a functional drink.</description>
+        <baseMoodEffect>1</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <!-- 果蔬汁心情记忆：-3，持续 12h -->
+  <ThoughtDef>
+    <defName>MEE_Thought_VegFruitJuice</defName>
+    <label>veg-fruit juice</label>
+    <description>The veg-fruit juice was a bit bland and unsatisfying.</description>
+    <durationDays>0.5</durationDays>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>veg-fruit juice</label>
+        <description>The veg-fruit juice was a bit bland and unsatisfying.</description>
+        <baseMoodEffect>-3</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <!-- 奶茶心情记忆：+3，持续 12h -->
+  <ThoughtDef>
+    <defName>MEE_Thought_MilkTea</defName>
+    <label>milk tea</label>
+    <description>Warm and comforting milk tea.</description>
+    <durationDays>0.5</durationDays>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <stages>
+      <li>
+        <label>milk tea</label>
+        <description>Warm and comforting milk tea.</description>
+        <baseMoodEffect>3</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>

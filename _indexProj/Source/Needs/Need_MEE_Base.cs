@@ -48,14 +48,25 @@ namespace Hormones
             CurLevel -= fall;
             if (CurLevel < 0f) CurLevel = 0f;
 
-            OnFallApplied(before, CurLevel);
+            OnModified(before, CurLevel);
         }
 
         /// <summary>外部（进食/饮水逻辑）调用，补充该代谢物。amount 为 0~1 比例。</summary>
         public void Satisfy(float amount)
         {
+            float before = CurLevel;
             CurLevel += amount;
             if (CurLevel > MaxLevel) CurLevel = MaxLevel;
+            OnModified(before, CurLevel);
+        }
+
+        /// <summary>外部（代谢模块）调用，按 0~1 比例扣除该代谢物（用于体魄升级消耗蛋白质缓冲等）。</summary>
+        public void Consume(float ratio)
+        {
+            float before = CurLevel;
+            CurLevel -= ratio * MaxLevel;
+            if (CurLevel < 0f) CurLevel = 0f;
+            OnModified(before, CurLevel);
         }
 
         /// <summary>当前满足度（0~1）。</summary>
@@ -70,7 +81,7 @@ namespace Hormones
         /// <summary>外部 Mod 重置额外每日消耗速率为默认 0。</summary>
         public void ResetExtraFallPerDay() => extraFallPerDay = 0f;
 
-        /// <summary>每次自然消耗后由 NeedInterval 调用，子类可在此触发变化事件（如糖）。</summary>
-        protected virtual void OnFallApplied(float before, float after) { }
+        /// <summary>每次需求数值变化后调用（自然消耗 NeedInterval / 补充 Satisfy / 扣除 Consume），子类在此触发对应变化事件（如糖）。</summary>
+        protected virtual void OnModified(float before, float after) { }
     }
 }

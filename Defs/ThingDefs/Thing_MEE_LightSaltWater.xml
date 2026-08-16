@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 淡盐水：水+盐调制。补水 + 劳损恢复效率-25%（12h）。 -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>MEE_LightSaltWater</defName>
+    <label>light salt water</label>
+    <description>Water mixed with a little salt. Satisfies the water need, but slows strain recovery by 25% for 12 hours.</description>
+    <graphicData>
+      <texPath>Things/Item/MEE/MEE_LightSaltWater</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.6,0.6)</drawSize>
+    </graphicData>
+    <stackLimit>50</stackLimit>
+    <thingCategories>
+      <li>Foods</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>40</MaxHitPoints>
+      <MarketValue>0.5</MarketValue>
+      <Mass>0.3</Mass>
+      <Flammability>1</Flammability>
+      <Nutrition>0</Nutrition>
+    </statBases>
+    <ingestible>
+      <preferability>NeverForNutrition</preferability>
+      <foodType>Fluid</foodType>
+    </ingestible>
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_Satisfier">
+        <needDef>MEEWater</needDef>
+        <satisfyFraction>0.5</satisfyFraction>
+        <applyBuffHediff>MEE_Buff_LightSaltWater</applyBuffHediff>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>

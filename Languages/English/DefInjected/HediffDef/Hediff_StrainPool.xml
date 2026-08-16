@@ -63,6 +63,10 @@
   <AuditoryStrain.stages.0.label>tinnitus</AuditoryStrain.stages.0.label>
   <AuditoryStrain.stages.1.label>hearing damage</AuditoryStrain.stages.1.label>
 
+  <!-- Good Sleep -->
+  <GoodSleep.label>good sleep</GoodSleep.label>
+  <GoodSleep.description>Had sufficient quality sleep in a beautiful room. Feeling refreshed and more motivated to work.</GoodSleep.description>
+
   <!-- Exhaustion state -->
   <PhysiqueStrainExhausted.label>exhausted</PhysiqueStrainExhausted.label>
   <PhysiqueStrainExhausted.description>Physical reserve is depleted. Will not take on heavy physical work automatically (manual assignment still works). Rest or leisure recovers physical reserve.</PhysiqueStrainExhausted.description>

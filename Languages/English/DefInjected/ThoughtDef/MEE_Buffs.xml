@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <MEE_Thought_FunctionalDrink.label>functional drink</MEE_Thought_FunctionalDrink.label>
+  <MEE_Thought_FunctionalDrink.description>Feeling refreshed after a functional drink.</MEE_Thought_FunctionalDrink.description>
+  <MEE_Thought_FunctionalDrink.stages.0.label>functional drink</MEE_Thought_FunctionalDrink.stages.0.label>
+  <MEE_Thought_FunctionalDrink.stages.0.description>Feeling refreshed after a functional drink.</MEE_Thought_FunctionalDrink.stages.0.description>
+
+  <MEE_Thought_VegFruitJuice.label>veg-fruit juice</MEE_Thought_VegFruitJuice.label>
+  <MEE_Thought_VegFruitJuice.description>The veg-fruit juice was a bit bland and unsatisfying.</MEE_Thought_VegFruitJuice.description>
+  <MEE_Thought_VegFruitJuice.stages.0.label>veg-fruit juice</MEE_Thought_VegFruitJuice.stages.0.label>
+  <MEE_Thought_VegFruitJuice.stages.0.description>The veg-fruit juice was a bit bland and unsatisfying.</MEE_Thought_VegFruitJuice.stages.0.description>
+
+  <MEE_Thought_MilkTea.label>milk tea</MEE_Thought_MilkTea.label>
+  <MEE_Thought_MilkTea.description>Warm and comforting milk tea.</MEE_Thought_MilkTea.description>
+  <MEE_Thought_MilkTea.stages.0.label>milk tea</MEE_Thought_MilkTea.stages.0.label>
+  <MEE_Thought_MilkTea.stages.0.description>Warm and comforting milk tea.</MEE_Thought_MilkTea.stages.0.description>
+</LanguageData>

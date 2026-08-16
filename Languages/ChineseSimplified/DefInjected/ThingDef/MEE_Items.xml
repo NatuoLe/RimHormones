@@ -4,8 +4,37 @@
   <MEE_Salt.description>食盐。代谢扩展模块的基础资源，用于满足「电解质」需求。</MEE_Salt.description>
   <MEE_ProteinExtract.label>蛋白质提取物</MEE_ProteinExtract.label>
   <MEE_ProteinExtract.description>提纯的蛋白质。代谢扩展模块的基础资源，用于满足「蛋白质」需求。</MEE_ProteinExtract.description>
-  <MEE_WaterBottle.label>水瓶</MEE_WaterBottle.label>
-  <MEE_WaterBottle.description>装满水的瓶子。代谢扩展模块的基础资源，用于满足「水」需求。</MEE_WaterBottle.description>
-  <MEE_GlucoseMash.label>葡萄糖原浆</MEE_GlucoseMash.label>
-  <MEE_GlucoseMash.description>由土豆或玉米在酿造台发酵而成的未精炼葡萄糖原浆。代谢扩展模块的基础糖资源，用于满足「糖」需求。</MEE_GlucoseMash.description>
+  <MEE_WaterBottle.label>饮用水</MEE_WaterBottle.label>
+  <MEE_WaterBottle.description>烧开后的安全饮用水。代谢扩展模块的基础资源，用于满足「水」需求。由生水在火源处煮沸得到。</MEE_WaterBottle.description>
+  <MEE_GlucoseMash.label>葡萄糖糖浆</MEE_GlucoseMash.label>
+  <MEE_GlucoseMash.description>由玉米或野果在酿造台发酵而成的未精炼葡萄糖糖浆。代谢扩展模块的基础糖资源，用于满足「糖」需求。</MEE_GlucoseMash.description>
+  <MEE_WaterWell.label>水井</MEE_WaterWell.label>
+  <MEE_WaterWell.description>简易手挖水井。殖民者可在井边打水灌装水瓶。属于代谢扩展模块。</MEE_WaterWell.description>
+  <MEE_WaterExtractor.label>取水机器</MEE_WaterExtractor.label>
+  <MEE_WaterExtractor.description>电动取水机器，从地下抽取并灌装水瓶。属于代谢扩展模块。</MEE_WaterExtractor.description>
+
+  <!-- 2026-08-13 扩展：生水 / 饮品 -->
+  <MEE_RawWater.label>生水</MEE_RawWater.label>
+  <MEE_RawWater.description>从水井、取水机器或野外取得未经处理的水。可饮用并满足水需求，但可能导致生病。在火源处烧开后变为安全饮用水。</MEE_RawWater.description>
+  <MEE_LightSaltWater.label>淡盐水</MEE_LightSaltWater.label>
+  <MEE_LightSaltWater.description>由水与少量盐调制。满足水需求，但使劳损恢复效率降低 25%，持续 12 小时。</MEE_LightSaltWater.description>
+  <MEE_FunctionalDrink.label>功能饮品</MEE_FunctionalDrink.label>
+  <MEE_FunctionalDrink.description>由水与糖调制的功能饮料。立即降低肌肉劳损 25%、视为一次锻炼（体魄不衰减），并提升心情 12 小时。</MEE_FunctionalDrink.description>
+  <MEE_VegFruitJuice.label>果蔬汁</MEE_VegFruitJuice.label>
+  <MEE_VegFruitJuice.description>由水与水果调制的果汁。满足水需求、使体魄总经验值增长提高 25%，但略微降低心情，持续 12 小时。</MEE_VegFruitJuice.description>
+  <MEE_MilkTea.label>奶茶</MEE_MilkTea.label>
+  <MEE_MilkTea.description>由水与牛奶调制的奶茶。满足水需求、提供 33% 饱食度、每日降低皮质醇 13%，并提升心情 12 小时。</MEE_MilkTea.description>
+
+  <!-- 2026-08-16 新增：水分收集器 / 简易雨水收集器 -->
+  <MEE_MoistureCollector.label>水分收集器</MEE_MoistureCollector.label>
+  <MEE_MoistureCollector.description>通电建筑：不下雨时也能从空气中恒定抽取水分（约当前½速率），下雨或下雪时速率翻倍（约当前2倍）。需要接入电网、无需殖民者操作。属于代谢扩展模块。生水在火源处烧开后变为安全饮用水。</MEE_MoistureCollector.description>
+  <MEE_SimpleRainwaterCollector.label>简易雨水收集器</MEE_SimpleRainwaterCollector.label>
+  <MEE_SimpleRainwaterCollector.description>廉价露天装置：仅在下雨时按当前速率收集（与水分收集器下雨速率相同），不下雨不收集。必须露天放置（无屋顶）。无需电力。属于代谢扩展模块。生水在火源处烧开后变为安全饮用水。</MEE_SimpleRainwaterCollector.description>
+  <MEE_WaterCollectorStored>储水量</MEE_WaterCollectorStored>
+  <MEE_WaterCollectorRate>当前降水速率：约 {0} 瓶/日</MEE_WaterCollectorRate>
+  <MEE_WaterCollectorIdle>当前无降水，暂停收集</MEE_WaterCollectorIdle>
+  <MEE_WaterCollectorAir>从空气收集：约 {0} 瓶/日</MEE_WaterCollectorAir>
+  <MEE_WaterCollectorNoPower>未通电，停止收集</MEE_WaterCollectorNoPower>
+  <MEE_WaterCollectorNoRoof>位于屋顶下，接不到雨水</MEE_WaterCollectorNoRoof>
+  <MEE_WaterCollectorFull>水箱已蓄满，持续产出</MEE_WaterCollectorFull>
 </LanguageData>

@@ -1,15 +1,61 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-  <MEE_MakeGlucoseMashFromPotato.label>酿造葡萄糖原浆（土豆）</MEE_MakeGlucoseMashFromPotato.label>
-  <MEE_MakeGlucoseMashFromPotato.description>在酿造台用土豆发酵制作葡萄糖原浆。</MEE_MakeGlucoseMashFromPotato.description>
-  <MEE_MakeGlucoseMashFromCorn.label>酿造葡萄糖原浆（玉米）</MEE_MakeGlucoseMashFromCorn.label>
-  <MEE_MakeGlucoseMashFromCorn.description>在酿造台用玉米发酵制作葡萄糖原浆。</MEE_MakeGlucoseMashFromCorn.description>
+  <MEE_MakeGlucoseMashFromCorn.label>酿造葡萄糖糖浆（玉米）</MEE_MakeGlucoseMashFromCorn.label>
+  <MEE_MakeGlucoseMashFromCorn.description>在酿造台用玉米发酵制作葡萄糖糖浆。</MEE_MakeGlucoseMashFromCorn.description>
+  <MEE_MakeGlucoseMashFromCorn.jobString>用玉米酿造葡萄糖糖浆。</MEE_MakeGlucoseMashFromCorn.jobString>
+  <MEE_MakeGlucoseMashFromFruit.label>酿造葡萄糖糖浆（野果）</MEE_MakeGlucoseMashFromFruit.label>
+  <MEE_MakeGlucoseMashFromFruit.description>在酿造台用野果发酵制作葡萄糖糖浆。</MEE_MakeGlucoseMashFromFruit.description>
+  <MEE_MakeGlucoseMashFromFruit.jobString>用野果酿造葡萄糖糖浆。</MEE_MakeGlucoseMashFromFruit.jobString>
+  <MEE_MakeGlucoseMashFromCornBulk5.label>酿造葡萄糖糖浆（玉米·大量 50→25）</MEE_MakeGlucoseMashFromCornBulk5.label>
+  <MEE_MakeGlucoseMashFromCornBulk5.description>在酿造台用 50 份玉米发酵制作 25 份葡萄糖糖浆，工作量随批量线性放大。</MEE_MakeGlucoseMashFromCornBulk5.description>
+  <MEE_MakeGlucoseMashFromCornBulk5.jobString>用玉米批量酿造葡萄糖糖浆。</MEE_MakeGlucoseMashFromCornBulk5.jobString>
+  <MEE_MakeGlucoseMashFromCornBulk10.label>酿造葡萄糖糖浆（玉米·大量 100→50）</MEE_MakeGlucoseMashFromCornBulk10.label>
+  <MEE_MakeGlucoseMashFromCornBulk10.description>在酿造台用 100 份玉米发酵制作 50 份葡萄糖糖浆，工作量随批量线性放大。</MEE_MakeGlucoseMashFromCornBulk10.description>
+  <MEE_MakeGlucoseMashFromCornBulk10.jobString>用玉米批量酿造葡萄糖糖浆。</MEE_MakeGlucoseMashFromCornBulk10.jobString>
+  <MEE_MakeGlucoseMashFromFruitBulk5.label>酿造葡萄糖糖浆（野果·大量 50→5）</MEE_MakeGlucoseMashFromFruitBulk5.label>
+  <MEE_MakeGlucoseMashFromFruitBulk5.description>在酿造台用 50 份野果发酵制作 5 份葡萄糖糖浆，工作量随批量线性放大。</MEE_MakeGlucoseMashFromFruitBulk5.description>
+  <MEE_MakeGlucoseMashFromFruitBulk5.jobString>用野果批量酿造葡萄糖糖浆。</MEE_MakeGlucoseMashFromFruitBulk5.jobString>
+  <MEE_MakeGlucoseMashFromFruitBulk10.label>酿造葡萄糖糖浆（野果·大量 100→10）</MEE_MakeGlucoseMashFromFruitBulk10.label>
+  <MEE_MakeGlucoseMashFromFruitBulk10.description>在酿造台用 100 份野果发酵制作 10 份葡萄糖糖浆，工作量随批量线性放大。</MEE_MakeGlucoseMashFromFruitBulk10.description>
+  <MEE_MakeGlucoseMashFromFruitBulk10.jobString>用野果批量酿造葡萄糖糖浆。</MEE_MakeGlucoseMashFromFruitBulk10.jobString>
   <MEE_MakeSaltFromStone.label>研磨盐（石块）</MEE_MakeSaltFromStone.label>
   <MEE_MakeSaltFromStone.description>在切石机用石块研磨出代谢用盐。</MEE_MakeSaltFromStone.description>
+  <MEE_MakeSaltFromStone.jobString>研磨代谢用盐。</MEE_MakeSaltFromStone.jobString>
   <MEE_MakeProteinExtractFromMilk.label>制作蛋白质提取物（牛奶）</MEE_MakeProteinExtractFromMilk.label>
-  <MEE_MakeProteinExtractFromMilk.description>在烹饪台用牛奶加工出蛋白质提取物。</MEE_MakeProteinExtractFromMilk.description>
+  <MEE_MakeProteinExtractFromMilk.description>在精炼台用牛奶加工出蛋白质提取物。</MEE_MakeProteinExtractFromMilk.description>
+  <MEE_MakeProteinExtractFromMilk.jobString>用牛奶制作蛋白质提取物。</MEE_MakeProteinExtractFromMilk.jobString>
   <MEE_MakeProteinExtractFromEggs.label>制作蛋白质提取物（鸡蛋）</MEE_MakeProteinExtractFromEggs.label>
-  <MEE_MakeProteinExtractFromEggs.description>在烹饪台用鸡蛋加工出蛋白质提取物。</MEE_MakeProteinExtractFromEggs.description>
+  <MEE_MakeProteinExtractFromEggs.description>在精炼台用鸡蛋加工出蛋白质提取物。</MEE_MakeProteinExtractFromEggs.description>
+  <MEE_MakeProteinExtractFromEggs.jobString>用鸡蛋制作蛋白质提取物。</MEE_MakeProteinExtractFromEggs.jobString>
   <MEE_MakeProteinExtractFromMeat.label>制作蛋白质提取物（生肉）</MEE_MakeProteinExtractFromMeat.label>
-  <MEE_MakeProteinExtractFromMeat.description>在烹饪台用任意生肉加工出蛋白质提取物。</MEE_MakeProteinExtractFromMeat.description>
+  <MEE_MakeProteinExtractFromMeat.description>在精炼台用任意生肉加工出蛋白质提取物。</MEE_MakeProteinExtractFromMeat.description>
+  <MEE_MakeProteinExtractFromMeat.jobString>用生肉制作蛋白质提取物。</MEE_MakeProteinExtractFromMeat.jobString>
+
+  <!-- 水：打水 / 烧水 -->
+  <MEE_MakeWaterBottle.label>打取生水</MEE_MakeWaterBottle.label>
+  <MEE_MakeWaterBottle.description>在水井或取水机器上打取未经处理的生水并灌装。在火源处烧开可得到安全饮用水。</MEE_MakeWaterBottle.description>
+  <MEE_MakeWaterBottle.jobString>打取生水。</MEE_MakeWaterBottle.jobString>
+  <MEE_BoilWater.label>烧水</MEE_BoilWater.label>
+  <MEE_BoilWater.description>在火源（营火 / 燃木灶 / 电灶）将生水煮沸为安全饮用水。</MEE_BoilWater.description>
+  <MEE_BoilWater.jobString>烧水。</MEE_BoilWater.jobString>
+  <MEE_BoilWaterBulk12.label>烧水（大量 12→10）</MEE_BoilWaterBulk12.label>
+  <MEE_BoilWaterBulk12.description>在火源处将 12 份生水批量煮沸为 10 份安全饮用水，单位耗时低于单次烧水。</MEE_BoilWaterBulk12.description>
+  <MEE_BoilWaterBulk12.jobString>批量烧水。</MEE_BoilWaterBulk12.jobString>
+  <MEE_BoilWaterBulk30.label>烧水（大量 30→25）</MEE_BoilWaterBulk30.label>
+  <MEE_BoilWaterBulk30.description>在火源处将 30 份生水批量煮沸为 25 份安全饮用水，单位耗时更低。</MEE_BoilWaterBulk30.description>
+  <MEE_BoilWaterBulk30.jobString>批量烧水。</MEE_BoilWaterBulk30.jobString>
+
+  <!-- 调制饮品 -->
+  <MEE_MakeLightSaltWater.label>调制淡盐水</MEE_MakeLightSaltWater.label>
+  <MEE_MakeLightSaltWater.description>在火源处用水与少量盐调制淡盐水。</MEE_MakeLightSaltWater.description>
+  <MEE_MakeLightSaltWater.jobString>调制淡盐水。</MEE_MakeLightSaltWater.jobString>
+  <MEE_MakeFunctionalDrink.label>调制功能饮品</MEE_MakeFunctionalDrink.label>
+  <MEE_MakeFunctionalDrink.description>在火源处用水与葡萄糖糖浆调制功能饮品。</MEE_MakeFunctionalDrink.description>
+  <MEE_MakeFunctionalDrink.jobString>调制功能饮品。</MEE_MakeFunctionalDrink.jobString>
+  <MEE_MakeVegFruitJuice.label>调制果蔬汁</MEE_MakeVegFruitJuice.label>
+  <MEE_MakeVegFruitJuice.description>在火源处用水与野果调制果蔬汁。</MEE_MakeVegFruitJuice.description>
+  <MEE_MakeVegFruitJuice.jobString>调制果蔬汁。</MEE_MakeVegFruitJuice.jobString>
+  <MEE_MakeMilkTea.label>调制奶茶</MEE_MakeMilkTea.label>
+  <MEE_MakeMilkTea.description>在火源处用水与牛奶调制奶茶。</MEE_MakeMilkTea.description>
+  <MEE_MakeMilkTea.jobString>调制奶茶。</MEE_MakeMilkTea.jobString>
 </LanguageData>

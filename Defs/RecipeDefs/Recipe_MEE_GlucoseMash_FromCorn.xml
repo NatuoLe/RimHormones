@@ -7,7 +7,6 @@
     <description>Brew glucose mash from corn at the brewery.</description>
     <jobString>Making glucose mash from corn.</jobString>
     <workAmount>1800</workAmount>
-    <effectOnly>false</effectOnly>
     <recipeUsers>
       <li>Brewery</li>
     </recipeUsers>
@@ -15,20 +14,17 @@
       <li>
         <filter>
           <thingDefs>
-            <li>Corn</li>
+            <li>RawCorn</li>
           </thingDefs>
         </filter>
         <count>10</count>
       </li>
     </ingredients>
     <products>
-      <MEE_GlucoseMash>1</MEE_GlucoseMash>
+      <MEE_GlucoseMash>5</MEE_GlucoseMash>
     </products>
     <skillRequirements>
-      <li>
-        <skill>Cooking</skill>
-        <minLevel>2</minLevel>
-      </li>
+      <Cooking>2</Cooking>
     </skillRequirements>
     <workSkill>Cooking</workSkill>
     <modExtensions>

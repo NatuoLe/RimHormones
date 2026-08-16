@@ -7,15 +7,30 @@
     <description>Table salt. A basic metabolic resource used by the Metabolic Essential module to satisfy the electrolytes need.</description>
     <graphicData>
       <texPath>Things/Item/MEE/MEE_Salt</texPath>
-      <graphicClass>Graphic_StackCount</graphicClass>
+      <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(0.6,0.6)</drawSize>
     </graphicData>
     <stackLimit>75</stackLimit>
+    <thingCategories>
+      <li>MEE_Ingredients</li>
+    </thingCategories>
     <statBases>
       <MaxHitPoints>50</MaxHitPoints>
       <MarketValue>0.4</MarketValue>
       <Mass>0.05</Mass>
       <Flammability>0</Flammability>
+      <Nutrition>0</Nutrition>
     </statBases>
+    <!-- 模式 B：补剂非饭（Nutrition=0、preferability=NeverForNutrition，不计入正常饮食）；摄入时由 Comp_MEE_Satisfier 补充电解质需求 -->
+    <ingestible>
+      <preferability>NeverForNutrition</preferability>
+      <foodType>Plant</foodType>
+    </ingestible>
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_Satisfier">
+        <needDef>MEEElectrolytes</needDef>
+        <satisfyFraction>0.5</satisfyFraction>
+      </li>
+    </comps>
   </ThingDef>
 </Defs>

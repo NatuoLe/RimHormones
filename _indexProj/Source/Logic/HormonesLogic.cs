@@ -309,34 +309,62 @@ public static class SkillRecord_Learn_Physique_Patch
 {
     private static SkillDef PhysiqueSkillDef => DefDatabase<SkillDef>.GetNamed("Physique", false);
 
-    [HarmonyPrefix]
-    public static void Prefix(SkillRecord __instance, ref float xp)
-    {
-        if (__instance?.def != PhysiqueSkillDef)
-            return;
-        // 只对“学习获得”的正经验施加热情倍率覆盖。
-        // 负经验（如体魄日常衰减 Learn(-decayXP, direct:true)）是独立机制，
-        // 其数值已在调用处算好，不能再被热情倍率缩放，否则衰减量会失真。
-        if (xp <= 0f)
-            return;
-
-        float originalMultiplier = GetOriginalPassionMultiplier(__instance.passion);
-        float customMultiplier = GetCustomPassionMultiplier(__instance.passion);
-        float inputXp = xp;
-        xp = xp / originalMultiplier * customMultiplier;
-
-        // 外置 Mod 接口：体魄经验额外乘区（如饮品拓展设 1.25f = +25%）。
-        // 通过 Need_MuscleStrain 上的调制器生效，主 Mod 不硬编码任何饮品 defName。
-        if (__instance.Pawn?.needs != null
-            && __instance.Pawn.needs.TryGetNeed<Need_MuscleStrain>(out var strainNeed)
-            && strainNeed != null)
+        [HarmonyPrefix]
+        public static void Prefix(SkillRecord __instance, ref float xp)
         {
-            float xpMult = strainNeed.GetExtraPhysiqueXpMultiplier();
-            if (xpMult != 1f) xp *= xpMult;
+            if (__instance?.def != PhysiqueSkillDef)
+                return;
+            // 只对“学习获得”的正经验施加热情倍率覆盖。
+            // 负经验（如体魄日常衰减 Learn(-decayXP, direct:true)）是独立机制，
+            // 其数值已在调用处算好，不能再被热情倍率缩放，否则衰减量会失真。
+            if (xp <= 0f)
+                return;
+
+            // 记录升级前等级，供 Postfix 检测“是否升级”并触发 OnPhysiqueLevelChanged 事件。
+            if (__instance.Pawn != null)
+                _physiqueOldLevel[__instance.Pawn.thingIDNumber] = __instance.levelInt;
+
+            float originalMultiplier = GetOriginalPassionMultiplier(__instance.passion);
+            float customMultiplier = GetCustomPassionMultiplier(__instance.passion);
+            float inputXp = xp;
+            xp = xp / originalMultiplier * customMultiplier;
+
+            // 外置 Mod 接口：体魄经验额外乘区（如饮品拓展设 1.25f = +25%）。
+            // 通过 Need_MuscleStrain 上的调制器生效，主 Mod 不硬编码任何饮品 defName。
+            if (__instance.Pawn?.needs != null
+                && __instance.Pawn.needs.TryGetNeed<Need_MuscleStrain>(out var strainNeed)
+                && strainNeed != null)
+            {
+                float xpMult = strainNeed.GetExtraPhysiqueXpMultiplier();
+                if (xpMult != 1f) xp *= xpMult;
+            }
+
+            // 代谢扩展模块门控：蛋白<10% 时禁止获得体魄经验（=无法升级体魄），
+            // 模块实现侧会同时施加「营养不足」Hediff；默认（未加载模块）放行。
+            var gate = MetaBolicLoadCtrl.PhysiqueUpgradeGate(__instance.Pawn);
+            if (!gate.allow) xp = 0f;
+            else if (gate.xpMult != 1f) xp *= gate.xpMult;
+
+            DebugPrintPassionXp(__instance, inputXp, xp, originalMultiplier, customMultiplier);
         }
 
-        DebugPrintPassionXp(__instance, inputXp, xp, originalMultiplier, customMultiplier);
-    }
+        // 体魄升级前等级快照（按 pawnId），供 Postfix 检测等级提升。
+        private static readonly System.Collections.Generic.Dictionary<int, int> _physiqueOldLevel
+            = new System.Collections.Generic.Dictionary<int, int>();
+
+        [HarmonyPostfix]
+        public static void Postfix(SkillRecord __instance)
+        {
+            if (__instance?.def != PhysiqueSkillDef || __instance.Pawn == null)
+                return;
+            int pawnId = __instance.Pawn.thingIDNumber;
+            if (!_physiqueOldLevel.TryGetValue(pawnId, out int oldLevel))
+                return;
+            _physiqueOldLevel.Remove(pawnId);
+            int newLevel = __instance.levelInt;
+            if (newLevel > oldLevel)
+                NeedChangeEvents.FirePhysiqueLevelChanged(__instance.Pawn, oldLevel, newLevel);
+        }
 
     // ============================================================
     // 【调试打印 2026-08-04】打印热情 patch 的「传入经验 → 真实经验」。

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <ThoughtDef>
+  <defName>MEE_AteSugar</defName>
+  <label>吃了糖</label>
+  <description>补充了糖分，精神状态不错。</description>
+  <durationDays>0.3</durationDays>
+  <thoughtClass>Thought_Memory</thoughtClass>
+  <stages>
+    <li>
+      <label>吃了糖</label>
+      <description>补充了糖分，精神状态不错。</description>
+      <baseMoodEffect>1</baseMoodEffect>
+    </li>
+  </stages>
+</ThoughtDef>
+</Defs>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 直接饮用自然水面（池塘/河/海）的补水任务。目标为水格（TargetIndex.A），由 JobDriver_MEE_DrinkFromGround 驱动。 -->
+  <JobDef>
+    <defName>MEE_DrinkFromGround</defName>
+    <driverClass>Hormones.JobDriver_MEE_DrinkFromGround</driverClass>
+    <reportString>Drinking water.</reportString>
+  </JobDef>
+</Defs>

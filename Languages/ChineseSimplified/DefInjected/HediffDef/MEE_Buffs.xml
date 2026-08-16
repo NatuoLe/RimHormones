@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <MEE_Buff_LightSaltWater.label>淡盐水</MEE_Buff_LightSaltWater.label>
+  <MEE_Buff_LightSaltWater.description>使肌肉劳损恢复效率降低 25%，持续 12 小时。</MEE_Buff_LightSaltWater.description>
+  <MEE_Buff_FunctionalDrink.label>功能饮品</MEE_Buff_FunctionalDrink.label>
+  <MEE_Buff_FunctionalDrink.description>提升心情 12 小时。</MEE_Buff_FunctionalDrink.description>
+  <MEE_Buff_VegFruitJuice.label>果蔬汁</MEE_Buff_VegFruitJuice.label>
+  <MEE_Buff_VegFruitJuice.description>使体魄总经验值增长提高 25%，但降低心情，持续 12 小时。</MEE_Buff_VegFruitJuice.description>
+  <MEE_Buff_MilkTea.label>奶茶</MEE_Buff_MilkTea.label>
+  <MEE_Buff_MilkTea.description>每日降低皮质醇 13% 并提升心情 12 小时。</MEE_Buff_MilkTea.description>
+</LanguageData>

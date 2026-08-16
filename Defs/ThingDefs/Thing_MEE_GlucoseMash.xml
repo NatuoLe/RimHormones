@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <!-- 葡萄糖原浆：由土豆/玉米在酿造台发酵制成，代谢扩展模块的基础糖资源（占位贴图，后续可换专用贴图） -->
+  <!-- 葡萄糖原浆：由土豆/玉米在酿造台发酵制成，代谢扩展模块的基础糖资源（已配糖浆专用贴图 sugarJam.png） -->
   <ThingDef ParentName="ResourceBase">
     <defName>MEE_GlucoseMash</defName>
-    <label>glucose mash</label>
-    <description>Unrefined glucose mash brewed from potatoes or corn. A basic metabolic resource used by the Metabolic Essential module to satisfy the sugar need.</description>
+    <label>glucose syrup</label>
+    <description>Unrefined glucose syrup brewed from corn or fruit. A basic metabolic resource used by the Metabolic Essential module to satisfy the sugar need.</description>
     <graphicData>
       <texPath>Things/Item/MEE/MEE_GlucoseMash</texPath>
-      <graphicClass>Graphic_StackCount</graphicClass>
+      <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(0.6,0.6)</drawSize>
     </graphicData>
     <stackLimit>50</stackLimit>
+    <thingCategories>
+      <li>Foods</li>
+    </thingCategories>
     <statBases>
       <MaxHitPoints>50</MaxHitPoints>
       <MarketValue>0.8</MarketValue>
       <Mass>0.3</Mass>
       <Flammability>1</Flammability>
+      <Nutrition>0</Nutrition>
     </statBases>
+    <!-- 模式 B：补剂非饭（Nutrition=0、preferability=NeverForNutrition，不计入正常饮食饱食度）；摄入时由 Comp_MEE_Satisfier 补充糖需求 -->
+    <ingestible>
+      <preferability>NeverForNutrition</preferability>
+      <foodType>Plant</foodType>
+    </ingestible>
+    <comps>
+      <li Class="Hormones.CompProperties_MEE_Satisfier">
+        <needDef>MEESugar</needDef>
+        <satisfyFraction>0.5</satisfyFraction>
+      </li>
+    </comps>
   </ThingDef>
 </Defs>

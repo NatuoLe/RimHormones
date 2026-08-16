@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <HediffDef>
+  <defName>MEE_WaterPoisoning</defName>
+  <label>水中毒</label>
+  <description>短时间内摄入过量水分导致的水中毒，引发呕吐、意识下降与工作效率降低。无法用药物治疗，约 24 小时后自行消退。</description>
+  <hediffClass>HediffWithComps</hediffClass>
+  <isBad>true</isBad>
+  <makesSickThought>false</makesSickThought>
+  <everCurableByItem>false</everCurableByItem>
+  <stages>
+    <li>
+      <label>水中毒</label>
+      <capMods>
+        <li>
+          <capacity>Consciousness</capacity>
+          <offset>-0.20</offset>
+        </li>
+      </capMods>
+      <statOffsets>
+        <WorkSpeedGlobal>-0.20</WorkSpeedGlobal>
+      </statOffsets>
+      <vomitMtbDays>0.5</vomitMtbDays>
+    </li>
+  </stages>
+  <comps>
+    <li Class="HediffCompProperties_Disappears">
+      <disappearsAfterTicks>60000</disappearsAfterTicks>
+    </li>
+  </comps>
+</HediffDef>
+</Defs>

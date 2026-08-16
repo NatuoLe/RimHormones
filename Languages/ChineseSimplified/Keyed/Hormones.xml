@@ -40,6 +40,10 @@
   <Yes>是</Yes>
   <No>否</No>
 
+  <!-- 健康面板双 UI 切换 -->
+  <HormonesHealthTab_Vanilla>健康</HormonesHealthTab_Vanilla>
+  <HormonesHealthTab_Physique>体魄</HormonesHealthTab_Physique>
+
   <!-- 击飞技能 -->
   <Hormones_KnockbackCooldown>击飞冷却中：{0}</Hormones_KnockbackCooldown>
 

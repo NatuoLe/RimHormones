@@ -9,5 +9,10 @@ namespace Hormones
         public Need_MEE_Protein(Pawn pawn) : base(pawn) { }
 
         protected override float FallPerDay => 0.15f; // 每日约消耗 15%
+
+        protected override void OnModified(float before, float after)
+        {
+            NeedChangeEvents.FireProteinChanged(pawn, before, after);
+        }
     }
 }

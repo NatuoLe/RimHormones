@@ -49,6 +49,21 @@ namespace Hormones
             return Path.Combine(mod.Content.RootDir, ModuleDir, ModuleDll);
         }
 
+        /// <summary>体魄升级门控结果。allow=是否允许获得体魄经验；xpMult=经验倍率（1=不变）。</summary>
+        public struct PhysiqueUpgradeGateResult
+        {
+            public bool allow;
+            public float xpMult;
+            public PhysiqueUpgradeGateResult(bool allow, float xpMult) { this.allow = allow; this.xpMult = xpMult; }
+        }
+
+        /// <summary>
+        /// 体魄升级门控：由 Metabolic Essential 模块在 Init 时填充（默认允许、倍率1）。
+        /// 主 mod 在每次体魄经验获取（SkillRecord.Learn）前咨询；模块实现：
+        /// 蛋白&lt;10% 时返回 allow=false 并施加「营养不足」Hediff（即无法升级体魄）。
+        /// </summary>
+        public static System.Func<Pawn, PhysiqueUpgradeGateResult> PhysiqueUpgradeGate = pawn => new PhysiqueUpgradeGateResult(true, 1f);
+
         /// <summary>
         /// “代谢扩展”可选模块的启动器。
         /// 部署形态：MetabolicEssential.dll 放在 mod 根的 MetabolicEssential\ 子目录（不在 Assemblies\ 下），
@@ -109,6 +124,17 @@ namespace Hormones
             RimHormonesMod mod = LoadedModManager.GetMod<RimHormonesMod>();
             if (mod != null)
                 TryLoad(mod.Content);
+
+            // 模块未加载时，把带 MEEBuildingMarker 的建筑（水井/取水机器）移出建造菜单，
+            // 使玩家不开 MEE 模块时根本看不到这些建筑。此时 DefDatabase 已就绪、DesignationCategoryDef.ResolveReferences 尚未执行。
+            if (!IsLoadedMME)
+            {
+                foreach (ThingDef td in DefDatabase<ThingDef>.AllDefs)
+                {
+                    if (td.HasModExtension<MEEBuildingMarker>())
+                        td.designationCategory = null;
+                }
+            }
         }
     }
 
@@ -129,6 +155,17 @@ namespace Hormones
     /// 用法：在食谱 Def 的 &lt;modExtensions&gt; 里加 &lt;li Class="Hormones.MEERecipeMarker" /&gt;
     /// </summary>
     public class MEERecipeMarker : DefModExtension
+    {
+    }
+
+    /// <summary>
+    /// 标记一座建筑属于 Metabolic Essential 模块。
+    /// 配合 MetaBolicLoadCtrl 静态构造：模块未加载（IsLoadedMME==false）时，
+    /// 把带此标记的建筑（水井/取水机器）的 designationCategory 置空，使其移出建造菜单——
+    /// 玩家在不开 MEE 模块时就根本看不到这些建筑（也更不会遇到“看得见点不了”的空账单）。
+    /// 用法：在建筑 Def 的 &lt;modExtensions&gt; 里加 &lt;li Class="Hormones.MEEBuildingMarker" /&gt;
+    /// </summary>
+    public class MEEBuildingMarker : DefModExtension
     {
     }
 }

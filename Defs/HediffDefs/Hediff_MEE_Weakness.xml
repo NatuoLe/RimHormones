@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <HediffDef>
+  <defName>MEE_Weakness</defName>
+  <label>浑身无力</label>
+  <description>电解质失衡导致的浑身无力，工作效率下降、心情低落。补充电解质后恢复。</description>
+  <hediffClass>Hediff</hediffClass>
+  <isBad>true</isBad>
+  <makesSickThought>false</makesSickThought>
+  <everCurableByItem>false</everCurableByItem>
+  <stages>
+    <li>
+      <label>浑身无力</label>
+      <statOffsets>
+        <WorkSpeedGlobal>-0.20</WorkSpeedGlobal>
+      </statOffsets>
+    </li>
+  </stages>
+</HediffDef>
+</Defs>

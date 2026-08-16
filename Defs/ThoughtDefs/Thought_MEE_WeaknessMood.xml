@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <ThoughtDef>
+  <defName>MEE_WeaknessMood</defName>
+  <label>浑身无力</label>
+  <description>电解质失衡让我浑身无力。</description>
+  <durationDays>1</durationDays>
+  <thoughtClass>Thought_Memory</thoughtClass>
+  <stages>
+    <li>
+      <label>浑身无力</label>
+      <description>电解质失衡让我浑身无力。</description>
+      <baseMoodEffect>-6</baseMoodEffect>
+    </li>
+  </stages>
+</ThoughtDef>
+</Defs>

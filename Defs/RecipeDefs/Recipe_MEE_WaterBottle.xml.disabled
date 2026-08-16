@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 生产建筑产出生水：在水井 / 取水机器上挂此账单，花费时间产出 MEE_RawWater（生水）。烧开后变为安全饮用水。 -->
+  <RecipeDef>
+    <defName>MEE_MakeWaterBottle</defName>
+    <label>draw raw water</label>
+    <description>Draw untreated raw water and fill bottles. Performed at a water well or water extractor. Boil it at a fire source to make safe drinking water.</description>
+    <jobString>Drawing raw water.</jobString>
+    <workAmount>2000</workAmount>
+    <workSkill>Crafting</workSkill>
+    <workSkillLearnFactor>0.3</workSkillLearnFactor>
+    <recipeUsers>
+      <li>MEE_WaterWell</li>
+      <li>MEE_WaterExtractor</li>
+    </recipeUsers>
+    <products>
+      <MEE_RawWater>10</MEE_RawWater>
+    </products>
+    <!-- 仅 Metabolic Essential 模块启用时可见/可做 -->
+    <modExtensions>
+      <li Class="Hormones.MEERecipeMarker" />
+    </modExtensions>
+  </RecipeDef>
+</Defs>
