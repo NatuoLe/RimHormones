@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- MEE 需求驱动式「取水供配方」WorkGiver：当炉灶等配方需要水（MEE_RawWater / MEE_WaterBottle）
+       且地面库存不足时，自动派小人到 DBH 取水设施灌 MEE 水瓶。仅 MEE 模块启用且装了 DBH 时真正工作
+       （代码 ShouldSkip 双重门控）。 -->
+  <WorkGiverDef>
+    <defName>FillMEEWaterBottles</defName>
+    <label>取水供配方</label>
+    <giverClass>Hormones.WorkGiver_MEE_FillWaterBottles</giverClass>
+    <workType>Hauling</workType>
+    <priorityInType>210</priorityInType>
+    <verb>取水</verb>
+    <gerund>取水中</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
+</Defs>

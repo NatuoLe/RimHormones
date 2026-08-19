@@ -441,7 +441,7 @@ namespace Hormones.UI
 
             Section(rect, ref curY, "当前状态");
             Row(rect, ref curY, "储备", strain.CurLevelPercentage.ToStringPercent(), Color.white);
-            Row(rect, ref curY, "上限", strain.MaxLevel.ToString("F0"), Color.white);
+            Row(rect, ref curY, "上限", strain.MaxLevel.ToString("0.00"), Color.white);
             Row(rect, ref curY, "当前值", strain.CurLevel.ToString("F1"), Color.white);
 
             Section(rect, ref curY, "速率");
@@ -520,8 +520,9 @@ namespace Hormones.UI
             }
 
             Section(rect, ref curY, need.def.LabelCap);
+            Row(rect, ref curY, "体魄阶段", PhysiqueLgc.GetPhysiqueStage(pawn).ToString(), Color.white);
             Row(rect, ref curY, "储备",   need.CurLevelPercentage.ToStringPercent(), Color.white);
-            Row(rect, ref curY, "上限",   need.MaxLevel.ToString("F0"),            Color.white);
+            Row(rect, ref curY, "上限",   need.MaxLevel.ToString("0.00"),         Color.white);
             Row(rect, ref curY, "当前值", need.CurLevel.ToString("F2"),           Color.white);
             Row(rect, ref curY, "满足度", ((Need_MEE_Base)need).Severity.ToStringPercent(), Color.white);
 

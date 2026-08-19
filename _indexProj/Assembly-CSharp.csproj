@@ -44,7 +44,10 @@
     <Compile Include="Source\Comps\MEEMeatElectrolytesPatch.cs" />
     <Compile Include="Source\Comps\Patch_Thing_Ingested_DietWater.cs" />
     <Compile Include="Source\Comps\JobGiver_SatisfyMetabolic.cs" />
+    <Compile Include="Source\Comps\WorkGiver_MEE_StoreWater.cs" />
+    <Compile Include="Source\Comps\WorkGiver_MEE_FillWaterBottles.cs" />
     <Compile Include="Source\Comps\JobDriver_MEE_DrinkFromGround.cs" />
+    <Compile Include="Source\Comps\JobDriver_MEE_DrinkFromFixture.cs" />
     <Compile Include="Source\Mods\RimHormonesMod.cs" />
     <Compile Include="Source\Utilities\Utils.cs" />
     <Compile Include="Source\Abilities\PawnFlyer_Knockback.cs" />

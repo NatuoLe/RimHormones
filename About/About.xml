@@ -22,4 +22,9 @@
       <displayName>Harmony</displayName>
     </li>
   </modDependencies>
+  <!-- 若存在 DBH(Dubs Bad Hygiene)，让其先于本 mod 加载，保证 DBHThirst 等定义更早就绪 -->
+  <!-- 注意：本游戏版本(1.6.4871) ModMetaDataInternal 字段名为 loadAfter(单数)，非旧版的 loadAfters -->
+  <loadAfter>
+    <li>Dubwise.DubsBadHygiene</li>
+  </loadAfter>
 </ModMetaData>

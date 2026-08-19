@@ -297,5 +297,40 @@ namespace Hormones
         public const float AdrenalineBuildupChancePerPhysique = 0.000583f;
         // 玩家可调总倍率默认值（1.0=默认，0=完全关闭长期堆积损伤）。
         public const float DefaultAdrenalineBuildupGlobalMult = 1f;
+
+        // ============================================================
+        // 【MEE 代谢需求容量 — 体魄缩放 2026-08-18】
+        //   水/电解质/蛋白质的 MaxLevel 随体魄阶段变化。
+        //   高体魄 = 更大容量 = 更强抗风险能力（断水/缺电解质时存活更久）。
+        //   数值语义：基础容量 1.0 + 阶段偏移量 = 实际 MaxLevel 倍率。
+        //   虚弱阶段略低于基准（-0.1），卓越阶段显著高于基准（水+45%/电+30%/蛋白+30%）。
+        // ============================================================
+        // 水需求容量偏移
+        public const float MEEWaterCapFrail = -0.10f;     // 虚弱: 0.90
+        public const float MEEWaterCapAverage = 0f;       // 一般: 1.00 (基准)
+        public const float MEEWaterCapFit = 0.15f;       // 健康: 1.15
+        public const float MEEWaterCapStrong = 0.30f;    // 强壮: 1.30
+        public const float MEEWaterCapPeak = 0.45f;      // 卓越: 1.45
+
+        // 电解质需求容量偏移
+        public const float MEEElectrolytesCapFrail = -0.10f;
+        public const float MEEElectrolytesCapAverage = 0f;
+        public const float MEEElectrolytesCapFit = 0.10f;
+        public const float MEEElectrolytesCapStrong = 0.20f;
+        public const float MEEElectrolytesCapPeak = 0.30f;
+
+        // 蛋白质需求容量偏移
+        public const float MEEProteinCapFrail = -0.10f;
+        public const float MEEProteinCapAverage = 0f;
+        public const float MEEProteinCapFit = 0.10f;
+        public const float MEEProteinCapStrong = 0.20f;
+        public const float MEEProteinCapPeak = 0.30f;
+
+        // 糖分需求容量偏移（糖为能量摄入型，虚弱/一般不惩罚，仅高体魄增益缓冲）
+        public const float MEESugarCapFrail = 0f;       // 虚弱: 1.00
+        public const float MEESugarCapAverage = 0f;    // 一般: 1.00 (基准)
+        public const float MEESugarCapFit = 0.10f;      // 健康: 1.10
+        public const float MEESugarCapStrong = 0.15f;  // 强壮: 1.15
+        public const float MEESugarCapPeak = 0.20f;    // 卓越: 1.20
     }
 }

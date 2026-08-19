@@ -46,6 +46,9 @@ namespace MetabolicEssential
             // 注册 MEE 需求飘字（订阅 NeedChangeEvents 四事件，集中处理水分/糖/电解质/蛋白质的飘字）。
             MEEMgr.Register();
 
+            // 水需求适配器：检测 DBH 共存并压制其水需求，使 MEE 水系统成为唯一权威（MEE 加载时触发）。
+            WaterAdapter.Init();
+
             Log.Message("[MetabolicEssential] 代谢扩展模块已初始化（实验性骨架）。");
         }
     }

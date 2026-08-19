@@ -8,7 +8,7 @@
     <defName>MEE_SimpleRainwaterCollector</defName>
     <label>simple rainwater collector</label>
     <description>A cheap open-air collector that gathers rain only while it is raining, at the same rate as the moisture collector's rain intake. Must be placed under open sky (no roof). Needs no power. Part of the Metabolic Essential module. Boil the raw water at a fire source to make it safe to drink.</description>
-    <!-- 占位贴图（纯色块），后续可换专用贴图 -->
+    <!-- 贴图复用原版「木动物睡眠箱」(AnimalSleepBox)，已复制到 Textures/Things/Building/MEE/MEE_SimpleRainwaterCollector.png -->
     <graphicData>
       <texPath>Things/Building/MEE/MEE_SimpleRainwaterCollector</texPath>
       <graphicClass>Graphic_Single</graphicClass>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- MEE 专属「存储水」WorkGiver：搬运 MEE 水物品（MEE_RawWater / MEE_WaterBottle）进储藏区，
+       作为 DBH 的 StockpileWaterBottles 在 MEE 接管下的等价物。仅 MEE 模块激活时工作。 -->
+  <WorkGiverDef>
+    <defName>StoreMEEWater</defName>
+    <label>store water</label>
+    <giverClass>Hormones.WorkGiver_MEE_StoreWater</giverClass>
+    <workType>Hauling</workType>
+    <priorityInType>200</priorityInType>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <canBeDoneByMechs>false</canBeDoneByMechs>
+  </WorkGiverDef>
+</Defs>

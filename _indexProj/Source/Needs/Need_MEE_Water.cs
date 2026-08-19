@@ -4,12 +4,15 @@ using UnityEngine;
 
 namespace Hormones
 {
-    /// <summary>水分需求。消耗较快，代表日常饮水缺口。</summary>
+    /// <summary>水分需求。消耗较快，代表日常饮水缺口。容量随体魄变化：高体魄=更大水储量=断水时存活更久。</summary>
     public class Need_MEE_Water : Need_MEE_Base
     {
         public Need_MEE_Water(Pawn pawn) : base(pawn) { }
 
-        protected override float FallPerDay => 0.6f; // 每日约消耗 60%
+        /// <summary>水需求容量 = 基准 1.0 × 体魄阶段倍率（虚弱 0.90 ~ 卓越 1.45）。</summary>
+        public override float MaxLevel => PhysiqueLgc.GetMEEWaterCapacityMult(pawn);
+
+        protected override float FallPerDay => 0.55f; // 每日约消耗 55%
 
         protected override void OnModified(float before, float after)
         {

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 在 DBH 取水设施（钢铁水池/水槽/浴缸）旁补水，取的是 MEE 的水（Need_MEE_Water）。
+       目标为建筑（TargetIndex.A），由 JobDriver_MEE_DrinkFromFixture 驱动。 -->
+  <JobDef>
+    <defName>MEE_DrinkFromFixture</defName>
+    <driverClass>Hormones.JobDriver_MEE_DrinkFromFixture</driverClass>
+    <reportString>Drinking from fixture.</reportString>
+  </JobDef>
+</Defs>

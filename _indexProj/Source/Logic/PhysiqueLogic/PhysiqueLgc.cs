@@ -435,6 +435,66 @@ namespace Hormones
             }
         }
 
+        /// <summary>获取水需求容量倍率（基础 1.0 + 体魄阶段偏移）。高体魄 = 更大水储量 = 断水时存活更久。</summary>
+        public static float GetMEEWaterCapacityMult(Pawn pawn)
+        {
+            PhysiqueStage stage = GetPhysiqueStage(pawn);
+            switch (stage)
+            {
+                case PhysiqueStage.Frail:   return 1f + Define.MEEWaterCapFrail;
+                case PhysiqueStage.Average: return 1f + Define.MEEWaterCapAverage;
+                case PhysiqueStage.Fit:     return 1f + Define.MEEWaterCapFit;
+                case PhysiqueStage.Strong:  return 1f + Define.MEEWaterCapStrong;
+                case PhysiqueStage.Peak:    return 1f + Define.MEEWaterCapPeak;
+                default:                   return 1f;
+            }
+        }
+
+        /// <summary>获取电解质需求容量倍率（基础 1.0 + 体魄阶段偏移）。</summary>
+        public static float GetMEEElectrolytesCapacityMult(Pawn pawn)
+        {
+            PhysiqueStage stage = GetPhysiqueStage(pawn);
+            switch (stage)
+            {
+                case PhysiqueStage.Frail:   return 1f + Define.MEEElectrolytesCapFrail;
+                case PhysiqueStage.Average: return 1f + Define.MEEElectrolytesCapAverage;
+                case PhysiqueStage.Fit:     return 1f + Define.MEEElectrolytesCapFit;
+                case PhysiqueStage.Strong:  return 1f + Define.MEEElectrolytesCapStrong;
+                case PhysiqueStage.Peak:    return 1f + Define.MEEElectrolytesCapPeak;
+                default:                   return 1f;
+            }
+        }
+
+        /// <summary>获取蛋白质需求容量倍率（基础 1.0 + 体魄阶段偏移）。</summary>
+        public static float GetMEEProteinCapacityMult(Pawn pawn)
+        {
+            PhysiqueStage stage = GetPhysiqueStage(pawn);
+            switch (stage)
+            {
+                case PhysiqueStage.Frail:   return 1f + Define.MEEProteinCapFrail;
+                case PhysiqueStage.Average: return 1f + Define.MEEProteinCapAverage;
+                case PhysiqueStage.Fit:     return 1f + Define.MEEProteinCapFit;
+                case PhysiqueStage.Strong:  return 1f + Define.MEEProteinCapStrong;
+                case PhysiqueStage.Peak:    return 1f + Define.MEEProteinCapPeak;
+                default:                   return 1f;
+            }
+        }
+
+        /// <summary>获取糖分需求容量倍率（基础 1.0 + 体魄阶段偏移）。糖为能量摄入型，仅高体魄增益。</summary>
+        public static float GetMEESugarCapacityMult(Pawn pawn)
+        {
+            PhysiqueStage stage = GetPhysiqueStage(pawn);
+            switch (stage)
+            {
+                case PhysiqueStage.Frail:   return 1f + Define.MEESugarCapFrail;
+                case PhysiqueStage.Average: return 1f + Define.MEESugarCapAverage;
+                case PhysiqueStage.Fit:     return 1f + Define.MEESugarCapFit;
+                case PhysiqueStage.Strong:  return 1f + Define.MEESugarCapStrong;
+                case PhysiqueStage.Peak:    return 1f + Define.MEESugarCapPeak;
+                default:                   return 1f;
+            }
+        }
+
         /// <summary>
         /// 获取肌肉劳损【扣减】倍率：干活时基础strain × 此倍率。
         /// 虚弱扣得快(易累)、强壮扛得住。体现"体魄越强越能持续劳作"。

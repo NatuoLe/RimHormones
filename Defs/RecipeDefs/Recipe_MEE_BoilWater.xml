@@ -17,6 +17,7 @@
         <filter>
           <thingDefs>
             <li>MEE_RawWater</li>
+            <li>MEE_WaterBottle</li>
           </thingDefs>
         </filter>
         <count>1</count>
