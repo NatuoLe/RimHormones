@@ -100,6 +100,15 @@ namespace Hormones
         // 上一帧是否在睡眠（用于 asleep→awake 跳变检测苏醒）
         private bool wasAsleep = false;
 
+        // ===== Hover 结算明细（每次 tick 刷新，供 GetTipString 显示）=====
+        // 单位：%/日（MaxLevel=10000，100点=1%；1天=60000tick=400个间隔 → 每区间点数×4 = %/日）
+        private float tipBaseDecayPerDay = 0f;     // 自然衰减幅度（正）
+        private float tipExtraDecayPerDay = 0f;    // 饮品等外部额外衰减幅度（正）
+        private float tipGrowthPerDay = 0f;        // 应激增长（正）
+        private float tipPhysiquePerDay = 0f;      // 体魄修正（可正可负）
+        private float tipSugarModPerDay = 0f;      // 糖逻辑调制（%/日，正=抑制）
+        private float tipNetPerDay = 0f;           // 净变化 %/日（正=皮质醇上升）
+
         public override float MaxLevel => 10000f;
 
         public override bool ShowOnNeedList => true;
@@ -201,6 +210,10 @@ namespace Hormones
                 float cover = PhysiqueLgc.GetStrainCoverEffect(pawn);
                 decay *= cover;
                 if (physiqueGrowth < 0f) physiqueGrowth *= cover;
+
+                // 抓取 hover 结算明细：以当前 decay（含×2、cover，尚未叠加饮品额外衰减）为自然衰减基础，
+                // 外部额外衰减单独传入；%/日 换算在 CaptureTipBreakdown 内完成。
+                CaptureTipBreakdown(decay, extraCortisolDecayPerInterval, growth, physiqueGrowth, sugarCortisolModPerDay);
 
                 // 外置 Mod 接口：额外皮质醇衰减（每 150 tick 间隔）。
                 // 由饮品拓展等 Mod 通过 SetExtraCortisolDecay 设置（如奶茶 -3.25/interval ≈ 额外衰减13%/日），
@@ -369,6 +382,85 @@ namespace Hormones
         public float GetSeverity()
         {
             return CurLevel / MaxLevel;
+        }
+
+        // ===== Hover 结算明细：每次 CortisolTick 调用，刷新各分量供 GetTipString 显示 =====
+        private void CaptureTipBreakdown(float baseDecay, float extraDecay, float growth, float physiqueGrowth, float sugarModPerDay)
+        {
+            // 全部换算为 %/日：MaxLevel=10000（100点=1%），1天=60000tick=400个间隔 → 每区间点数×4 = %/日
+            tipBaseDecayPerDay  = baseDecay * 4f;        // 自然衰减幅度（正）→ 对皮质醇的效应为负
+            tipExtraDecayPerDay = extraDecay * 4f;       // 饮品等外部额外衰减幅度（正）→ 效应为负
+            tipGrowthPerDay     = growth * 4f;           // 应激增长（正）→ 效应为正
+            tipPhysiquePerDay   = physiqueGrowth * 4f;   // 体魄修正（可正可负）
+            tipSugarModPerDay   = sugarModPerDay;        // 糖逻辑调制（%/日，正=抑制增长=效应为负）
+            // 净变化 %/日（正=皮质醇上升）
+            tipNetPerDay = -tipBaseDecayPerDay - tipExtraDecayPerDay + tipGrowthPerDay + tipPhysiquePerDay - tipSugarModPerDay;
+        }
+
+        /// <summary>
+        /// Hover 到皮质醇需求条时显示的结算明细：文本介绍 + 各分量（正红负绿、带符号）+ 净变化。
+        /// 各分量数值为「对皮质醇的效应」：正=皮质醇上升（红），负=皮质醇下降（绿）。
+        /// </summary>
+        public override string GetTipString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(base.GetTipString());
+            sb.AppendLine();
+            sb.AppendLine("【皮质醇结算明细】");
+            sb.AppendLine("压力激素：应激源使其上升、安逸使其下降。以下为各分量对皮质醇的效应（正=上升·红，负=下降·绿），每 2.5 秒动态刷新：");
+            AppendSignedLine(sb, "自然衰减",      -tipBaseDecayPerDay);
+            AppendSignedLine(sb, "饮品额外衰减",  -tipExtraDecayPerDay);
+            AppendSignedLine(sb, "应激增长",      tipGrowthPerDay);
+            AppendSignedLine(sb, "体魄修正",      tipPhysiquePerDay);
+            AppendSignedLine(sb, "糖↔皮质醇调制", -tipSugarModPerDay);
+            sb.AppendLine("——————");
+            AppendSignedLine(sb, "净变化", tipNetPerDay);
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// 追加一行带符号、带颜色的分量明细（正=红，负=绿）。
+        /// </summary>
+        private static void AppendSignedLine(StringBuilder sb, string label, float effectPerDay)
+        {
+            string sign = effectPerDay >= 0f ? "+" : "";
+            string color = effectPerDay >= 0f ? "#FF7A7A" : "#7AFF7A"; // 涨红跌绿
+            sb.AppendLine($"  {label}：<color={color}>{sign}{effectPerDay:F1}%/日</color>");
+        }
+
+        /// <summary>
+        /// 皮质醇结算明细（单位 %/日），供体魄面板「结算明细」段展示当前正负累加与具体数值。
+        /// 各字段含义：baseDecay/extraDecay/growth/sugarMod 均为「正幅度」，physique 可正可负；
+        /// 对皮质醇的「净效应」= -baseDecay - extraDecay + growth + physique - sugarMod（即 net）。
+        /// </summary>
+        public readonly struct CortisolBreakdown
+        {
+            public readonly float baseDecay;   // 自然衰减幅度（正）
+            public readonly float extraDecay;  // 饮品等外部额外衰减幅度（正）
+            public readonly float growth;      // 应激增长（正）
+            public readonly float physique;    // 体魄修正（可正可负）
+            public readonly float sugarMod;    // 糖逻辑调制（%/日，正=抑制增长=效应为负）
+            public readonly float net;         // 净变化 %/日（正=皮质醇上升）
+
+            public CortisolBreakdown(float baseDecay, float extraDecay, float growth, float physique, float sugarMod, float net)
+            {
+                this.baseDecay = baseDecay;
+                this.extraDecay = extraDecay;
+                this.growth = growth;
+                this.physique = physique;
+                this.sugarMod = sugarMod;
+                this.net = net;
+            }
+        }
+
+        /// <summary>
+        /// 返回当前结算明细快照（每次 CortisolTick 刷新）。体格面板用它渲染正负累加与具体数值。
+        /// </summary>
+        public CortisolBreakdown GetCortisolBreakdown()
+        {
+            return new CortisolBreakdown(
+                tipBaseDecayPerDay, tipExtraDecayPerDay, tipGrowthPerDay,
+                tipPhysiquePerDay, tipSugarModPerDay, tipNetPerDay);
         }
 
         /// <summary>

@@ -167,6 +167,22 @@ namespace Hormones.UI
             curY += r.height;
         }
 
+        /// <summary>格式化为带符号的 %/日 文本（正=带 +，负=自动 -）。</summary>
+        private static string FormatSigned(float v)
+        {
+            return (v >= 0f ? "+" : "") + v.ToString("F1") + "%/日";
+        }
+
+        /// <summary>
+        /// 皮质醇结算明细配色：效应为正(皮质醇上升)=红，为负(下降)=绿；bold=true 时用更亮的高饱和色强调净变化。
+        /// </summary>
+        private static Color ColorForEffect(float effect, bool bold = false)
+        {
+            if (effect >= 0f)
+                return bold ? new Color(1f, 0.35f, 0.35f) : new Color(1f, 0.48f, 0.48f);
+            return bold ? new Color(0.35f, 1f, 0.35f) : new Color(0.48f, 1f, 0.48f);
+        }
+
         /// <summary>
         /// 可点击行。视觉上与 Row 一致，额外具备：
         ///   - 选中态持久高亮（DrawHighlightSelected，原版选中同款贴图）
@@ -484,6 +500,36 @@ namespace Hormones.UI
             var fight = c.GetSocialFightChanceInfo();
             Row(rect, ref curY, "社交冲突（" + fight.tierLabel + "）",
                 fight.factor.ToStringPercent(), Color.white);
+
+            // ===== 结算明细：各分量正负累加 + 具体数值（涨红跌绿）=====
+            var b = c.GetCortisolBreakdown();
+            // 各分量对皮质醇的净效应：正=上升(红)，负=下降(绿)
+            float eBase   = -b.baseDecay;   // 自然衰减 → 下降
+            float eExtra  = -b.extraDecay;  // 饮品额外衰减 → 下降
+            float eGrowth =  b.growth;      // 应激增长 → 上升
+            float ePhysique = b.physique;   // 体魄修正 → 可正可负
+            float eSugar  = -b.sugarMod;    // 糖调制：正=抑制 → 下降
+
+            Section(rect, ref curY, "结算明细（%/日）");
+            Row(rect, ref curY, "自然衰减",     FormatSigned(eBase),     ColorForEffect(eBase));
+            Row(rect, ref curY, "饮品额外衰减", FormatSigned(eExtra),    ColorForEffect(eExtra));
+            Row(rect, ref curY, "应激增长",     FormatSigned(eGrowth),   ColorForEffect(eGrowth));
+            Row(rect, ref curY, "体魄修正",     FormatSigned(ePhysique), ColorForEffect(ePhysique));
+            Row(rect, ref curY, "糖↔皮质醇调制", FormatSigned(eSugar),   ColorForEffect(eSugar));
+
+            // 正负累加：上升项合计 / 下降项合计
+            float pos = (eGrowth   > 0f ? eGrowth   : 0f)
+                      + (ePhysique > 0f ? ePhysique : 0f)
+                      + (eSugar     > 0f ? eSugar     : 0f);
+            float neg = (eBase    < 0f ? eBase    : 0f)
+                      + (eExtra   < 0f ? eExtra   : 0f)
+                      + (ePhysique < 0f ? ePhysique : 0f)
+                      + (eSugar    < 0f ? eSugar    : 0f);
+            Row(rect, ref curY, "↑ 上升项合计", FormatSigned(pos), ColorForEffect(pos));
+            Row(rect, ref curY, "↓ 下降项合计", FormatSigned(neg), ColorForEffect(neg));
+
+            // 净变化（重点行，加粗感：用更亮的红/绿）
+            Row(rect, ref curY, "净变化", FormatSigned(b.net), ColorForEffect(b.net, true));
 
             // 压力源是多行文本，用 Label 直接铺开而不是塞进单行 Row
             string stressors = c.GetCurrentStressors();
