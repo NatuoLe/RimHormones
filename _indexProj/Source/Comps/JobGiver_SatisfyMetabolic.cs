@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -55,7 +54,7 @@ namespace Hormones
                 if (need == null) continue;
                 if (need.CurLevelPercentage > NeedThreshold) continue;
 
-                // 1) 优先找可摄入的补剂物品（水：饮用水/生水；并兼容 FDE 等带 WaterExt.SeekForThirst 标记的饮品）
+                // 1) 优先找可摄入的补剂物品（水：先饮用水，其次生水）
                 foreach (string itemName in pair.items)
                 {
                     ThingDef itemDef = DefDatabase<ThingDef>.GetNamed(itemName, false);
@@ -64,18 +63,6 @@ namespace Hormones
                     if (item != null)
                     {
                         Job job = JobMaker.MakeJob(JobDefOf.Ingest, item);
-                        job.count = 1;
-                        return job;
-                    }
-                }
-
-                // 1b) 仅水需求：额外主动寻找地图上带 WaterExt.SeekForThirst 标记的饮品（嫁接 FDE「口渴主动找水物品」逻辑）
-                if (pair.need == "MEEWater")
-                {
-                    Thing drink = FindSeekForThirstBottle(pawn);
-                    if (drink != null)
-                    {
-                        Job job = JobMaker.MakeJob(JobDefOf.Ingest, drink);
                         job.count = 1;
                         return job;
                     }
@@ -95,89 +82,8 @@ namespace Hormones
                         }
                     }
                 }
-
-                // 3) 仅水需求：去 DBH 取水设施（钢铁水池/水槽/浴缸）取水，取的是 MEE 的水（Need_MEE_Water）
-                if (pair.need == "MEEWater")
-                {
-                    Thing fixture = FindNearestDBHWaterFixture(pawn, 9999f);
-                    if (fixture != null)
-                    {
-                        JobDef drinkJob = DefDatabase<JobDef>.GetNamedSilentFail("MEE_DrinkFromFixture");
-                        if (drinkJob != null)
-                        {
-                            Job job = JobMaker.MakeJob(drinkJob, fixture);
-                            return job;
-                        }
-                    }
-                }
             }
             return null;
-        }
-
-        /// <summary>寻找地图上带 WaterExt.SeekForThirst 标记的可饮水物品（FDE 饮品等），优先就近可达者。</summary>
-        private static Thing FindSeekForThirstBottle(Pawn pawn)
-        {
-            if (pawn?.Map == null) return null;
-            List<Thing> candidates = new List<Thing>();
-            foreach (ThingDef def in DefDatabase<ThingDef>.AllDefsListForReading)
-            {
-                if (!IsSeekForThirst(def)) continue;
-                List<Thing> things = pawn.Map.listerThings.ThingsOfDef(def);
-                if (things != null) candidates.AddRange(things);
-            }
-            if (candidates.Count == 0) return null;
-            return GenClosest.ClosestThing_Global_Reachable(
-                pawn.Position, pawn.Map, candidates, PathEndMode.Touch,
-                TraverseParms.For(pawn, Danger.Deadly), 9999f,
-                t => !t.IsForbidden(pawn) && !t.IsBurning() && pawn.CanReserve(t, 2));
-        }
-
-        private static bool IsSeekForThirst(ThingDef def)
-        {
-            if (def?.modExtensions == null) return false;
-            foreach (DefModExtension ext in def.modExtensions)
-            {
-                // WaterExt 来自 DBH；用字段名软匹配，避免硬引用 DBH 程序集
-                if (ext.GetType().Name == "WaterExt")
-                {
-                    var seek = ext.GetType().GetField("SeekForThirst");
-                    var water = ext.GetType().GetField("water");
-                    bool seekVal = seek != null && (bool)seek.GetValue(ext);
-                    float waterVal = water != null ? (float)water.GetValue(ext) : 0f;
-                    return seekVal && waterVal > 0f;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>寻找地图上最近的 DBH 取水设施（钢铁水池/水槽/浴缸），零硬引用 DBH 程序集。</summary>
-        private static Thing FindNearestDBHWaterFixture(Pawn pawn, float range)
-        {
-            if (pawn?.Map == null) return null;
-            var fixtureTypes = new[]
-            {
-                AccessTools.TypeByName("DubsBadHygiene.Building_WaterFeature"),
-                AccessTools.TypeByName("DubsBadHygiene.Building_AssignableFixture"),
-            }.Where(t => t != null).ToArray();
-            if (fixtureTypes.Length == 0) return null;
-
-            List<Thing> candidates = new List<Thing>();
-            foreach (Thing t in pawn.Map.listerThings.AllThings)
-            {
-                if (t == null || t.Destroyed) continue;
-                Type tt = t.GetType();
-                bool isFixture = false;
-                foreach (var ft in fixtureTypes)
-                {
-                    if (ft.IsAssignableFrom(tt)) { isFixture = true; break; }
-                }
-                if (isFixture) candidates.Add(t);
-            }
-            if (candidates.Count == 0) return null;
-            return GenClosest.ClosestThing_Global_Reachable(
-                pawn.Position, pawn.Map, candidates, PathEndMode.Touch,
-                TraverseParms.For(pawn, Danger.Deadly), range,
-                t => !t.IsForbidden(pawn) && pawn.CanReserve(t, 1));
         }
 
         /// <summary>优先取随身库存里的补剂（免搬运）；否则在地图上找可取用的。
