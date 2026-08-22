@@ -31,6 +31,9 @@ namespace Hormones
     /// | 疼痛Hediff  | +5%  |
     /// | 得病        | +8%  |
     /// | 被侮辱Hediff| +3%  |
+    /// | 低血糖Hediff | +5%  |
+    /// | 浑身无力Hediff| +5% |
+    /// | 看见尸体(每具)| +3% |
     ///
     /// 档位效果（随严重度 S = CurLevel/MaxLevel）：
     /// | 区间          | 状态   | 心情加成 | 冒犯权重 | 神经衰弱 |
@@ -410,7 +413,9 @@ namespace Hormones
             sb.AppendLine("压力激素：应激源使其上升、安逸使其下降。以下为各分量对皮质醇的效应（正=上升·红，负=下降·绿），每 2.5 秒动态刷新：");
             AppendSignedLine(sb, "自然衰减",      -tipBaseDecayPerDay);
             AppendSignedLine(sb, "饮品额外衰减",  -tipExtraDecayPerDay);
-            AppendSignedLine(sb, "应激增长",      tipGrowthPerDay);
+            // 应激增长：拆成各源头
+            foreach (var src in GetCortisolGrowthSources())
+                AppendSignedLine(sb, src.label, src.perDay);
             AppendSignedLine(sb, "体魄修正",      tipPhysiquePerDay);
             AppendSignedLine(sb, "糖↔皮质醇调制", -tipSugarModPerDay);
             sb.AppendLine("——————");
@@ -640,73 +645,95 @@ namespace Hormones
         }
 
         /// <summary>
-        /// 获取增长速率（每tick）
-        /// 包含各种应激源：新设计
+        /// <summary>
+        /// 公开：返回当前【激活】的各个应激源及其对皮质醇的每日贡献（%/日，与 GetCortisolBreakdown().growth 同一口径）。
+        /// 仅返回满足判定条件的源头；每个数值 = 对应 Define 常量 × 换算系数(0.02)，所有源头之和 = b.growth。
+        /// 供体魄面板/需求条 tooltip 把「应激增长」拆成明细展示。
+        /// </summary>
+        public List<(string label, float perDay)> GetCortisolGrowthSources()
+        {
+            // 换算链路（与 CaptureTipBreakdown 一致）：
+            //   Define 常量(每日) × (150/60000 转每区间) × 2(整体速率) × 4(显示 %/日) = 常量 × 0.02
+            const float scale = (150f / 60000f) * 2f * 4f;
+            var list = new List<(string, float)>();
+            foreach (var s in CalcGrowthSources())
+                list.Add((s.label, s.perDayRaw * scale));
+            return list;
+        }
+
+        /// <summary>
+        /// 内部：逐个判定 10 种应激源，返回 (中文标签, 每日贡献原始值)。
+        /// GetGrowthPerInterval 用它求和；GetCortisolGrowthSources 用它换算成 %/日。
+        /// </summary>
+        private List<(string label, float perDayRaw)> CalcGrowthSources()
+        {
+            var list = new List<(string, float)>();
+
+            // 心情低落 (mood < 阈值)
+            if (pawn.needs?.mood != null && pawn.needs.mood.CurLevel < Define.CortisolMoodLowThreshold)
+                list.Add(("心情低落", Define.CortisolGrowthLowMood));
+
+            // 环境恶劣 (beauty <= Ugly)
+            if (pawn.needs?.beauty != null && (int)pawn.needs.beauty.CurCategory <= (int)BeautyCategory.Ugly)
+                list.Add(("环境恶劣", Define.CortisolGrowthUglyEnv));
+
+            // 饥饿 (饥饿 Hediff)
+            if (HasHungerHediff())
+                list.Add(("饥饿", Define.CortisolGrowthHunger));
+
+            // 疼痛 (PainTotal > 0)
+            if (pawn.health?.hediffSet != null && pawn.health.hediffSet.PainTotal > 0f)
+                list.Add(("疼痛", Define.CortisolGrowthPain));
+
+            // 患病 (任意疾病)
+            if (HasAnyIllness())
+                list.Add(("患病", Define.CortisolGrowthIllness));
+
+            // 受辱 (被侮辱记忆)
+            if (HasInsultedMood())
+                list.Add(("受辱", Define.CortisolGrowthInsulted));
+
+            // 食用生食 (AteRawFood 记忆)
+            if (HasAteRawFoodThought())
+                list.Add(("食用生食", Define.CortisolGrowthAteRawFood));
+
+            // 浑身湿透 (SoakingWet 情景)
+            if (HasSoakingWetThought())
+                list.Add(("浑身湿透", Define.CortisolGrowthSoakingWet));
+
+            // 舒适度过低 (comfort < 0.5)
+            if (pawn.needs?.comfort != null && pawn.needs.comfort.CurLevel < 0.5f)
+                list.Add(("舒适度过低", Define.CortisolGrowthUncomfortable));
+
+            // 缺乏娱乐 (joy < 0.3)
+            if (pawn.needs?.joy != null && pawn.needs.joy.CurLevel < 0.3f)
+                list.Add(("缺乏娱乐", Define.CortisolGrowthNoRecreation));
+
+            // 低血糖 (MEE_Hypoglycemia Hediff，由 Metabolic Essential 糖逻辑触发)
+            if (HasHypoglycemiaHediff())
+                list.Add(("低血糖", Define.CortisolGrowthHypoglycemia));
+
+            // 浑身无力 (MEE_Weakness Hediff，由 Metabolic Essential 电解质失衡触发)
+            if (HasWeaknessHediff())
+                list.Add(("浑身无力", Define.CortisolGrowthWeakness));
+
+            // 看见尸体 (同图、25 格内、无遮挡；每具 +3%/日，按尸体数叠加)
+            int corpseCount = CountVisibleCorpses();
+            if (corpseCount > 0)
+                list.Add((corpseCount == 1 ? "看见尸体" : $"看见尸体×{corpseCount}", corpseCount * Define.CortisolGrowthSeeCorpse));
+
+            return list;
+        }
+
+        /// <summary>
+        /// 获取增长速率（每tick）。
+        /// 汇总所有激活应激源；各源头明细见 GetCortisolGrowthSources()。
         /// </summary>
         private float GetGrowthPerInterval()
         {
             float growthPerDay = 0f;
-
-            // 心情<0.3
-            if (pawn.needs?.mood != null && pawn.needs.mood.CurLevel < Define.CortisolMoodLowThreshold)
-            {
-                growthPerDay += Define.CortisolGrowthLowMood;
-            }
-
-            // 环境差 (beauty <= Ugly)
-            if (pawn.needs?.beauty != null && (int)pawn.needs.beauty.CurCategory <= (int)BeautyCategory.Ugly)
-            {
-                growthPerDay += Define.CortisolGrowthUglyEnv;
-            }
-
-            // 饥饿Hediff
-            if (HasHungerHediff())
-            {
-                growthPerDay += Define.CortisolGrowthHunger;
-            }
-
-            // 疼痛Hediff
-            if (pawn.health?.hediffSet != null && pawn.health.hediffSet.PainTotal > 0f)
-            {
-                growthPerDay += Define.CortisolGrowthPain;
-            }
-
-            // 得病 (任何疾病)
-            if (HasAnyIllness())
-            {
-                growthPerDay += Define.CortisolGrowthIllness;
-            }
-
-            // 被侮辱
-            if (HasInsultedMood())
-            {
-                growthPerDay += Define.CortisolGrowthInsulted;
-            }
-
-            // 吃了生的食物（AteRawFood 记忆 Thought）
-            if (HasAteRawFoodThought())
-            {
-                growthPerDay += Define.CortisolGrowthAteRawFood;
-            }
-
-            // 湿透了（SoakingWet 情景 Thought）
-            if (HasSoakingWetThought())
-            {
-                growthPerDay += Define.CortisolGrowthSoakingWet;
-            }
-
-            // 不够舒适（comfort need < 0.5）
-            if (pawn.needs?.comfort != null && pawn.needs.comfort.CurLevel < 0.5f)
-            {
-                growthPerDay += Define.CortisolGrowthUncomfortable;
-            }
-
-            // 没有娱乐活动（joy need < 0.3）
-            if (pawn.needs?.joy != null && pawn.needs.joy.CurLevel < 0.3f)
-            {
-                growthPerDay += Define.CortisolGrowthNoRecreation;
-            }
-
+            foreach (var s in CalcGrowthSources())
+                growthPerDay += s.perDayRaw;
             // 转换为每 150 tick 区间的量（60000 ticks = 1天；NeedInterval 每 150 tick 一次）
             return growthPerDay * 150f / 60000f;
         }
@@ -759,6 +786,51 @@ namespace Hormones
                 }
             }
             return 0f;
+        }
+
+        /// <summary>
+        /// 检测是否患有低血糖（MEE_Hypoglycemia Hediff，由 Metabolic Essential 糖逻辑触发）。
+        /// </summary>
+        private bool HasHypoglycemiaHediff()
+        {
+            return pawn.health?.hediffSet != null &&
+                   pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("MEE_Hypoglycemia", false));
+        }
+
+        /// <summary>
+        /// 检测是否浑身无力（MEE_Weakness Hediff，由 Metabolic Essential 电解质失衡触发）。
+        /// </summary>
+        private bool HasWeaknessHediff()
+        {
+            return pawn.health?.hediffSet != null &&
+                   pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("MEE_Weakness", false));
+        }
+
+        /// <summary>
+        /// 统计 pawn 当前能「看见」的尸体数量：同图、25 格内、且无遮挡（GenSight.LineOfSight）。
+        /// 用于「看见尸体」应激源（每具 +3%/日）。
+        /// </summary>
+        private int CountVisibleCorpses()
+        {
+            if (pawn?.Map == null)
+                return 0;
+
+            List<Thing> corpses = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Corpse);
+            if (corpses == null || corpses.Count == 0)
+                return 0;
+
+            int count = 0;
+            foreach (Thing c in corpses)
+            {
+                if (c == null || c.Position == pawn.Position)
+                    continue;
+                if (!c.Position.InHorDistOf(pawn.Position, 25f))
+                    continue;
+                if (!GenSight.LineOfSight(pawn.Position, c.Position, pawn.Map))
+                    continue;
+                count++;
+            }
+            return count;
         }
 
         /// <summary>

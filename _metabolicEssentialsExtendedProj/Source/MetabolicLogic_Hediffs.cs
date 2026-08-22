@@ -28,6 +28,9 @@ namespace MetabolicEssential
         private const float WaterPoisoningThreshold = 0.90f;   // 饮用前 Water > 90%
         private const float WaterPoisoningChance = 0.60f;      // 触发概率 60%
         private const float WeaknessThreshold = 0.30f;         // 电解质 < 30%
+        // 低血糖：血糖（Sugar CurLevel）低于 20% 且 本次为扣减（newV - oldV < 0）时按概率触发
+        private const float HypoglycemiaLevelThreshold = 0.20f; // 血糖低于 20%
+        private const float HypoglycemiaChance = 0.05f;          // 触发概率 5%
 
         /// <summary>每 pawn 的“缺水持续 tick”累计器，用于脱水判定。</summary>
         private static readonly Dictionary<int, int> lowWaterTicks = new Dictionary<int, int>();
@@ -38,6 +41,7 @@ namespace MetabolicEssential
             NeedChangeEvents.OnElectrolytesChanged += OnElectrolytesChanged;
             NeedChangeEvents.OnDrinkMEEWater += OnDrinkMEEWater;
             NeedChangeEvents.OnSugarEaten += OnSugarEaten;
+            NeedChangeEvents.OnSugarChanged += OnSugarChanged;
         }
 
         private static void OnWaterChanged(Pawn pawn, float oldV, float newV)
@@ -87,6 +91,22 @@ namespace MetabolicEssential
         {
             if (pawn == null || !MetaBolicLoadCtrl.Active) return;
             AddThought(pawn, "MEE_AteSugar");
+        }
+
+        /// <summary>
+        /// 低血糖触发：血糖（Sugar CurLevel）低于 20% 且本次变化为扣减（newV - oldV &lt; 0）时，
+        /// 按 5% 概率触发「低血糖」Hediff + 心情。Hediff 自身 24h 自动消退且不可医疗；
+        /// 因 AddHediff 带 HasHediff 去重，不会叠加（24h 内同一 pawn 至多一份）。
+        /// </summary>
+        private static void OnSugarChanged(Pawn pawn, float oldV, float newV)
+        {
+            if (pawn == null || !MetaBolicLoadCtrl.Active) return;
+            // 仅当血糖已低于阈值、且本次为扣减（修改值为负）时尝试触发
+            if (newV < HypoglycemiaLevelThreshold && (newV - oldV) < 0f && Rand.Value < HypoglycemiaChance)
+            {
+                AddHediff(pawn, "MEE_Hypoglycemia");
+                AddThought(pawn, "MEE_HypoglycemiaMood");
+            }
         }
 
         private static void OnDrinkMEEWater(Pawn pawn, float levelBeforeDrink)

@@ -11,7 +11,7 @@ namespace Hormones
         /// <summary>蛋白质容量 = 基准 1.0 × 体魄阶段倍率（虚弱 0.90 ~ 卓越 1.30）。</summary>
         public override float MaxLevel => PhysiqueLgc.GetMEEProteinCapacityMult(pawn);
 
-        protected override float FallPerDay => 0.15f; // 每日约消耗 15%
+        protected override float BaseFallPerDay => 0.15f; // 每日约消耗 15%
 
         protected override void OnModified(float before, float after)
         {

@@ -28,6 +28,7 @@ namespace Hormones.UI
             MEESugar,           // 代谢：糖
             MEEElectrolytes,    // 代谢：电解质
             MEEProtein,         // 代谢：蛋白质
+            Adrenaline,         // 肾上腺素
         }
 
         private static DetailTab curTab = DetailTab.Physique;
@@ -54,6 +55,17 @@ namespace Hormones.UI
             DrawDetailList(right.ContractedBy(10f), pawn);
         }
 
+        /// <summary>原版体魄技能每升一级所需经验（与 SkillRecord.Learn 内部 1000 阈值一致）。</summary>
+        private const float PhysiqueXpPerLevel = 1000f;
+
+        /// <summary>取体魄技能 SkillRecord（defName=Physique），用于读取经验值。取不到返回 null。</summary>
+        private static SkillRecord GetPhysiqueSkill(Pawn pawn)
+        {
+            SkillDef def = DefDatabase<SkillDef>.GetNamed("Physique", false);
+            if (def == null || pawn?.skills == null) return null;
+            return pawn.skills.GetSkill(def);
+        }
+
         private static void DrawSummary(Rect rect, Pawn pawn)
         {
             Widgets.DrawMenuSection(rect);
@@ -70,6 +82,14 @@ namespace Hormones.UI
             RowButtonBar(inner, ref curY, "Physique".Translate(), lv.ToString(), Color.white,
                 DetailTab.Physique, (float)lv / Define.PhysiqueMaxLevel, "查看体魄详细数据");
 
+            // 体魄经验值（仅本 mod 持有该技能的对象显示）
+            SkillRecord physSkill = GetPhysiqueSkill(pawn);
+            if (physSkill != null)
+            {
+                Row(inner, ref curY, "体魄经验",
+                    $"{physSkill.xpSinceLastLevel:F0} / {PhysiqueXpPerLevel:F0}", Color.white);
+            }
+
             Need_MuscleStrain strain = pawn.needs?.TryGetNeed<Need_MuscleStrain>();
             if (strain != null)
             {
@@ -85,6 +105,15 @@ namespace Hormones.UI
                     cortisol.CurLevelPercentage.ToStringPercent(), Color.white,
                     DetailTab.Cortisol, cortisol, "查看皮质醇详细数据");
             }
+
+            // ---- 肾上腺素（Hediff，Severity 0~1）----
+            Hediff adrenalineHediff = GetAdrenalineHediff(pawn);
+            float adrSeverity = adrenalineHediff != null ? adrenalineHediff.Severity : 0f;
+            RowButtonBar(inner, ref curY, "肾上腺素",
+                (adrSeverity * 100f).ToString("F0") + "%", Color.white,
+                DetailTab.Adrenaline, adrSeverity, "查看肾上腺素详细数据",
+                new List<float> { Define.AdrenalineThresholdDormant, Define.AdrenalineThresholdLow, Define.AdrenalineThresholdMedium },
+                0);
 
             // ---- MEE 四需求：仅当模块加载时显示，并绘制分隔线 ----
             if (MetaBolicLoadCtrl.IsLoadedMME)
@@ -103,18 +132,7 @@ namespace Hormones.UI
                 }
             }
 
-            curY += 10f;
-            Widgets.DrawLineHorizontal(0f, curY, inner.width, Color.gray);
-            curY += 10f;
-
-            // ---- 静态行：只展示，不可点 ----
-            Row(inner, ref curY, "WorkEfficiency".Translate(),
-                PhysiqueLgc.GetWorkEfficiency(pawn).ToStringPercent(), Color.white);
-            Row(inner, ref curY, "MetabolicRate".Translate(),
-                PhysiqueLgc.GetMetabolicRate(pawn).ToStringPercent(), Color.white);
-            Row(inner, ref curY, "HungerRate".Translate(),
-                PhysiqueLgc.GetHungerRate(pawn).ToStringPercent(), Color.white);
-
+            // 注：工作效率/代谢率/饥饿速率 已在体魄 Hediff 悬停 tooltip 内展示，此处不再重复。
             Widgets.EndGroup();
             Text.Anchor = TextAnchor.UpperLeft;
         }
@@ -167,10 +185,20 @@ namespace Hormones.UI
             curY += r.height;
         }
 
-        /// <summary>格式化为带符号的 %/日 文本（正=带 +，负=自动 -）。</summary>
+        /// <summary>格式化为带符号的 %/日 文本（正=带 +，负=自动 -）。用于按天变化的速率量（皮质醇结算、代谢需求结算）。</summary>
         private static string FormatSigned(float v)
         {
             return (v >= 0f ? "+" : "") + v.ToString("F1") + "%/日";
+        }
+
+        /// <summary>
+        /// 格式化为带符号的 % 文本（正=带 +，负=自动 -）。用于瞬时效果修正（如 +8% 意识 / -8% 视力），
+        /// 不含时间维度——肾上腺素效果是直接乘到 stat 上的百分比修正，不是按天/秒变化的速率。
+        /// 速率量（%/日、%/秒）请用 FormatSigned / 各自内联格式。
+        /// </summary>
+        private static string FormatPct(float v)
+        {
+            return (v >= 0f ? "+" : "") + v.ToString("F1") + "%";
         }
 
         /// <summary>
@@ -181,6 +209,17 @@ namespace Hormones.UI
             if (effect >= 0f)
                 return bold ? new Color(1f, 0.35f, 0.35f) : new Color(1f, 0.48f, 0.48f);
             return bold ? new Color(0.35f, 1f, 0.35f) : new Color(0.48f, 1f, 0.48f);
+        }
+
+        /// <summary>
+        /// 代谢需求(水/糖/电解质/蛋白)结算明细配色：需求等级上升(被补充)=绿(好)，下降(被消耗)=红(坏)。
+        /// 与皮质醇 ColorForEffect 极性相反（皮质醇上升=坏=红）。
+        /// </summary>
+        private static Color ColorForLevelChange(float effect, bool bold = false)
+        {
+            if (effect >= 0f)
+                return bold ? new Color(0.35f, 1f, 0.35f) : new Color(0.48f, 1f, 0.48f);
+            return bold ? new Color(1f, 0.35f, 0.35f) : new Color(1f, 0.48f, 0.48f);
         }
 
         /// <summary>
@@ -377,6 +416,8 @@ namespace Hormones.UI
                 case DetailTab.MEEElectrolytes:
                 case DetailTab.MEEProtein:
                     DrawMetabolicDetail(content, ref curY, pawn, curTab.ToString()); break;
+                case DetailTab.Adrenaline:
+                    DrawAdrenalineDetail(content, ref curY, pawn); break;
             }
 
             if (Event.current.type == EventType.Repaint) viewHeight = curY;
@@ -393,6 +434,7 @@ namespace Hormones.UI
                 case DetailTab.Physique:  return "体魄";
                 case DetailTab.Strain:    return "肌肉劳损";
                 case DetailTab.Cortisol:  return "皮质醇";
+                case DetailTab.Adrenaline: return "肾上腺素";
                 case DetailTab.MEEWater:
                 case DetailTab.MEESugar:
                 case DetailTab.MEEElectrolytes:
@@ -403,14 +445,21 @@ namespace Hormones.UI
             return "";
         }
 
-        /// <summary>小节标题，用于右侧内容分组。</summary>
-        private static void Section(Rect rect, ref float curY, string label)
+        /// <summary>小节标题，用于右侧内容分组。suffix 可选，右对齐显示在标题行（用于结算明细带净变化）。</summary>
+        private static void Section(Rect rect, ref float curY, string label, string suffix = null, Color suffixColor = default)
         {
             curY += 6f;
             Rect r = new Rect(0f, curY, rect.width, 24f);
             Text.Anchor = TextAnchor.MiddleLeft;
             GUI.color = new Color(0.75f, 0.85f, 1f);
             Widgets.Label(r, label);
+            if (!suffix.NullOrEmpty())
+            {
+                GUI.color = (suffixColor == default) ? Color.white : suffixColor;
+                Text.Anchor = TextAnchor.MiddleRight;
+                Widgets.Label(r, suffix);
+                Text.Anchor = TextAnchor.MiddleLeft;
+            }
             GUI.color = Color.white;
             Text.Anchor = TextAnchor.UpperLeft;
             curY += r.height;
@@ -426,10 +475,17 @@ namespace Hormones.UI
             Row(rect, ref curY, "每日经验衰减",
                 PhysiqueLgc.GetDailyDecayXP(pawn).ToString("F1"), Color.white);
 
+            // 体魄经验值（技能 defName=Physique 的 xpSinceLastLevel）
+            SkillRecord physSkill = GetPhysiqueSkill(pawn);
+            if (physSkill != null)
+            {
+                float xp = physSkill.xpSinceLastLevel;
+                Row(rect, ref curY, "当前经验", xp.ToString("F0"), Color.white);
+                Row(rect, ref curY, "距下一级", (PhysiqueXpPerLevel - xp).ToString("F0"), Color.white);
+                Row(rect, ref curY, "升级进度", (xp / PhysiqueXpPerLevel).ToStringPercent(), Color.white);
+            }
+
             Section(rect, ref curY, "属性影响");
-            Row(rect, ref curY, "工作效率", PhysiqueLgc.GetWorkEfficiency(pawn).ToStringPercent(), Color.white);
-            Row(rect, ref curY, "代谢率",   PhysiqueLgc.GetMetabolicRate(pawn).ToStringPercent(), Color.white);
-            Row(rect, ref curY, "饥饿速率", PhysiqueLgc.GetHungerRate(pawn).ToStringPercent(), Color.white);
             Row(rect, ref curY, "食欲",     PhysiqueLgc.GetAppetiteMultiplier(pawn).ToStringPercent(), Color.white);
             Row(rect, ref curY, "战斗加成", PhysiqueLgc.GetPhysiqueBonus(pawn).ToStringPercent(), Color.white);
 
@@ -501,44 +557,106 @@ namespace Hormones.UI
             Row(rect, ref curY, "社交冲突（" + fight.tierLabel + "）",
                 fight.factor.ToStringPercent(), Color.white);
 
-            // ===== 结算明细：各分量正负累加 + 具体数值（涨红跌绿）=====
+            // ===== 结算明细：仅显示非零分量 + 净变化 =====
             var b = c.GetCortisolBreakdown();
             // 各分量对皮质醇的净效应：正=上升(红)，负=下降(绿)
-            float eBase   = -b.baseDecay;   // 自然衰减 → 下降
-            float eExtra  = -b.extraDecay;  // 饮品额外衰减 → 下降
-            float eGrowth =  b.growth;      // 应激增长 → 上升
-            float ePhysique = b.physique;   // 体魄修正 → 可正可负
-            float eSugar  = -b.sugarMod;    // 糖调制：正=抑制 → 下降
+            float eBase    = -b.baseDecay;   // 自然衰减 → 下降
+            float eExtra   = -b.extraDecay;  // 饮品额外衰减 → 下降
+            float ePhysique = b.physique;     // 体魄修正 → 可正可负
+            float eSugar   = -b.sugarMod;     // 糖调制：正=抑制 → 下降
 
-            Section(rect, ref curY, "结算明细（%/日）");
-            Row(rect, ref curY, "自然衰减",     FormatSigned(eBase),     ColorForEffect(eBase));
-            Row(rect, ref curY, "饮品额外衰减", FormatSigned(eExtra),    ColorForEffect(eExtra));
-            Row(rect, ref curY, "应激增长",     FormatSigned(eGrowth),   ColorForEffect(eGrowth));
-            Row(rect, ref curY, "体魄修正",     FormatSigned(ePhysique), ColorForEffect(ePhysique));
-            Row(rect, ref curY, "糖↔皮质醇调制", FormatSigned(eSugar),   ColorForEffect(eSugar));
-
-            // 正负累加：上升项合计 / 下降项合计
-            float pos = (eGrowth   > 0f ? eGrowth   : 0f)
-                      + (ePhysique > 0f ? ePhysique : 0f)
-                      + (eSugar     > 0f ? eSugar     : 0f);
-            float neg = (eBase    < 0f ? eBase    : 0f)
-                      + (eExtra   < 0f ? eExtra   : 0f)
-                      + (ePhysique < 0f ? ePhysique : 0f)
-                      + (eSugar    < 0f ? eSugar    : 0f);
-            Row(rect, ref curY, "↑ 上升项合计", FormatSigned(pos), ColorForEffect(pos));
-            Row(rect, ref curY, "↓ 下降项合计", FormatSigned(neg), ColorForEffect(neg));
-
-            // 净变化（重点行，加粗感：用更亮的红/绿）
-            Row(rect, ref curY, "净变化", FormatSigned(b.net), ColorForEffect(b.net, true));
-
-            // 压力源是多行文本，用 Label 直接铺开而不是塞进单行 Row
-            string stressors = c.GetCurrentStressors();
-            if (!stressors.NullOrEmpty())
+            // 结算明细：净变化并入标题（%/日，红=上升·绿=下降）
+            Section(rect, ref curY, "结算明细（%/日）", "净 " + FormatSigned(b.net), ColorForEffect(b.net, true));
+            if (System.Math.Abs(eBase) > 0.001f)
+                Row(rect, ref curY, "自然衰减",       FormatSigned(eBase),     ColorForEffect(eBase));
+            if (System.Math.Abs(eExtra) > 0.001f)
+                Row(rect, ref curY, "饮品额外衰减",    FormatSigned(eExtra),    ColorForEffect(eExtra));
+            // 应激增长：拆成各源头（仅显示当前激活且非零项，红=上升）
+            foreach (var src in c.GetCortisolGrowthSources())
             {
-                Section(rect, ref curY, "当前压力源");
-                float h = Text.CalcHeight(stressors, rect.width);
-                Widgets.Label(new Rect(0f, curY, rect.width, h), stressors);
-                curY += h;
+                if (System.Math.Abs(src.perDay) > 0.001f)
+                    Row(rect, ref curY, src.label, FormatSigned(src.perDay), ColorForEffect(src.perDay));
+            }
+            if (System.Math.Abs(ePhysique) > 0.001f)
+                Row(rect, ref curY, "体魄修正",        FormatSigned(ePhysique), ColorForEffect(ePhysique));
+            if (System.Math.Abs(eSugar) > 0.001f)
+                Row(rect, ref curY, "糖↔皮质醇调制",  FormatSigned(eSugar),    ColorForEffect(eSugar));
+        }
+
+        /// <summary>取肾上腺素 Hediff（defName=Adrenaline），取不到返回 null。</summary>
+        private static Hediff GetAdrenalineHediff(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null) return null;
+            return pawn.health.hediffSet.GetFirstHediffOfDef(DefDatabase<HediffDef>.GetNamed("Adrenaline", false));
+        }
+
+        /// <summary>肾上腺素阶段中文标签。</summary>
+        private static string AdrenalineLevelLabel(AdrenalineLevel level)
+        {
+            switch (level)
+            {
+                case AdrenalineLevel.Dormant: return "休眠";
+                case AdrenalineLevel.Low:     return "低浓度";
+                case AdrenalineLevel.Medium:  return "中浓度";
+                case AdrenalineLevel.High:    return "高浓度";
+            }
+            return "";
+        }
+
+        private static void DrawAdrenalineDetail(Rect rect, ref float curY, Pawn pawn)
+        {
+            Hediff adrenaline = GetAdrenalineHediff(pawn);
+            float severity = adrenaline != null ? adrenaline.Severity : 0f;
+            AdrenalineLevel level = AdrenalineLogic.GetAdrenalineLevel(severity);
+            AdrenalineEffects effects = AdrenalineLogic.CalculateAdrenalineEffects(pawn);
+
+            Section(rect, ref curY, "当前状态");
+            Row(rect, ref curY, "阶段", AdrenalineLevelLabel(level), Color.white);
+            Row(rect, ref curY, "浓度", (severity * 100f).ToString("F0") + "%", Color.white);
+
+            // 净变化/秒（生成−衰减），正数=浓度上升
+            float netPerSec = AdrenalineProducer.CalculateNetChangePerSecond(pawn);
+            Row(rect, ref curY, "净变化",
+                (netPerSec >= 0f ? "+" : "") + (netPerSec * 100f).ToString("F1") + "%/秒",
+                netPerSec >= 0f ? new Color(1f, 0.6f, 0.3f) : new Color(0.5f, 0.8f, 1f));
+
+            // 迷你条（阶段阈值刻度）
+            Rect barRect = new Rect(0f, curY, rect.width - 2f, 8f);
+            Widgets.FillableBar(barRect, Mathf.Clamp01(severity), Widgets.BarFullTexHor);
+            DrawMiniBarThreshold(barRect, Define.AdrenalineThresholdDormant, severity);
+            DrawMiniBarThreshold(barRect, Define.AdrenalineThresholdLow, severity);
+            DrawMiniBarThreshold(barRect, Define.AdrenalineThresholdMedium, severity);
+            curY += barRect.height + 4f;
+
+            Section(rect, ref curY, "当前效果");
+            if (level == AdrenalineLevel.Dormant)
+            {
+                Row(rect, ref curY, "（休眠，无加成/惩罚）", "", Color.gray);
+            }
+            else
+            {
+                // 配色：增益=绿，惩罚=红（与代谢需求一致）。
+                // 注意：这些是瞬时百分比修正（直接乘到 stat 上），单位用 % 而非 %/日（%/日 用于速率量）。
+                Row(rect, ref curY, "意识",     FormatPct(effects.Consciousness * 100f),     ColorForLevelChange(effects.Consciousness));
+                Row(rect, ref curY, "移动速度", FormatPct(effects.MoveSpeed * 100f),         ColorForLevelChange(effects.MoveSpeed));
+                Row(rect, ref curY, "呼吸/循环",FormatPct(effects.Respiratory * 100f),       ColorForLevelChange(effects.Respiratory));
+                Row(rect, ref curY, "代谢",     FormatPct(effects.Metabolism * 100f),         ColorForLevelChange(effects.Metabolism));
+                Row(rect, ref curY, "近战伤害", FormatPct(effects.MeleeDamage * 100f),        ColorForLevelChange(effects.MeleeDamage));
+                Row(rect, ref curY, "闪避",     FormatPct(effects.Dodge * 100f),              ColorForLevelChange(effects.Dodge));
+                Row(rect, ref curY, "近战命中", FormatPct(effects.MeleeHitReduction * 100f),  ColorForLevelChange(effects.MeleeHitReduction));
+                Row(rect, ref curY, "视力",     FormatPct(effects.VisionReduction * 100f),    ColorForLevelChange(effects.VisionReduction));
+                Row(rect, ref curY, "听力",     FormatPct(effects.HearingReduction * 100f),   ColorForLevelChange(effects.HearingReduction));
+            }
+
+            Section(rect, ref curY, "体魄与透支");
+            Row(rect, ref curY, "体魄修正",
+                FormatPct((effects.PhysiqueModifier - 1f) * 100f), ColorForLevelChange(effects.PhysiqueModifier - 1f));
+            Row(rect, ref curY, "透支豁免", PhysiqueLgc.IsAdrenalineExempt(pawn) ? "是" : "否", Color.white);
+            if (level != AdrenalineLevel.Dormant)
+            {
+                float rest = effects.RestMultiplier;
+                Row(rect, ref curY, "休息需求", (rest >= 1f ? "+" : "") + ((rest - 1f) * 100f).ToString("F0") + "%",
+                    ColorForLevelChange(rest - 1f));
             }
         }
 
@@ -571,6 +689,16 @@ namespace Hormones.UI
             Row(rect, ref curY, "上限",   need.MaxLevel.ToString("0.00"),         Color.white);
             Row(rect, ref curY, "当前值", need.CurLevel.ToString("F2"),           Color.white);
             Row(rect, ref curY, "满足度", ((Need_MEE_Base)need).Severity.ToStringPercent(), Color.white);
+
+            // 结算明细：自然消耗 + 外部调节，净变化并入标题（%/日，绿=补充·红=消耗）
+            var mee = (Need_MEE_Base)need;
+            var mb = mee.GetMEEBreakdown();
+            float mNet = mb.NetPerDay * 100f; // 占 MaxLevel 的 %/日
+            Section(rect, ref curY, "结算明细（%/日）", "净 " + FormatSigned(mNet), ColorForLevelChange(mNet, true));
+            if (System.Math.Abs(mb.naturalFall) > 0.0001f)
+                Row(rect, ref curY, "自然消耗", FormatSigned(-mb.naturalFall * 100f), ColorForLevelChange(-mb.naturalFall * 100f));
+            if (System.Math.Abs(mb.extraFall) > 0.0001f)
+                Row(rect, ref curY, "外部调节", FormatSigned(-mb.extraFall * 100f), ColorForLevelChange(-mb.extraFall * 100f));
 
             // 迷你条（带阈值刻度 + 变化箭头），让单需求页也能一眼看趋势
             Rect barRect = new Rect(0f, curY, rect.width - 2f, 8f);

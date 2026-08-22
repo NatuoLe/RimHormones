@@ -1,0 +1,247 @@
+========================================
+  Build and Copy Mod to RimWorld Mods
+========================================
+
+Project Dir: F:\RimHormones\
+Dest Dir: F:\steam\steamapps\common\RimWorld\Mods\Rim-Hormones
+
+find: ‚Äò/I‚Äô: No such file or directory
+find: ‚ÄòRimWorldWin64.exe‚Äô: No such file or directory
+find: ‚Äò/I‚Äô: No such file or directory
+find: ‚ÄòRimWorld.exe‚Äô: No such file or directory
+========================================
+  Step 1: Build RimHormones.dll
+========================================
+
+  Ê≠£Âú®Á°ÆÂÆöË¶ÅËøòÂéüÁöÑÈ°πÁõÆ‚Ä¶
+  ÊâÄÊúâÈ°πÁõÆÂùáÊòØÊúÄÊñ∞ÁöÑÔºåÊó†Ê≥ïËøòÂéü„ÄÇ
+  Assembly-CSharp -> F:\RimHormones\_indexProj\bin\Release\net48\RimHormones.dll
+
+Â∑≤ÊàêÂäüÁîüÊàê„ÄÇ
+    0 ‰∏™Ë≠¶Âëä
+    0 ‰∏™ÈîôËØØ
+
+Â∑≤Áî®Êó∂Èó¥ 00:00:01.40
+
+Build success: RimHormones.dll
+
+========================================
+  Step 2: Stage RimHormones.dll into Assemblies
+========================================
+
+“—∏¥÷∆         1 ∏ˆŒƒº˛°£
+“—∏¥÷∆         1 ∏ˆŒƒº˛°£
+“—∏¥÷∆         1 ∏ˆŒƒº˛°£
+
+========================================
+  Step 3: Build MetabolicEssential.dll
+========================================
+
+  Ê≠£Âú®Á°ÆÂÆöË¶ÅËøòÂéüÁöÑÈ°πÁõÆ‚Ä¶
+  ÊâÄÊúâÈ°πÁõÆÂùáÊòØÊúÄÊñ∞ÁöÑÔºåÊó†Ê≥ïËøòÂéü„ÄÇ
+  MetabolicEssential -> F:\RimHormones\MetabolicEssential\MetabolicEssential.dll
+
+Â∑≤ÊàêÂäüÁîüÊàê„ÄÇ
+    0 ‰∏™Ë≠¶Âëä
+    0 ‰∏™ÈîôËØØ
+
+Â∑≤Áî®Êó∂Èó¥ 00:00:03.10
+
+Build success: MetabolicEssential.dll
+
+========================================
+  Step 4: Clean up obsolete files
+========================================
+
+
+========================================
+  Step 5: Copy content to RimWorld Mods
+========================================
+
+Copy About folder...
+F:\RimHormones\About\About.xml
+F:\RimHormones\About\Preview.png
+F:\RimHormones\About\PreviewOld.Png
+∏¥÷∆¡À 3 ∏ˆŒƒº˛
+Copy Defs folder...
+F:\RimHormones\Defs\AbilityDefs\Ability_Knockback.xml.disabled
+F:\RimHormones\Defs\HediffDefs\Hediff_Adrenaline.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_AdrenalineStrain.xml.disabled
+F:\RimHormones\Defs\HediffDefs\Hediff_Cortisol.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_GoodSleep.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MEE_Buff_FunctionalDrink.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MEE_Buff_LightSaltWater.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MEE_Buff_MilkTea.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MEE_Buff_VegFruitJuice.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MEE_Dehydration.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MEE_Hypoglycemia.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MEE_Malnutrition.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MEE_WaterPoisoning.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MEE_Weakness.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_MuscleStrain.xml.disabled
+F:\RimHormones\Defs\HediffDefs\Hediff_PhysiqueDisplay.xml
+F:\RimHormones\Defs\HediffDefs\Hediff_StrainPool.xml
+F:\RimHormones\Defs\JobDefs\Job_Exercise.xml
+F:\RimHormones\Defs\JobDefs\Job_MEE_DrinkFromFixture.xml
+F:\RimHormones\Defs\JobDefs\Job_MEE_DrinkFromGround.xml
+F:\RimHormones\Defs\MiscDefs\StrainAdrenalineStageRules.xml
+F:\RimHormones\Defs\MiscDefs\StrainTierRules.xml
+F:\RimHormones\Defs\NeedDefs\Need_Cortisol.xml
+F:\RimHormones\Defs\NeedDefs\Need_MEE_Electrolytes.xml
+F:\RimHormones\Defs\NeedDefs\Need_MEE_Protein.xml
+F:\RimHormones\Defs\NeedDefs\Need_MEE_Sugar.xml
+F:\RimHormones\Defs\NeedDefs\Need_MEE_Water.xml
+F:\RimHormones\Defs\NeedDefs\Need_MuscleStrain.xml
+F:\RimHormones\Defs\PawnColumnDefs\PawnColumn_StrainBlock.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_BoilWater.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_BoilWaterBulk.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_FunctionalDrink.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_GlucoseMash_FromCorn.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_GlucoseMash_FromCorn_Bulk10.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_GlucoseMash_FromCorn_Bulk5.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_GlucoseMash_FromFruit.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_GlucoseMash_FromFruit_Bulk10.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_GlucoseMash_FromFruit_Bulk5.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_LightSaltWater.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_MilkTea.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_ProteinExtract.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_Salt_FromStone.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_VegFruitJuice.xml
+F:\RimHormones\Defs\RecipeDefs\Recipe_MEE_WaterBottle.xml.disabled
+F:\RimHormones\Defs\SkillDefs\Physique.xml
+F:\RimHormones\Defs\ThingCategoryDefs\ThingCategory_MEE.xml
+F:\RimHormones\Defs\ThingDefs\Thing_ExerciseSpot.xml
+F:\RimHormones\Defs\ThingDefs\Thing_KnockbackFlyer.xml.disabled
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_FunctionalDrink.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_GlucoseMash.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_LightSaltWater.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_MilkTea.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_MoistureCollector.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_ProteinExtract.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_RawWater.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_Salt.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_SimpleRainwaterCollector.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_VegFruitJuice.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_WaterBottle.xml
+F:\RimHormones\Defs\ThingDefs\Thing_MEE_WaterBuildings.xml.disabled
+F:\RimHormones\Defs\ThoughtDefs\Thought_CortisolMood.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_GoodSleepMood.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_Insomnia.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_MEE_AteSugar.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_MEE_Buffs.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_MEE_HypoglycemiaMood.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_MEE_NeedWater.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_MEE_Thirsty.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_MEE_WaterPoisoningMood.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_MEE_WeaknessMood.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_MuscleStrainRest.xml
+F:\RimHormones\Defs\ThoughtDefs\Thought_Neurasthenia.xml
+F:\RimHormones\Defs\TraitDefs\Traits_Physique.xml
+F:\RimHormones\Defs\WorkGiverDefs\WorkGiver_Exercise.xml
+F:\RimHormones\Defs\WorkGiverDefs\WorkGiver_MEE_FillWaterBottles.xml
+F:\RimHormones\Defs\WorkGiverDefs\WorkGiver_MEE_StoreWater.xml
+F:\RimHormones\Defs\WorkGiverDefs\WorkGiver_MEE_Water.xml.disabled
+F:\RimHormones\Defs\WorkTypeDefs\WorkType_Exercise.xml
+∏¥÷∆¡À 78 ∏ˆŒƒº˛
+Copy Patches folder...
+F:\RimHormones\Patches\AssignTable_StrainBlock.xml
+F:\RimHormones\Patches\Backstory_Physique.xml
+F:\RimHormones\Patches\Trait_PhysiqueAptitudes.xml
+∏¥÷∆¡À 3 ∏ˆŒƒº˛
+Copy Languages folder...
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\HediffDef\Hediff_StrainPool.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\HediffDef\MEE_Buffs.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\HediffDef\PhysiqueBodyCondition.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\JobDef\Job_Exercise.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\NeedDef\Hormones.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\PawnColumnDef\PawnColumn_StrainBlock.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\RecipeDef\MEE_Recipes.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\SkillDef\Physique.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\ThingDef\MEE_Items.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\ThingDef\Thing_ExerciseSpot.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\ThoughtDef\CortisolMoodEffect.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\ThoughtDef\GoodSleepMood.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\ThoughtDef\InsomniaMood.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\ThoughtDef\MEE_Buffs.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\ThoughtDef\MuscleStrainRest.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\ThoughtDef\NeurastheniaMood.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\ThoughtDef\SevereBleeding.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\TraitDef\Traits_Physique.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\WorkGiverDef\WorkGiver_Exercise.xml
+F:\RimHormones\Languages\ChineseSimplified\DefInjected\WorkTypeDef\WorkType_Exercise.xml
+F:\RimHormones\Languages\ChineseSimplified\Keyed\Hormones.xml
+F:\RimHormones\Languages\English\DefInjected\HediffDef\Hediff_StrainPool.xml
+F:\RimHormones\Languages\English\DefInjected\HediffDef\PhysiqueBodyCondition.xml
+F:\RimHormones\Languages\English\DefInjected\JobDef\Job_Exercise.xml
+F:\RimHormones\Languages\English\DefInjected\NeedDef\Hormones.xml
+F:\RimHormones\Languages\English\DefInjected\PawnColumnDef\PawnColumn_StrainBlock.xml
+F:\RimHormones\Languages\English\DefInjected\RecipeDef\MEE_Recipes.xml
+F:\RimHormones\Languages\English\DefInjected\SkillDef\Physique.xml
+F:\RimHormones\Languages\English\DefInjected\ThingDef\MEE_Items.xml
+F:\RimHormones\Languages\English\DefInjected\ThingDef\Thing_ExerciseSpot.xml
+F:\RimHormones\Languages\English\DefInjected\ThoughtDef\CortisolMoodEffect.xml
+F:\RimHormones\Languages\English\DefInjected\ThoughtDef\GoodSleepMood.xml
+F:\RimHormones\Languages\English\DefInjected\ThoughtDef\InsomniaMood.xml
+F:\RimHormones\Languages\English\DefInjected\ThoughtDef\MEE_Buffs.xml
+F:\RimHormones\Languages\English\DefInjected\ThoughtDef\MuscleStrainRest.xml
+F:\RimHormones\Languages\English\DefInjected\ThoughtDef\NeurastheniaMood.xml
+F:\RimHormones\Languages\English\DefInjected\ThoughtDef\SevereBleeding.xml
+F:\RimHormones\Languages\English\DefInjected\TraitDef\Traits_Physique.xml
+F:\RimHormones\Languages\English\DefInjected\WorkGiverDef\WorkGiver_Exercise.xml
+F:\RimHormones\Languages\English\DefInjected\WorkTypeDef\WorkType_Exercise.xml
+F:\RimHormones\Languages\English\Keyed\Hormones.xml
+∏¥÷∆¡À 41 ∏ˆŒƒº˛
+Copy Textures folder...
+F:\RimHormones\Textures\Things\Building\MEE\MEE_MoistureCollector.png
+F:\RimHormones\Textures\Things\Building\MEE\MEE_SimpleRainwaterCollector.png
+F:\RimHormones\Textures\Things\Building\MEE\MEE_WaterExtractor.png
+F:\RimHormones\Textures\Things\Building\MEE\MEE_WaterWell.png
+F:\RimHormones\Textures\Things\Item\MEE\MEE_FunctionalDrink.png
+F:\RimHormones\Textures\Things\Item\MEE\MEE_GlucoseMash.png
+F:\RimHormones\Textures\Things\Item\MEE\MEE_LightSaltWater.png
+F:\RimHormones\Textures\Things\Item\MEE\MEE_MilkTea.png
+F:\RimHormones\Textures\Things\Item\MEE\MEE_ProteinExtract.png
+F:\RimHormones\Textures\Things\Item\MEE\MEE_RawWater.png
+F:\RimHormones\Textures\Things\Item\MEE\MEE_Salt.png
+F:\RimHormones\Textures\Things\Item\MEE\MEE_VegFruitJuice.png
+F:\RimHormones\Textures\Things\Item\MEE\MEE_WaterBottle.png
+F:\RimHormones\Textures\Things\Item\MEE\rawWater.png
+F:\RimHormones\Textures\Things\Item\MEE\salt.png
+F:\RimHormones\Textures\Things\Item\MEE\sugar.png
+F:\RimHormones\Textures\Things\Item\MEE\sugarJam.png
+F:\RimHormones\Textures\Things\Item\MEE\sugarJam2.png
+F:\RimHormones\Textures\UI\Buttons\HealthBG.png
+∏¥÷∆¡À 19 ∏ˆŒƒº˛
+Copy Config folder...
+F:\RimHormones\Config\BackstoryPhysique.xml
+∏¥÷∆¡À 1 ∏ˆŒƒº˛
+
+========================================
+  Step 6: Copy Assemblies and optional module
+========================================
+
+«Î«Ûµƒ≤Ÿ◊˜Œﬁ∑®‘⁄ π”√”√ªß”≥…‰«¯”Ú¥Úø™µƒŒƒº˛…œ÷¥––°£
+“—∏¥÷∆         0 ∏ˆŒƒº˛°£
+
+WARNING: RimHormones.dll could NOT be overwritten - locked by RimWorld.
+Close the game completely and re-run this script, or restart RimWorld
+to load the freshly built DLL on next launch.
+
+“—∏¥÷∆         1 ∏ˆŒƒº˛°£
+
+Deployed core assemblies:
+0Harmony.dll
+RimHormones.dll
+
+Copying optional module to MetabolicEssential\ subfolder...
+«Î«Ûµƒ≤Ÿ◊˜Œﬁ∑®‘⁄ π”√”√ªß”≥…‰«¯”Ú¥Úø™µƒŒƒº˛…œ÷¥––°£
+“—∏¥÷∆         0 ∏ˆŒƒº˛°£
+Deployed optional module:
+MetabolicEssential.dll
+
+========================================
+  Done!
+  Restart RimWorld to apply changes (the Metabolic Essential toggle takes effect on restart).
+========================================
+
+«Î∞¥»Œ“‚º¸ºÃ–¯. . . 

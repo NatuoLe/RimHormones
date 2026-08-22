@@ -10,3 +10,13 @@ D:\RimMods\Rim-Hormones\RimHormones\_metabolicEssentialsExtendedProj\obj\Release
 D:\RimMods\Rim-Hormones\RimHormones\_metabolicEssentialsExtendedProj\obj\Release\MetabolicEssential.pdb
 D:\RimMods\Rim-Hormones\RimHormones\MetabolicEssential\MetabolicEssential.dll
 D:\RimMods\Rim-Hormones\RimHormones\MetabolicEssential\MetabolicEssential.pdb
+F:\RimHormones\MetabolicEssential\MetabolicEssential.dll
+F:\RimHormones\MetabolicEssential\MetabolicEssential.pdb
+F:\RimHormones\_metabolicEssentialsExtendedProj\obj\Release\MetabolicEssential.csproj.AssemblyReference.cache
+F:\RimHormones\_metabolicEssentialsExtendedProj\obj\Release\MetabolicEssential.GeneratedMSBuildEditorConfig.editorconfig
+F:\RimHormones\_metabolicEssentialsExtendedProj\obj\Release\MetabolicEssential.AssemblyInfoInputs.cache
+F:\RimHormones\_metabolicEssentialsExtendedProj\obj\Release\MetabolicEssential.AssemblyInfo.cs
+F:\RimHormones\_metabolicEssentialsExtendedProj\obj\Release\MetabolicEssential.csproj.CoreCompileInputs.cache
+F:\RimHormones\_metabolicEssentialsExtendedProj\obj\Release\MetabolicEssential.sourcelink.json
+F:\RimHormones\_metabolicEssentialsExtendedProj\obj\Release\MetabolicEssential.dll
+F:\RimHormones\_metabolicEssentialsExtendedProj\obj\Release\MetabolicEssential.pdb

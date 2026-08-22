@@ -11,7 +11,7 @@ namespace Hormones
         /// <summary>电解质容量 = 基准 1.0 × 体魄阶段倍率（虚弱 0.90 ~ 卓越 1.30）。</summary>
         public override float MaxLevel => PhysiqueLgc.GetMEEElectrolytesCapacityMult(pawn);
 
-        protected override float FallPerDay => 0.3f; // 每日约消耗 30%
+        protected override float BaseFallPerDay => 0.3f; // 每日约消耗 30%
 
         protected override void OnModified(float before, float after)
         {

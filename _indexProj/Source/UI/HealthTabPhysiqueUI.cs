@@ -107,6 +107,14 @@ namespace Hormones.UI
 
             // size 是 InspectTabBase 的 protected 字段，用 Traverse 读，避免反射写死
             Vector2 size = Traverse.Create(__instance).Field("size").GetValue<Vector2>();
+            // 顶部 toggle 条占 26px，会压缩内容区；整体把窗口加高，给体魄 UI 更多空间。
+            // 仅在未抬升时设成绝对目标值（430 为原版基线），避免重复累加，也不缩小其它 mod 已加高的窗口。
+            const float ExtraHeight = 40f;
+            if (size.y < 430f + ExtraHeight - 0.5f)
+            {
+                size.y = 430f + ExtraHeight;
+                Traverse.Create(__instance).Field("size").SetValue(size);
+            }
             Rect container = new Rect(Vector2.zero, size);
 
             Rect toggleRow = HealthTabUIState.DrawToggleRow(container);

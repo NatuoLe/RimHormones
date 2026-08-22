@@ -8,24 +8,31 @@
     ".NETFramework,Version=v4.8": []
   },
   "packageFolders": {
-    "C:\\Users\\zhou\\.nuget\\packages\\": {}
+    "C:\\Users\\natuozhou\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\RimMods\\Rim-Hormones\\RimHormones\\_metabolicEssentialsExtendedProj\\MetabolicEssential.csproj",
+      "projectUniqueName": "F:\\RimHormones\\_metabolicEssentialsExtendedProj\\MetabolicEssential.csproj",
       "projectName": "MetabolicEssential",
-      "projectPath": "D:\\RimMods\\Rim-Hormones\\RimHormones\\_metabolicEssentialsExtendedProj\\MetabolicEssential.csproj",
-      "packagesPath": "C:\\Users\\zhou\\.nuget\\packages\\",
-      "outputPath": "D:\\RimMods\\Rim-Hormones\\RimHormones\\_metabolicEssentialsExtendedProj\\obj\\",
+      "projectPath": "F:\\RimHormones\\_metabolicEssentialsExtendedProj\\MetabolicEssential.csproj",
+      "packagesPath": "C:\\Users\\natuozhou\\.nuget\\packages\\",
+      "outputPath": "F:\\RimHormones\\_metabolicEssentialsExtendedProj\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\zhou\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\natuozhou\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net48"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -49,7 +56,7 @@
     "frameworks": {
       "net48": {
         "targetAlias": "net48",
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

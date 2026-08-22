@@ -16,8 +16,11 @@ namespace Hormones
     /// </summary>
     public abstract class Need_MEE_Base : Need
     {
-        /// <summary>每日自然消耗速率（占 MaxLevel 的 0~1 比例）。子类按代谢特性覆盖。</summary>
-        protected abstract float FallPerDay { get; }
+        /// <summary>每日自然消耗速率（占 MaxLevel 的 0~1 比例），不含外部调节。子类按代谢特性覆盖。</summary>
+        protected abstract float BaseFallPerDay { get; }
+
+        /// <summary>每日总消耗速率 = 自然消耗 + 外部调节。NeedInterval 以此消耗。</summary>
+        protected float FallPerDay => BaseFallPerDay + extraFallPerDay;
 
         /// <summary>UI 阈值百分比（用于需求条配色区间）。</summary>
         protected virtual List<float> Thresholds => new List<float> { 0.15f, 0.3f, 0.7f };
@@ -74,14 +77,40 @@ namespace Hormones
 
         // ===== 外置 Mod 接口：额外每日消耗速率（占 MaxLevel 的 0~1 比例，可正可负） =====
         // 由 Metabolic Essential「糖逻辑」等外部模块通过下方方法设置，驱动消耗速率变化（如皮质醇高时降速）。
-        // 默认 0 = 无额外影响；子类 FallPerDay 已包含该叠加量。
+        // 默认 0 = 无额外影响；总消耗 = BaseFallPerDay + 此值。
         protected float extraFallPerDay = 0f;
-        /// <summary>外部 Mod 设置额外每日消耗速率（叠加在子类 FallPerDay 之上，可正可负）。</summary>
+        /// <summary>外部 Mod 设置额外每日消耗速率（叠加在 BaseFallPerDay 之上，可正可负）。</summary>
         public void SetExtraFallPerDay(float f) => extraFallPerDay = f;
         /// <summary>外部 Mod 重置额外每日消耗速率为默认 0。</summary>
         public void ResetExtraFallPerDay() => extraFallPerDay = 0f;
 
         /// <summary>每次需求数值变化后调用（自然消耗 NeedInterval / 补充 Satisfy / 扣除 Consume），子类在此触发对应变化事件（如糖）。</summary>
         protected virtual void OnModified(float before, float after) { }
+
+        /// <summary>
+        /// 代谢需求结算明细（占 MaxLevel 的每日比例）。供体魄面板「结算明细」段展示自然消耗、外部调节与净变化。
+        /// 各字段含义：naturalFall/extraFall 均为「正=消耗(使需求下降)」比例；
+        /// 对需求等级的「净变化比例」= -(naturalFall + extraFall)（负=需求下降）。
+        /// </summary>
+        public readonly struct MEEBreakdown
+        {
+            public readonly float naturalFall;  // 自然消耗（正）
+            public readonly float extraFall;    // 外部调节（可正可负；正=额外消耗）
+            public MEEBreakdown(float naturalFall, float extraFall)
+            {
+                this.naturalFall = naturalFall;
+                this.extraFall = extraFall;
+            }
+            /// <summary>占 MaxLevel 的每日净变化比例：负=需求下降（被消耗）。</summary>
+            public float NetPerDay => -(naturalFall + extraFall);
+        }
+
+        /// <summary>
+        /// 返回当前结算明细快照（自然消耗 + 外部调节）。体格面板用它渲染分解与净变化。
+        /// </summary>
+        public MEEBreakdown GetMEEBreakdown()
+        {
+            return new MEEBreakdown(BaseFallPerDay, extraFallPerDay);
+        }
     }
 }

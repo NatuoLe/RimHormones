@@ -9,7 +9,7 @@ set "MOD_NAME=Rim-Hormones"
 
 rem --- destination mods root: override via 1st argument, else default ---
 if "%~1"=="" (
-    set "DEST_ROOT=D:\Steam\steamapps\common\RimWorld\Mods"
+    set "DEST_ROOT=F:\steam\steamapps\common\RimWorld\Mods"
 ) else (
     set "DEST_ROOT=%~1"
 )

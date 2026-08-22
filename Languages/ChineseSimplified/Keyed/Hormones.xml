@@ -47,6 +47,13 @@
   <!-- 击飞技能 -->
   <Hormones_KnockbackCooldown>击飞冷却中：{0}</Hormones_KnockbackCooldown>
 
+  <!-- 肾上腺素 Hediff -->
+  <Adrenaline>肾上腺素</Adrenaline>
+  <AdrenalineDormant>休眠</AdrenalineDormant>
+  <AdrenalineLow>低浓度</AdrenalineLow>
+  <AdrenalineMedium>中浓度</AdrenalineMedium>
+  <AdrenalineHigh>高浓度</AdrenalineHigh>
+
   <!-- 皮质醇 Need -->
   <Cortisol>皮质醇</Cortisol>
   <Cortisol_Desc>皮质醇水平反映长期压力状态。高值时心情受抑、争端易起，并提升神经衰弱风险；体魄越强缓冲越佳。</Cortisol_Desc>

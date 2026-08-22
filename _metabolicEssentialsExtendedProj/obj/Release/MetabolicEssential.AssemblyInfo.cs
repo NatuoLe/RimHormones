@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MetabolicEssential")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ea205a8826ca64e1c8e68996e69ca28e504cec4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ab01ede31fdf3aea5d732d2d1b0656a4f5f5ac95")]
 [assembly: System.Reflection.AssemblyProductAttribute("MetabolicEssential")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MetabolicEssential")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

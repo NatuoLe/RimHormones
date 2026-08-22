@@ -148,6 +148,11 @@ namespace Hormones
         public const float CortisolGrowthUncomfortable = 800f; // 不够舒适：+8%/日
         public const float CortisolGrowthNoRecreation = 800f;   // 没有娱乐活动：+8%/日
 
+        // 新增应激源（代谢/环境类，perDayRaw：显示值=常量×0.02）
+        public const float CortisolGrowthHypoglycemia = 250f;   // 低血糖(MEE_Hypoglycemia Hediff)：+5%/日
+        public const float CortisolGrowthWeakness = 250f;       // 浑身无力(MEE_Weakness Hediff)：+5%/日
+        public const float CortisolGrowthSeeCorpse = 150f;      // 每具可见尸体：+3%/日（按尸体数叠加）
+
         // ========================================
         // 状态判定阈值
         // ========================================

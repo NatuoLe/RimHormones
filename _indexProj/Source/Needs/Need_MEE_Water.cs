@@ -12,7 +12,7 @@ namespace Hormones
         /// <summary>水需求容量 = 基准 1.0 × 体魄阶段倍率（虚弱 0.90 ~ 卓越 1.45）。</summary>
         public override float MaxLevel => PhysiqueLgc.GetMEEWaterCapacityMult(pawn);
 
-        protected override float FallPerDay => 0.55f; // 每日约消耗 55%
+        protected override float BaseFallPerDay => 0.55f; // 每日约消耗 55%
 
         protected override void OnModified(float before, float after)
         {

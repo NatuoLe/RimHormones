@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <HediffDef>
+  <defName>MEE_Hypoglycemia</defName>
+  <label>低血糖</label>
+  <description>短时间内摄入过量糖分导致血糖剧烈波动引发的低血糖，头晕乏力、意识下降与工作效率降低。无法用药物治疗，约 24 小时后自行消退。</description>
+  <hediffClass>HediffWithComps</hediffClass>
+  <isBad>true</isBad>
+  <makesSickThought>false</makesSickThought>
+  <everCurableByItem>false</everCurableByItem>
+  <stages>
+    <li>
+      <label>低血糖</label>
+      <capMods>
+        <li>
+          <capacity>Consciousness</capacity>
+          <offset>-0.15</offset>
+        </li>
+      </capMods>
+      <statOffsets>
+        <WorkSpeedGlobal>-0.15</WorkSpeedGlobal>
+      </statOffsets>
+    </li>
+  </stages>
+  <comps>
+    <li Class="HediffCompProperties_Disappears">
+      <disappearsAfterTicks>60000</disappearsAfterTicks>
+    </li>
+  </comps>
+</HediffDef>
+</Defs>

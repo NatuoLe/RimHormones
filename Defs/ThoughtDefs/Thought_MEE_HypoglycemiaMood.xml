@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <ThoughtDef>
+  <defName>MEE_HypoglycemiaMood</defName>
+  <label>低血糖</label>
+  <description>低血糖让我头晕乏力、心烦意乱。</description>
+  <durationDays>1</durationDays>
+  <thoughtClass>Thought_Memory</thoughtClass>
+  <stages>
+    <li>
+      <label>低血糖</label>
+      <description>低血糖让我头晕乏力、心烦意乱。</description>
+      <baseMoodEffect>-6</baseMoodEffect>
+    </li>
+  </stages>
+</ThoughtDef>
+</Defs>

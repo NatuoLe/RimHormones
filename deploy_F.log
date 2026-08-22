@@ -1,0 +1,52 @@
+========================================
+  Build and Copy Mod to RimWorld Mods - F:\steam
+============================================================
+
+Project Dir: F:\RimHormones\
+Dest Dir: F:\steam\steamapps\common\RimWorld\Mods\Rim-Hormones
+
+========================================
+  Step 1: Build RimHormones.dll
+========================================
+
+  正在确定要还原的项目…
+  所有项目均是最新的，无法还原。
+  Assembly-CSharp -> F:\RimHormones\_indexProj\bin\Release\net48\RimHormones.dll
+
+已成功生成。
+    0 个警告
+    0 个错误
+
+已用时间 00:00:03.53
+
+Build success: RimHormones.dll
+
+========================================
+  Step 2: Stage RimHormones.dll into Assemblies
+========================================
+
+�Ѹ���         1 ���ļ���
+�Ѹ���         1 ���ļ���
+�Ѹ���         1 ���ļ���
+
+========================================
+  Step 3: Build MetabolicEssential.dll
+========================================
+
+  正在确定要还原的项目…
+  所有项目均是最新的，无法还原。
+  MetabolicEssential -> F:\RimHormones\MetabolicEssential\MetabolicEssential.dll
+
+已成功生成。
+    0 个警告
+    0 个错误
+
+已用时间 00:00:03.35
+
+Build success: MetabolicEssential.dll
+
+========================================
+  Step 4: Clean up obsolete files
+========================================
+
+��ʱ��Ӧ�� Thing_MEE_WaterBuildings.xml��
